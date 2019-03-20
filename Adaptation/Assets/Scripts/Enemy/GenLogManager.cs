@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 
 public enum LogType { Progress, Individual, ForGraphing }
@@ -114,6 +115,7 @@ static public class GenLogManager
         StreamWriter writer = new StreamWriter(path, false);
         writer.Write(log);
         writer.Close();
+        AssetDatabase.ImportAsset(path);
         if (logType == LogType.Individual) individualDetailsLog = new StringBuilder();
     }
 }
