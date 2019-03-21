@@ -23,34 +23,34 @@ public class PlayerMovement : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         Move(horisontal, vertical);
         Turning();
-        Animating(horisontal, vertical);    
+        Animating(horisontal, vertical);
     }
 
-        private void Move(float horizontal, float vertical)
+    private void Move(float horizontal, float vertical)
+    {
+        movement.Set(horizontal, 0f, vertical);
+        movement = movement.normalized * speed * Time.deltaTime;
+        playerRigidBody.MovePosition(transform.position + movement);
+    }
+
+    private void Turning()
+    {
+        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit floorHit;
+
+        if (Physics.Raycast(camRay, out floorHit, camRayLength, floorMask))
         {
-            movement.Set(horizontal, 0f, vertical);
-            movement = movement.normalized * speed * Time.deltaTime;
-            playerRigidBody.MovePosition(transform.position + movement);
+            Vector3 playerToMouse = floorHit.point - transform.position;
+            playerToMouse.y = 0f;
+
+            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+            playerRigidBody.MoveRotation(newRotation);
         }
+    }
 
-        private void Turning()
-        {
-            Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit floorHit;
-
-            if (Physics.Raycast(camRay, out floorHit, camRayLength, floorMask))
-            {
-                Vector3 playerToMouse = floorHit.point - transform.position;
-                playerToMouse.y = 0f;
-
-                Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
-                playerRigidBody.MoveRotation(newRotation);
-            }
-        }
-
-        private void Animating(float h, float v)
-        {
-            bool walking = h != 0f || v != 0f;
-            anim.SetBool("IsWalking", walking);
-        }
+    private void Animating(float h, float v)
+    {
+        bool walking = h != 0f || v != 0f;
+        anim.SetBool("IsWalking", walking);
+    }
 }
