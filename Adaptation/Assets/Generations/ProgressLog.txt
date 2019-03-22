@@ -2,28 +2,28 @@
 ------- Generation: 0 -------
 
 Individuals (sorted by fitness value): 
-	Score: 0,5432986			 Traits: hmhh
-	Score: -1,622054			 Traits: hmsh
-	Score: -1,843313			 Traits: sddd
-	Score: -3,310548			 Traits: ddmd
-	Score: -3,527853			 Traits: mhhd
-	Score: -5,314992			 Traits: ddsh
-	Score: -8,712205			 Traits: dssm
-	Score: -9,614624			 Traits: hdmh
+	Score: 19,92081			 Traits: hsms
+	Score: 18,31973			 Traits: dmsh
+	Score: 10,27959			 Traits: shmm
+	Score: 8,296923			 Traits: dhdh
+	Score: 7,552937			 Traits: mssd
+	Score: 7,374344			 Traits: hmdh
+	Score: 7,332699			 Traits: smds
+	Score: 2,369751			 Traits: dmhm
 
 Best individuals (parents for next gen): 
-	Traits: hmhh
-	Traits: hmsh
-	Traits: sddd
-	Traits: ddmd
+	Traits: hsms
+	Traits: dmsh
+	Traits: shmm
+	Traits: dhdh
 
 New generation: 
-	Traits: hmhh
-	Traits: hmsh
-	Traits: sddd
-	Traits: ddmd
-	Traits: hmsh
-	Traits: hmhh
-	Traits: sdmd
-	Traits: dddd
+	Traits: hsms
+	Traits: dmsh
+	Traits: shmm
+	Traits: dhdh
+	Traits: hssh
+	Traits: dmms
+	Traits: shdh
+	Traits: dhmm
 

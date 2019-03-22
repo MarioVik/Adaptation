@@ -1,56 +1,56 @@
 
-Individual number: 1
+Individual number: 7
 Damage done to player: 0
-Time spent alive: 4,505615
-Distance to player: 1,44924
-Fitness score: 0,0789476
-
-
-Individual number: 0
-Damage done to player: 0
-Time spent alive: 6,472292
-Distance to player: 3,8824
-Fitness score: -2,587454
-
-
-Individual number: 4
-Damage done to player: 0
-Time spent alive: 7,637865
-Distance to player: 7,937854
-Fitness score: -8,087849
-
-
-Individual number: 3
-Damage done to player: 0
-Time spent alive: 8,462656
-Distance to player: 8,384021
-Fitness score: -8,344704
+Time spent alive: 5,672038
+Distance to player: 2,356213
+Fitness score: -0,6983001
 
 
 Individual number: 5
 Damage done to player: 0
-Time spent alive: 11,14741
-Distance to player: 2,31302
-Fitness score: 2,104175
+Time spent alive: 7,671148
+Distance to player: 2,6358
+Fitness score: -0,118126
 
 
-Individual number: 7
+Individual number: 3
 Damage done to player: 0
-Time spent alive: 12,6047
-Distance to player: 5,706648
-Fitness score: -2,257623
-
-
-Individual number: 6
-Damage done to player: 0
-Time spent alive: 14,38937
-Distance to player: 5,216834
-Fitness score: -0,6305654
+Time spent alive: 9,6433
+Distance to player: 1,442631
+Fitness score: 2,657704
 
 
 Individual number: 2
+Damage done to player: 30
+Time spent alive: 16,29824
+Distance to player: 0,8744098
+Fitness score: 36,83751
+
+
+Individual number: 0
 Damage done to player: 0
-Time spent alive: 16,31418
-Distance to player: 4,16176
-Fitness score: 1,914448
+Time spent alive: 16,54192
+Distance to player: 2,095785
+Fitness score: 5,127283
+
+
+Individual number: 6
+Damage done to player: 15
+Time spent alive: 16,62239
+Distance to player: 2,209122
+Fitness score: 19,99751
+
+
+Individual number: 1
+Damage done to player: 0
+Time spent alive: 18,32358
+Distance to player: 1,978987
+Fitness score: 6,193309
+
+
+Individual number: 4
+Damage done to player: 0
+Time spent alive: 18,66818
+Distance to player: 2,383018
+Fitness score: 5,759562
 

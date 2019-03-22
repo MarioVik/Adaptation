@@ -45,9 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponcollider: {fileID: 1917039016}
-  damagePerAttack: 20
-  timeBetweenAttacks: 0.15
-  range: 100
 --- !u!82 &6478175286192527607
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1966,7 +1963,7 @@ Transform:
   m_GameObject: {fileID: 1759537257034320}
   m_LocalRotation: {x: -0.70839787, y: -0.00031848613, z: -0.0022091607, w: 0.7058099}
   m_LocalPosition: {x: 0.11881603, y: -0.026984178, z: 0.007319052}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.4, z: 1}
   m_Children: []
   m_Father: {fileID: 4946330883490848}
   m_RootOrder: 5
@@ -2027,7 +2024,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.17297588
-  m_Height: 1.4528031
+  m_Height: 1.452803
   m_Direction: 1
   m_Center: {x: -0.000000010724975, y: -0.5163905, z: 0.00000055296135}
 --- !u!114 &1917039017
@@ -2042,6 +2039,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9302a3d77512d4bb0c6d206739b445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackingScript: {fileID: 1451150560}
 --- !u!1 &1763373088721764
 GameObject:
   m_ObjectHideFlags: 0

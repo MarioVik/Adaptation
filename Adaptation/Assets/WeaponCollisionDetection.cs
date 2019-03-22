@@ -12,7 +12,7 @@ public class WeaponCollisionDetection : MonoBehaviour
         EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
         if (enemyHealth != null)
         {
-            attackingScript.HitEnemy(enemyHealth);
+            attackingScript.HitEnemy(enemyHealth, enemyHealth.transform.position);
         }
     }
 }
