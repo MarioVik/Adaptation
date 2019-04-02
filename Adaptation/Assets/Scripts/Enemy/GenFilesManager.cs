@@ -8,9 +8,9 @@ static public class GenFilesManager
 {
     //static public string DirectoryPath { get { return @"C:\Users\vikto\OneDrive\År3\Examensarbete\Adaptation\Adaptation\Assets\Generations\"; } }
     static public string DirectoryPath { get { return @"Assets\Generations\"; } }
-    static public string PlayerFilename { get { return "playertraits.txt"; } }
+    static public string PlayerFilename { get { return "PlayerTraits.txt"; } }
     static public string PlayerFilepath { get { return DirectoryPath + PlayerFilename; } }
-    static public string EnemyFilename { get { return "generation_" + GenerationManager.CurrentGeneration + ".txt"; } }
+    static public string EnemyFilename { get { return "Generation_" + GenerationManager.CurrentGeneration + ".txt"; } }
     static public string EnemyFilepath { get { return DirectoryPath + EnemyFilename; } }
 
     static public void SavePlayer(string playerTraits)

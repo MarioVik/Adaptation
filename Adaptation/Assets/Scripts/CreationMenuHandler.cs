@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CreationMenuHandler : MonoBehaviour
@@ -26,20 +27,6 @@ public class CreationMenuHandler : MonoBehaviour
     int health, attackDamage, attackSpeed, attackRange, movementSpeed;
     bool melee, ranged, block, dash;
 
-    //private int SpentAttributes { get { return health + attackDamage + attackSpeed + attackRange + movementSpeed; } }
-    //private int SpentFeatures
-    //{
-    //    get
-    //    {
-    //        int feats = 0;
-    //        if (melee) feats++;
-    //        if (ranged) feats++;
-    //        if (block) feats++;
-    //        if (dash) feats++;
-    //        return feats;
-    //    }
-    //}
-
     private void Start()
     {
         UpdateGUI();
@@ -48,8 +35,7 @@ public class CreationMenuHandler : MonoBehaviour
     public void CompletePlayer()
     {
         GenFilesManager.SavePlayer(GetPlayerTraits());
-        //Load Level 1
-
+        SceneManager.LoadScene(1);
     }
 
     private string GetPlayerTraits()
