@@ -23,8 +23,8 @@ public class GenerationManager : MonoBehaviour
     readonly int individualSize = 4;
 
     System.Random rand = new System.Random();
-    char[] possibleTraits = new char[] { 'h', 'm', 'd', 's' };
-    char RandomTrait { get { return possibleTraits[rand.Next(0, possibleTraits.Length)]; } }
+    char[] possibleAttributes = new char[] { 'h', 'd', 's', 'r', 'm' };
+    char RandomAttribute { get { return possibleAttributes[rand.Next(0, possibleAttributes.Length)]; } }
 
     bool gameStarted = false;
 
@@ -102,7 +102,7 @@ public class GenerationManager : MonoBehaviour
             StringBuilder newIndividual = new StringBuilder();
             for (int j = 0; j < individualSize; j++)
             {
-                newIndividual.Append(RandomTrait);
+                newIndividual.Append(RandomAttribute);
             }
             newGeneration.Add(newIndividual.ToString());
         }
@@ -110,7 +110,7 @@ public class GenerationManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Breeds a new generation and saves it as a txt-file 
+    /// Breeds a new generation and saves it as a .txt file 
     /// </summary>
     void CreateNextGeneration()
     {
@@ -186,7 +186,7 @@ public class GenerationManager : MonoBehaviour
 
             int placeToChange = rand.Next(0, child.Length);
             char newTrait;
-            do { newTrait = RandomTrait; } while (newTrait == child[placeToChange]);
+            do { newTrait = RandomAttribute; } while (newTrait == child[placeToChange]);
             child[placeToChange] = newTrait;
 
             /*Logging*/

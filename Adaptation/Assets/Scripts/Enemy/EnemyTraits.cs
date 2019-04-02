@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyTraits : MonoBehaviour
 {
-    string traits;
+    string[] traits;
     int individualNumber;
     float totalDamage = 0;
     float timeAlive = 0;
@@ -28,22 +28,21 @@ public class EnemyTraits : MonoBehaviour
 
     void Start()
     {
-        traits = GenerationManager.FetchTraits(out individualNumber);
-        foreach (char tempChar in traits)
-        {
-            ApplyTrait(tempChar);
-        }
+        traits = GenerationManager.FetchTraits(out individualNumber).Split('|');
+
+        foreach (char tempChar in traits[0])
+            ApplyAttribute(tempChar);
+
+        //foreach (char tempChar in traits[1])
+        //    ApplyFeature(tempChar);
     }
 
-    void ApplyTrait(char traitChar)
+    void ApplyAttribute(char attrChar)
     {
-        switch (traitChar)
+        switch (attrChar)
         {
             case 'h':
                 GetComponent<EnemyHealth>().IncreaseHealth(10);
-                break;
-            case 'm':
-                GetComponent<EnemyMovement>().IncreaseSpeed(1.5f);
                 break;
             case 'd':
                 GetComponent<EnemyAttack>().IncreaseAttackDamage(5);
@@ -51,8 +50,35 @@ public class EnemyTraits : MonoBehaviour
             case 's':
                 GetComponent<EnemyAttack>().IncreaseAttackSpeed(0.1f);
                 break;
+            case 'r':
+                GetComponent<EnemyAttack>().IncreaseAttackRange(0.1f);
+                break;
+            case 'm':
+                GetComponent<EnemyMovement>().IncreaseSpeed(1.5f);
+                break;
             default:
-                throw new System.Exception("Enemy has unrecognized trait");
+                throw new System.Exception("Enemy has unrecognized attribute");
+        }
+    }
+
+    void ApplyFeature(char featChar)
+    {
+        switch (featChar)
+        {
+            case 'M':
+                //attach meleeattacking script
+                break;
+            case 'R':
+                //attach playershooting script
+                break;
+            case 'B':
+                GetComponent<EnemyHealth>().EnableBlock();
+                break;
+            case 'D':
+                GetComponent<EnemyMovement>().EnableDash();
+                break;
+            default:
+                throw new System.Exception("Enemy has unrecognized feature");
         }
     }
 

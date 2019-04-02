@@ -9,6 +9,8 @@ public class EnemyMovement : MonoBehaviour
     EnemyHealth enemyHealth;
     NavMeshAgent navAgent;
 
+    bool dashEnabled;
+
     public void IncreaseSpeed(float increase)
     {
         navAgent.acceleration += increase;
@@ -34,6 +36,19 @@ public class EnemyMovement : MonoBehaviour
         else
         {
             navAgent.enabled = false;
+        }
+    }
+
+    public void EnableDash()
+    {
+        dashEnabled = false;
+    }
+
+    private void Dash()
+    {
+        if (dashEnabled)
+        {
+            //Move a set distance in turned direction 
         }
     }
 }

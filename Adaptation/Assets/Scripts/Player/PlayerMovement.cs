@@ -10,6 +10,13 @@ public class PlayerMovement : MonoBehaviour
     int floorMask;
     float camRayLength = 100f;
 
+    bool dashEnabled;
+
+    public void IncreaseSpeed(float increase)
+    {
+        speed += increase;
+    }
+
     private void Awake()
     {
         floorMask = LayerMask.GetMask("Floor");
@@ -52,5 +59,18 @@ public class PlayerMovement : MonoBehaviour
     {
         bool walking = h != 0f || v != 0f;
         anim.SetBool("IsWalking", walking);
+    }
+
+    public void EnableDash()
+    {
+        dashEnabled = false;
+    }
+
+    private void Dash()
+    {
+        if (dashEnabled)
+        {
+            //Move a set distance in turned direction 
+        }
     }
 }

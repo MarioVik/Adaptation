@@ -13,14 +13,20 @@ public class PlayerHealth : MonoBehaviour
     public AudioClip deathClip;
     public float flashSpeed = 5f;
     public Color flashColour = new Color(1f, 0f, 0f, 0.1f);
-
-
+    
     Animator anim;
     AudioSource playerAudio;
     PlayerMovement playerMovement;
     //PlayerShooting playerShooting;
     bool isDead;
     bool damaged;
+    bool blockEnabled;
+
+    public void IncreaseHealth(int increase)
+    {
+        startingHealth += increase;
+        currentHealth = startingHealth;
+    }
 
     public void ResetHealth()
     {
@@ -36,8 +42,7 @@ public class PlayerHealth : MonoBehaviour
         //playerShooting = GetComponentInChildren<PlayerShooting>();
         ResetHealth();
     }
-
-
+    
     void Update()
     {
         if (damaged)
@@ -50,8 +55,7 @@ public class PlayerHealth : MonoBehaviour
         }
         damaged = false;
     }
-
-
+    
     public void TakeDamage(int amount)
     {
         damaged = true;
@@ -63,7 +67,6 @@ public class PlayerHealth : MonoBehaviour
             Death();
         }
     }
-
 
     void Death()
     {
@@ -80,9 +83,21 @@ public class PlayerHealth : MonoBehaviour
         //playerShooting.enabled = false;
     }
 
-
     public void RestartLevel()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void EnableBlock()
+    {
+        blockEnabled = false;
+    }
+
+    private void Block()
+    {
+        if (blockEnabled)
+        {
+            //Disable/reduce damage taken for certain duration
+        }
     }
 }

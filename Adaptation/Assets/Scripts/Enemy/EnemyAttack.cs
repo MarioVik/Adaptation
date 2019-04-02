@@ -23,6 +23,11 @@ public class EnemyAttack : MonoBehaviour
         attackDamage += increase;
     }
 
+    public void IncreaseAttackRange(float increase)
+    {
+        transform.localScale = new Vector3(transform.localScale.x + increase, transform.localScale.y, transform.localScale.z + increase);
+    }
+
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");

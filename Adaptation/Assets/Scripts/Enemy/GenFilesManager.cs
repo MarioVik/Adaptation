@@ -33,6 +33,14 @@ static public class GenFilesManager
         //TextAsset asset = (TextAsset)Resources.Load(Filename);
     }
 
+    static public string LoadPlayer()
+    {
+        StreamReader reader = new StreamReader(PlayerFilepath);
+        string playerTraits = reader.ReadLine();
+        reader.Close();
+        return playerTraits;
+    }
+
     static public List<Individual> LoadGeneration()
     {
         StreamReader reader = new StreamReader(EnemyFilepath);

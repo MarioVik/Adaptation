@@ -16,6 +16,8 @@ public class EnemyHealth : MonoBehaviour
     bool isDead;
     bool isSinking;
 
+    bool blockEnabled;
+
     public void IncreaseHealth(int increase)
     {
         startingHealth += increase;
@@ -81,5 +83,18 @@ public class EnemyHealth : MonoBehaviour
         isSinking = true;
         IndividualsTextManager.killedIndividuals += 1;
         Destroy(gameObject, 2f);
+    }
+
+    public void EnableBlock()
+    {
+        blockEnabled = false;
+    }
+
+    private void Block()
+    {
+        if (blockEnabled)
+        {
+            //Disable/reduce damage taken for certain duration
+        }
     }
 }

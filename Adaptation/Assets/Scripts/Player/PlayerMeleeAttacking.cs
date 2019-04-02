@@ -18,6 +18,24 @@ public class PlayerMeleeAttacking : MonoBehaviour
 
     List<EnemyHealth> hitEnemies;
 
+    public void IncreaseAttackDamage(int increase)
+    {
+        damagePerAttack += increase;
+    }
+
+    public void IncreaseAttackSpeed(float increase)
+    {
+        //Scale animation time                                  <<<<---- TODO
+        timeBetweenAttacks -= increase;
+    }
+
+    public void IncreaseAttackRange(float increase)
+    {
+        weaponcollider.transform.localScale = new Vector3(
+            weaponcollider.transform.localScale.x, 
+            weaponcollider.transform.localScale.y + increase,
+            weaponcollider.transform.localScale.z);
+    }
 
     void Awake()
     {

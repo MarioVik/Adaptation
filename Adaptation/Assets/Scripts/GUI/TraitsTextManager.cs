@@ -22,7 +22,7 @@ public class TraitsTextManager : MonoBehaviour
         StreamReader reader = new StreamReader(GenFilesManager.EnemyFilepath);
         while (!reader.EndOfStream)
         {
-            textFileText.AppendLine(reader.ReadLine());
+            textFileText.AppendLine("\t" + reader.ReadLine());
         }
         reader.Close();
 
