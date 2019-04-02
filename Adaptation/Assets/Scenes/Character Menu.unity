@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44864208, g: 0.4949655, b: 0.555642, a: 1}
+  m_IndirectSpecularColor: {r: 0.44864148, g: 0.49496484, b: 0.5556409, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -397,7 +397,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 278607667}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: DecreaseHealth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &278607667
@@ -449,6 +460,7 @@ GameObject:
   - component: {fileID: 395663824}
   - component: {fileID: 395663823}
   - component: {fileID: 395663822}
+  - component: {fileID: 395663826}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -538,6 +550,38 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &395663826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395663821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9888854f88775b4abdbcf4b4a30681b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attributeTexts:
+  - {fileID: 1804811395}
+  - {fileID: 772268639}
+  - {fileID: 2113202018}
+  - {fileID: 1338050924}
+  - {fileID: 1477278357}
+  - {fileID: 1240950460}
+  featureTexts:
+  - {fileID: 929881543}
+  - {fileID: 981489118}
+  - {fileID: 1902499868}
+  - {fileID: 2096248328}
+  - {fileID: 1920233788}
+  featureButtonTexts:
+  - {fileID: 2124552033}
+  - {fileID: 1570702749}
+  - {fileID: 1329237707}
+  - {fileID: 1059642473}
+  totalAttributes: 8
+  totalFeatures: 2
 --- !u!1001 &529350227
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -713,7 +757,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -400, y: 80}
+  m_AnchoredPosition: {x: -350, y: 80}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &547612207
@@ -738,7 +782,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 5855fee1854558544b21a80ffc36269f, type: 3}
-    m_FontSize: 30
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -836,7 +880,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 558902216}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: DecreaseAttackDamage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &558902216
@@ -1060,7 +1115,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -100.00002}
+  m_AnchoredPosition: {x: 40, y: -100.00002}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &772268639
@@ -1183,7 +1238,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 807990351}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: IncreaseHealth
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &807990351
@@ -1301,7 +1367,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 813354670}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: IncreaseAttackRange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &813354670
@@ -1419,7 +1496,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 834203951}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: DecreaseAttackRange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &834203951
@@ -1494,7 +1582,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -50}
+  m_AnchoredPosition: {x: 40, y: -50}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &929881543
@@ -1631,7 +1719,7 @@ GameObject:
   - component: {fileID: 976046682}
   - component: {fileID: 976046681}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ButtonToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1696,7 +1784,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 976046682}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: ToggleMelee
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &976046682
@@ -1771,7 +1870,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -100.00002}
+  m_AnchoredPosition: {x: 40, y: -100.00002}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &981489118
@@ -1999,7 +2098,7 @@ GameObject:
   - component: {fileID: 1066426077}
   - component: {fileID: 1066426076}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ButtonToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2064,7 +2163,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1066426077}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: ToggleRanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1066426077
@@ -2275,7 +2385,7 @@ GameObject:
   - component: {fileID: 1204056518}
   - component: {fileID: 1204056517}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ButtonToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2340,7 +2450,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1204056518}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: ToggleBlock
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1204056518
@@ -2415,7 +2536,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: -350}
-  m_SizeDelta: {x: 350, y: 50}
+  m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1240950460
 MonoBehaviour:
@@ -2450,7 +2571,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Atrribute Points Left: 8'
+  m_Text: 'Atrribute Points Left: 0'
 --- !u!222 &1240950461
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2551,7 +2672,7 @@ GameObject:
   - component: {fileID: 1264928590}
   - component: {fileID: 1264928589}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ButtonToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2616,7 +2737,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1264928590}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: ToggleDash
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1264928590
@@ -2734,7 +2866,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1286819451}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: DereaseAttackSpeed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1286819451
@@ -2889,7 +3032,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -200}
+  m_AnchoredPosition: {x: 40, y: -200}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1338050924
@@ -3194,7 +3337,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -250}
+  m_AnchoredPosition: {x: 40, y: -250}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1477278357
@@ -3396,7 +3539,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1629019837}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: DecreaseMovementSpeed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1629019837
@@ -3514,7 +3668,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1699586423}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: IncreaseAttackDamage
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1699586423
@@ -3590,7 +3755,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -50}
+  m_AnchoredPosition: {x: 40, y: -50}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1804811395
@@ -3792,7 +3957,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1856771206}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: IncreaseAttackSpeed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1856771206
@@ -3867,7 +4043,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -150.00005}
+  m_AnchoredPosition: {x: 40, y: -150.00005}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1902499868
@@ -3952,7 +4128,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 260, y: 80}
+  m_AnchoredPosition: {x: 210, y: 80}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1908180541
@@ -3977,7 +4153,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 5855fee1854558544b21a80ffc36269f, type: 3}
-    m_FontSize: 30
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -4067,7 +4243,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Feature Points Left: 2'
+  m_Text: 'Feature Points Left: 0'
 --- !u!222 &1920233789
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4154,7 +4330,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2041935202}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 395663826}
+        m_MethodName: IncreaseMovementSpeed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2041935202
@@ -4229,7 +4416,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -200.00003}
+  m_AnchoredPosition: {x: 40, y: -200.00003}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2096248328
@@ -4310,7 +4497,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -150.00005}
+  m_AnchoredPosition: {x: 40, y: -150.00005}
   m_SizeDelta: {x: 350, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2113202018
