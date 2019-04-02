@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,9 @@ public class CreationMenuHandler : MonoBehaviour
     Text[] featureTexts;
     [SerializeField]
     Text[] featureButtonTexts;
+
+    [SerializeField]
+    Button completeButton;
 
     [SerializeField]
     int totalAttributes;
@@ -41,6 +45,49 @@ public class CreationMenuHandler : MonoBehaviour
         UpdateGUI();
     }
 
+    public void CompletePlayer()
+    {
+        GenFilesManager.SavePlayer(GetPlayerTraits());
+        //Load Level 1
+
+    }
+
+    private string GetPlayerTraits()
+    {
+        StringBuilder playertraits = new StringBuilder();
+
+        for (int i = 0; i < health; i++)
+            playertraits.Append('h');
+
+        for (int i = 0; i < attackDamage; i++)
+            playertraits.Append('d');
+
+        for (int i = 0; i < attackSpeed; i++)
+            playertraits.Append('s');
+
+        for (int i = 0; i < attackRange; i++)
+            playertraits.Append('r');
+
+        for (int i = 0; i < movementSpeed; i++)
+            playertraits.Append('m');
+
+        playertraits.Append('|');
+
+        if (melee)
+            playertraits.Append('M');
+
+        if (ranged)
+            playertraits.Append('R');
+
+        if (block)
+            playertraits.Append('B');
+
+        if (dash)
+            playertraits.Append('D');
+
+        return playertraits.ToString();
+    }
+
     public void UpdateGUI()
     {
         attributeTexts[0].text = "Health: " + health;
@@ -60,6 +107,16 @@ public class CreationMenuHandler : MonoBehaviour
         featureButtonTexts[1].text = ranged ? "x" : "o";
         featureButtonTexts[2].text = block ? "x" : "o";
         featureButtonTexts[3].text = dash ? "x" : "o";
+
+        if (totalAttributes - attributes == 0
+            && totalFeatures - features == 0)
+        {
+            completeButton.interactable = true;
+        }
+        else
+        {
+            completeButton.interactable = false;
+        }
     }
 
     public void IncreaseHealth()

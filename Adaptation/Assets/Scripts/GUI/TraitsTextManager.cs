@@ -19,7 +19,7 @@ public class TraitsTextManager : MonoBehaviour
         StringBuilder textFileText = new StringBuilder();
         textFileText.AppendLine("Current generation:");
 
-        StreamReader reader = new StreamReader(GenFilesManager.Filepath);
+        StreamReader reader = new StreamReader(GenFilesManager.EnemyFilepath);
         while (!reader.EndOfStream)
         {
             textFileText.AppendLine(reader.ReadLine());

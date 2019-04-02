@@ -12,7 +12,7 @@ static public class GenLogManager
     static StringBuilder progressLog, individualDetailsLog, logForGraphing;
 
     static string ProgressLogPath { get { return GenFilesManager.DirectoryPath + "ProgressLog.txt"; } }
-    static string IndividualDetailsLogPath { get { return GenFilesManager.DirectoryPath + "IndividualDetailsLog_" + GenFilesManager.Filename; } }
+    static string IndividualDetailsLogPath { get { return GenFilesManager.DirectoryPath + "IndividualDetailsLog_" + GenFilesManager.EnemyFilename; } }
     static string LogForGraphingPath { get { return GenFilesManager.DirectoryPath + "LogForGraphing.txt"; } }
 
     static public void Initialize()
