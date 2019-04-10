@@ -17,6 +17,21 @@ public class PlayerShooting : MonoBehaviour
     Light gunLight;
     float effectsDisplayTime = 0.2f;
 
+    public void IncreaseAttackDamage(int increase)
+    {
+        damagePerShot += increase;
+    }
+
+    public void IncreaseAttackSpeed(float increase)
+    {
+        //Scale animation time                                  <<<<---- TODO
+        timeBetweenBullets -= increase;
+    }
+
+    public void IncreaseAttackRange(float increase)
+    {
+        range += increase;
+    }
 
     void Awake()
     {
