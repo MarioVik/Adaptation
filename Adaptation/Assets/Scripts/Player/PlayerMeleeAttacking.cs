@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMeleeAttacking : MonoBehaviour
 {
-    [SerializeField]
     Collider weaponcollider;
 
     int damagePerAttack = 40;
@@ -32,7 +31,7 @@ public class PlayerMeleeAttacking : MonoBehaviour
     public void IncreaseAttackRange(float increase)
     {
         weaponcollider.transform.localScale = new Vector3(
-            weaponcollider.transform.localScale.x, 
+            weaponcollider.transform.localScale.x,
             weaponcollider.transform.localScale.y + increase,
             weaponcollider.transform.localScale.z);
     }
@@ -42,6 +41,7 @@ public class PlayerMeleeAttacking : MonoBehaviour
         shootableMask = LayerMask.GetMask("Shootable");
         weaponAudio = GetComponent<AudioSource>();
         anim = GetComponentInParent<Animator>();
+        weaponcollider = GetComponent<CapsuleCollider>();
         weaponcollider.enabled = false;
         attackTimer = timeBetweenAttacks;
         animationTimer = 0;
@@ -101,8 +101,12 @@ public class PlayerMeleeAttacking : MonoBehaviour
         Debug.Log("Enemy hit");
     }
 
-    //public void HitEnemy()
-    //{
-    //    enemyHealth.TakeDamage(damagePerShot, shootHit.point);
-    //}
+    private void OnTriggerEnter(Collider other)
+    {
+        EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
+        if (enemyHealth != null)
+        {
+            HitEnemy(enemyHealth, enemyHealth.transform.position);
+        }
+    }
 }

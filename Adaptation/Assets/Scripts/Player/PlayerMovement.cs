@@ -28,6 +28,9 @@ public class PlayerMovement : MonoBehaviour
     {
         float horisontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
+
+        if (Input.GetButtonDown("Fire2"))
+            Dash(horisontal, vertical);
         Move(horisontal, vertical);
         Turning();
         Animating(horisontal, vertical);
@@ -66,10 +69,13 @@ public class PlayerMovement : MonoBehaviour
         dashEnabled = false;
     }
 
-    private void Dash()
+    private void Dash(float horizontal, float vertical)
     {
         if (dashEnabled)
         {
+            movement.Set(horizontal, 0f, vertical);
+            movement = movement.normalized * (speed * 10) * Time.deltaTime;
+            playerRigidBody.MovePosition(transform.position + movement);
             //Move a set distance in turned direction 
         }
     }
