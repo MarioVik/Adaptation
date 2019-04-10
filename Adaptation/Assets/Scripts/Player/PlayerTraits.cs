@@ -6,11 +6,11 @@ using UnityEngine;
 public class PlayerTraits : MonoBehaviour
 {
     [SerializeField]
-    GameObject meleePrefab;
+    GameObject meleeObject;
     [SerializeField]
-    GameObject rangedPrefab;
+    GameObject rangedObject;
     [SerializeField]
-    GameObject blockPrefab;
+    GameObject blockObject;
 
     bool ranged, melee;
 
@@ -63,13 +63,16 @@ public class PlayerTraits : MonoBehaviour
         switch (featChar)
         {
             case 'M':
-                ApplyMelee();
+                meleeObject.SetActive(true);
+                melee = true;
                 break;
             case 'R':
-                ApplyRanged();
+                rangedObject.SetActive(true);
+                ranged = true;
                 break;
             case 'B':
-                ApplyBlock();
+                blockObject.SetActive(true);
+                GetComponent<PlayerHealth>().EnableBlock();
                 break;
             case 'D':
                 GetComponent<PlayerMovement>().EnableDash();
@@ -77,34 +80,6 @@ public class PlayerTraits : MonoBehaviour
             default:
                 throw new System.Exception("Player has unrecognized feature");
         }
-    }
-
-    void ApplyMelee()
-    {
-        GameObject rightHand = new GameObject();
-        GetChildObject(transform, "RightHand", ref rightHand);
-        GameObject meleeObj = Instantiate(meleePrefab);
-        meleeObj.transform.parent = rightHand.transform;
-        melee = true;
-    }
-
-    void ApplyRanged()
-    {
-        GameObject rightHand = new GameObject();
-        GetChildObject(transform, "RightHand", ref rightHand);
-        GameObject rangedObj = Instantiate(rangedPrefab);
-        rangedObj.transform.parent = rightHand.transform;
-        ranged = true;
-    }
-
-    void ApplyBlock()
-    {
-        GameObject leftHand = new GameObject();
-        GetChildObject(transform, "LeftHand", ref leftHand);
-        GameObject blockObj = Instantiate(blockPrefab);
-        blockObj.transform.parent = leftHand.transform;
-
-        GetComponent<PlayerHealth>().EnableBlock();
     }
 
     void GetChildObject(Transform parent, string _tag, ref GameObject targetChild)

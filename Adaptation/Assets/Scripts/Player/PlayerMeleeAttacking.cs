@@ -36,7 +36,7 @@ public class PlayerMeleeAttacking : MonoBehaviour
             weaponcollider.transform.localScale.z);
     }
 
-    void Awake()
+    private void Awake()
     {
         shootableMask = LayerMask.GetMask("Shootable");
         weaponAudio = GetComponent<AudioSource>();

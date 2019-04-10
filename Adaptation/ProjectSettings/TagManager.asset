@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - LeftHand
   - RightHand
+  - MeleeWeapon
+  - RangedWeapon
   layers:
   - Default
   - TransparentFX
