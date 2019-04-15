@@ -38,19 +38,25 @@ public class PlayerTraits : MonoBehaviour
                 if (melee)
                     GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackDamage(5);
                 if (ranged)
-                    GetComponentInChildren<PlayerShooting>().IncreaseAttackDamage(5);
+                    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackDamage(5);
                 break;
             case 's':
                 if (melee)
                     GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackSpeed(0.1f);
                 if (ranged)
-                    GetComponentInChildren<PlayerShooting>().IncreaseAttackSpeed(0.1f);
+                    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackSpeed(10f);
+                break;
+            case 'o':
+                if (melee)
+                    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRate(0.1f);
+                if (ranged)
+                    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRate(0.1f);
                 break;
             case 'r':
                 if (melee)
                     GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRange(0.1f);
                 if (ranged)
-                    GetComponentInChildren<PlayerShooting>().IncreaseAttackRange(10f);
+                    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRange(1f);
                 break;
             case 'm':
                 GetComponent<PlayerMovement>().IncreaseSpeed(1.5f);

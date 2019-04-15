@@ -7,7 +7,7 @@ public class PlayerMeleeAttacking : MonoBehaviour
     Collider weaponcollider;
 
     int damagePerAttack = 40;
-    float timeBetweenAttacks = 0.7f;
+    float timeBetweenAttacks = 0.8f;
 
     float attackTimer;
     int shootableMask;
@@ -24,7 +24,11 @@ public class PlayerMeleeAttacking : MonoBehaviour
 
     public void IncreaseAttackSpeed(float increase)
     {
-        //Scale animation time                                  <<<<---- TODO
+        //Scale animation time                                  <<<<---- TODO        
+    }
+
+    public void IncreaseAttackRate(float increase)
+    {
         timeBetweenAttacks -= increase;
     }
 

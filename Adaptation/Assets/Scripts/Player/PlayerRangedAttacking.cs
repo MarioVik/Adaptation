@@ -10,8 +10,8 @@ public class PlayerRangedAttacking : MonoBehaviour
     Transform shootOrigin;
 
     int damagePerAttack = 40;
-    float timeBetweenAttacks = 0.7f;
-    float range = 100f;
+    float timeBetweenAttacks = 0.8f;
+    float range = 8f;
     float speed = 20f;
 
     float attackTimer;
@@ -28,6 +28,11 @@ public class PlayerRangedAttacking : MonoBehaviour
     public void IncreaseAttackSpeed(float increase)
     {
         //Scale animation time                                  <<<<---- TODO
+        speed += increase;
+    }
+
+    public void IncreaseAttackRate(float increase)
+    {
         timeBetweenAttacks -= increase;
     }
 

@@ -16,7 +16,7 @@ public class ProjectileBehaviour : MonoBehaviour
         this.range = range;
         this.damage = damage;
 
-        startPos = originTransform.position;
+        startPos = transform.position;
     }
 
     void Awake()
