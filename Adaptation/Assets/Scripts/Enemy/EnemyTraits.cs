@@ -5,6 +5,15 @@ using UnityEngine;
 
 public class EnemyTraits : MonoBehaviour
 {
+    [SerializeField]
+    GameObject meleeObject;
+    [SerializeField]
+    GameObject rangedObject;
+    [SerializeField]
+    GameObject blockObject;
+
+    bool ranged, melee;
+
     string[] traits;
     int individualNumber;
     float totalDamage = 0;
@@ -45,13 +54,28 @@ public class EnemyTraits : MonoBehaviour
                 GetComponent<EnemyHealth>().IncreaseHealth(10);
                 break;
             case 'd':
-                GetComponent<EnemyAttack>().IncreaseAttackDamage(5);
+                if (melee)
+                    GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackDamage(5);
+                if (ranged)
+                    GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackDamage(5);
                 break;
             case 's':
-                GetComponent<EnemyAttack>().IncreaseAttackSpeed(0.1f);
+                if (melee)
+                    GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackSpeed(0.1f);
+                if (ranged)
+                    GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackSpeed(10f);
+                break;
+            case 'o':
+                if (melee)
+                    GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackRate(0.1f);
+                if (ranged)
+                    GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRate(0.1f);
                 break;
             case 'r':
-                GetComponent<EnemyAttack>().IncreaseAttackRange(0.1f);
+                if (melee)
+                    GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackRange(0.1f);
+                if (ranged)
+                    GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRange(1f);
                 break;
             case 'm':
                 GetComponent<EnemyMovement>().IncreaseSpeed(1.5f);
@@ -66,16 +90,18 @@ public class EnemyTraits : MonoBehaviour
         switch (featChar)
         {
             case 'M':
-                //attach meleeattacking script
+                meleeObject.SetActive(true);
+                melee = true;
                 break;
             case 'R':
-                //attach playershooting script
+                rangedObject.SetActive(true);
+                ranged = true;
                 break;
             case 'B':
-                GetComponent<EnemyHealth>().EnableBlock();
+                blockObject.SetActive(true);
                 break;
             case 'D':
-                GetComponent<EnemyMovement>().EnableDash();
+                GetComponent<EnemyDashing>().enabled = true;
                 break;
             default:
                 throw new System.Exception("Enemy has unrecognized feature");

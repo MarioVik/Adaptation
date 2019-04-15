@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44864148, g: 0.49496484, b: 0.5556409, a: 1}
+  m_IndirectSpecularColor: {r: 0.44864208, g: 0.4949655, b: 0.555642, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3029,7 +3029,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 395663826}
-        m_MethodName: DereaseAttackSpeed
+        m_MethodName: DecreaseAttackSpeed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
