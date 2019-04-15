@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMeleeAttacking : MonoBehaviour
+public class PlayerRangedAttacking : MonoBehaviour
 {
-    Collider weaponcollider;
+    [SerializeField]
+    GameObject projectilePrefab;
+    [SerializeField]
+    Transform shootOrigin;
 
     int damagePerAttack = 40;
     float timeBetweenAttacks = 0.7f;
+    float range = 100f;
+    float speed = 20f;
 
     float attackTimer;
     int shootableMask;
     AudioSource weaponAudio;
     float animationDuration, animationTimer;
     Animator anim;
-
-    List<EnemyHealth> hitEnemies;
 
     public void IncreaseAttackDamage(int increase)
     {
@@ -30,10 +33,7 @@ public class PlayerMeleeAttacking : MonoBehaviour
 
     public void IncreaseAttackRange(float increase)
     {
-        weaponcollider.transform.localScale = new Vector3(
-            weaponcollider.transform.localScale.x,
-            weaponcollider.transform.localScale.y + increase,
-            weaponcollider.transform.localScale.z);
+        range += increase;
     }
 
     private void Awake()
@@ -41,12 +41,9 @@ public class PlayerMeleeAttacking : MonoBehaviour
         shootableMask = LayerMask.GetMask("Shootable");
         weaponAudio = GetComponent<AudioSource>();
         anim = GetComponentInParent<Animator>();
-        weaponcollider = GetComponent<CapsuleCollider>();
-        weaponcollider.enabled = false;
         attackTimer = timeBetweenAttacks;
         animationTimer = 0;
         animationDuration = GetAnimationTime();
-        hitEnemies = new List<EnemyHealth>();
     }
 
     public float GetAnimationTime()
@@ -73,39 +70,18 @@ public class PlayerMeleeAttacking : MonoBehaviour
             if (animationTimer >= animationDuration)
             {
                 animationTimer = 0;
-                weaponcollider.enabled = false;
                 anim.SetBool("IsAttacking", false);
-                foreach (EnemyHealth tempEnemy in hitEnemies)
-                    tempEnemy.AlreadyHit = false;
             }
         }
     }
 
     void Attack()
     {
+        GameObject projectile = Instantiate(projectilePrefab);
+        projectile.GetComponent<ProjectileBehaviour>().Initialize(shootOrigin, speed, range, damagePerAttack);
+
         attackTimer = 0f;
-        weaponcollider.enabled = true;
         weaponAudio.Play();
         anim.SetBool("IsAttacking", true);
-    }
-
-    public void HitEnemy(EnemyHealth enemyHealth, Vector3 hitPoint)
-    {
-        if (!enemyHealth.AlreadyHit)
-        {
-            enemyHealth.TakeDamage(damagePerAttack, hitPoint);
-            hitEnemies.Add(enemyHealth);
-        }
-        enemyHealth.AlreadyHit = true;
-        Debug.Log("Enemy hit");
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
-        if (enemyHealth != null)
-        {
-            HitEnemy(enemyHealth, enemyHealth.transform.position);
-        }
     }
 }

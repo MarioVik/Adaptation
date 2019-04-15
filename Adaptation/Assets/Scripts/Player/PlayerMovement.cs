@@ -7,10 +7,9 @@ public class PlayerMovement : MonoBehaviour
     Vector3 movement;
     Animator anim;
     Rigidbody playerRigidBody;
+    PlayerDashing playerDashing;
     int floorMask;
     float camRayLength = 100f;
-
-    bool dashEnabled;
 
     public void IncreaseSpeed(float increase)
     {
@@ -22,21 +21,23 @@ public class PlayerMovement : MonoBehaviour
         floorMask = LayerMask.GetMask("Floor");
         anim = GetComponent<Animator>();
         playerRigidBody = GetComponent<Rigidbody>();
+        playerDashing = GetComponent<PlayerDashing>();
     }
 
     private void FixedUpdate()
     {
-        float horisontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        if (!playerDashing.Dashing)
+        {
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetButtonDown("Fire2"))
-            Dash(horisontal, vertical);
-        Move(horisontal, vertical);
-        Turning();
-        Animating(horisontal, vertical);
+            Move(horizontal, vertical);
+            Turning();
+            Animating(horizontal, vertical);
+        }
     }
 
-    private void Move(float horizontal, float vertical)
+    public void Move(float horizontal, float vertical)
     {
         movement.Set(horizontal, 0f, vertical);
         movement = movement.normalized * speed * Time.deltaTime;
@@ -62,21 +63,5 @@ public class PlayerMovement : MonoBehaviour
     {
         bool walking = h != 0f || v != 0f;
         anim.SetBool("IsWalking", walking);
-    }
-
-    public void EnableDash()
-    {
-        dashEnabled = false;
-    }
-
-    private void Dash(float horizontal, float vertical)
-    {
-        if (dashEnabled)
-        {
-            movement.Set(horizontal, 0f, vertical);
-            movement = movement.normalized * (speed * 10) * Time.deltaTime;
-            playerRigidBody.MovePosition(transform.position + movement);
-            //Move a set distance in turned direction 
-        }
     }
 }

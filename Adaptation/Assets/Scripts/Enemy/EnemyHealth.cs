@@ -4,7 +4,7 @@ public class EnemyHealth : MonoBehaviour
 {
     public bool AlreadyHit { get; set; }
 
-    public int startingHealth = 100;
+    public int startingHealth = 80;
     public int currentHealth;
     public float sinkSpeed = 2.5f;
     public AudioClip deathClip;

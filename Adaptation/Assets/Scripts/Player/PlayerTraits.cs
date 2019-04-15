@@ -11,6 +11,8 @@ public class PlayerTraits : MonoBehaviour
     GameObject rangedObject;
     [SerializeField]
     GameObject blockObject;
+    //[SerializeField]
+    //GameObject dashObject;
 
     bool ranged, melee;
 
@@ -72,10 +74,9 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 'B':
                 blockObject.SetActive(true);
-                GetComponent<PlayerHealth>().EnableBlock();
                 break;
             case 'D':
-                GetComponent<PlayerMovement>().EnableDash();
+                GetComponent<PlayerDashing>().enabled = true;
                 break;
             default:
                 throw new System.Exception("Player has unrecognized feature");
