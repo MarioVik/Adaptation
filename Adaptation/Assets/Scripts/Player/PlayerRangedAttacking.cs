@@ -66,7 +66,7 @@ public class PlayerRangedAttacking : MonoBehaviour
 
         if (attackTimer >= timeBetweenAttacks && Time.timeScale != 0)
         {
-            if (Input.GetButton("Attack"))
+            if (Input.GetButton("Fire1"))
                 Attack();
         }
         else

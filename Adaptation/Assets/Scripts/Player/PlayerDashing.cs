@@ -26,22 +26,22 @@ public class PlayerDashing : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (Input.GetButton("Dash") && timer >= coolDown && !Dashing)
-        {
-            ActivateDash();
-            Debug.Log("Dashing");
-        }
+        //if (Input.GetButton("Jump") && timer >= coolDown && !Dashing)
+        //{
+        //    ActivateDash();
+        //    Debug.Log("Dashing");
+        //}
 
-        if (Dashing)
-        {
-            if (Vector3.Distance(transform.position, posBefore) >= dashDistance
-                || lastFramePos == transform.position)
-            {
-                Dashing = false;
-                timer = 0;
-                Debug.Log("Stopped dashing");
-            }
-        }
+        //if (Dashing)
+        //{
+        //    if (Vector3.Distance(transform.position, posBefore) >= dashDistance
+        //        || lastFramePos == transform.position)
+        //    {
+        //        Dashing = false;
+        //        timer = 0;
+        //        Debug.Log("Stopped dashing");
+        //    }
+        //}
     }
 
     private void FixedUpdate()
