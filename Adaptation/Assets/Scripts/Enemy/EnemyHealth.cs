@@ -13,7 +13,7 @@ public class EnemyHealth : MonoBehaviour
     AudioSource enemyAudio;
     ParticleSystem hitParticles;
     CapsuleCollider capsuleCollider;
-    bool isDead;
+    public bool IsDead { get; set; }
     bool isSinking;
 
     bool blockEnabled;
@@ -45,7 +45,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int amount, Vector3 hitPoint)
     {
-        if (isDead)
+        if (IsDead)
             return;
 
         enemyAudio.Play();
@@ -64,7 +64,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Death()
     {
-        isDead = true;
+        IsDead = true;
 
         capsuleCollider.isTrigger = true;
 

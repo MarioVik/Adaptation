@@ -5,12 +5,9 @@ using UnityEngine;
 
 public class PlayerTraits : MonoBehaviour
 {
-    [SerializeField]
-    GameObject meleeObject;
-    [SerializeField]
-    GameObject rangedObject;
-    [SerializeField]
-    GameObject blockObject;
+    [SerializeField] GameObject meleeObject;
+    [SerializeField] GameObject rangedObject;
+    [SerializeField] GameObject blockObject;
     //[SerializeField]
     //GameObject dashObject;
 
@@ -42,15 +39,15 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 's':
                 if (melee)
-                    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackSpeed(0.1f);
+                    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackSpeed(0.2f);
                 if (ranged)
                     GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackSpeed(10f);
                 break;
             case 'o':
-                if (melee)
-                    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRate(0.1f);
-                if (ranged)
-                    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRate(0.1f);
+                //if (melee)
+                //    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRate(0.1f);
+                //if (ranged)
+                //    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRate(0.1f);
                 break;
             case 'r':
                 if (melee)

@@ -7,34 +7,42 @@ public class PlayerRangedAttacking : MonoBehaviour
     [SerializeField]
     GameObject projectilePrefab;
     [SerializeField]
-    Transform shootOrigin;
+    GameObject targetPointer;
+    public Transform ShootOrigin { get; set; }
 
-    int damagePerAttack = 40;
-    float timeBetweenAttacks = 0.8f;
+    int damage = 40;
     float range = 8f;
-    float speed = 20f;
+    float projectileSpeed = 20f;
+    float attackSpeed = 1.0f;
 
-    float attackTimer;
     int shootableMask;
+
     AudioSource weaponAudio;
-    float animationDuration, animationTimer;
+    float animationDuration;
+    AnimationClip normalClip, comboClip;
+    float animationTimer = 0;
     Animator anim;
+
+    bool attacking, combo;
+
+    List<EnemyHealth> enemies;
+    int targetIndex = -1;
 
     public void IncreaseAttackDamage(int increase)
     {
-        damagePerAttack += increase;
+        damage += increase;
     }
 
     public void IncreaseAttackSpeed(float increase)
     {
-        //Scale animation time                                  <<<<---- TODO
-        speed += increase;
+        projectileSpeed += increase;
+        attackSpeed += (increase / 10);
     }
 
-    public void IncreaseAttackRate(float increase)
-    {
-        timeBetweenAttacks -= increase;
-    }
+    //public void IncreaseAttackRate(float increase)
+    //{
+    //    timeBetweenAttacks -= increase;
+    //}
 
     public void IncreaseAttackRange(float increase)
     {
@@ -43,50 +51,130 @@ public class PlayerRangedAttacking : MonoBehaviour
 
     private void Awake()
     {
+        GameObject empyGo = new GameObject();
+        ShootOrigin = empyGo.transform;
+
         shootableMask = LayerMask.GetMask("Shootable");
         weaponAudio = GetComponent<AudioSource>();
+
         anim = GetComponentInParent<Animator>();
-        attackTimer = timeBetweenAttacks;
-        animationTimer = 0;
-        animationDuration = GetAnimationTime();
+        normalClip = GetAnimationTime("NormalAttack01_SwordShield");
+        comboClip = GetAnimationTime("NormalAttack02_SwordShield");
     }
 
-    public float GetAnimationTime()
+    public AnimationClip GetAnimationTime(string name)
     {
         AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
         foreach (AnimationClip clip in clips)
-            if (clip.name == "NormalAttack01_SwordShield")
-                return clip.length;
+            if (clip.name == name)
+                return clip;
         throw new System.ArgumentNullException("No matching animation clip found for attack");
     }
 
     void Update()
     {
-        attackTimer += Time.deltaTime;
-
-        if (attackTimer >= timeBetweenAttacks && Time.timeScale != 0)
-        {
-            if (Input.GetButton("Fire1"))
-                Attack();
-        }
-        else
+        if (attacking)
         {
             animationTimer += Time.deltaTime;
+            if (combo && animationTimer >= animationDuration / 2)
+            {
+                Shoot();
+                combo = false;
+            }
             if (animationTimer >= animationDuration)
             {
                 animationTimer = 0;
-                anim.SetBool("IsAttacking", false);
+                attacking = false;
+                anim.speed = 1.0f;
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (targetIndex == -1)
+                {
+                    targetPointer.SetActive(true);
+                    UpdateEnemies();
+                    TargetClosest();
+                }
+                else
+                {
+                    targetIndex++;
+                }
+
+            }
+        }
+        if (targetIndex != -1)
+        {
+            UpdateTargetPointer();
+        }
+    }
+
+    private void UpdateTargetPointer()
+    {
+        Vector3 position = enemies[targetIndex].transform.position;
+        position.y += 2;
+        Quaternion rotation = enemies[targetIndex].transform.rotation;
+        targetPointer.transform.SetPositionAndRotation(position, rotation);
+        //targetPointer.transform.position.y += 2;
+    }
+
+    private void TargetClosest()
+    {
+        float closestDistance = float.MaxValue;
+
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            if (closestDistance > Vector3.Distance(ShootOrigin.position, enemies[i].transform.position))
+            {
+                closestDistance = Vector3.Distance(ShootOrigin.position, enemies[i].transform.position);
+                targetIndex = i;
             }
         }
     }
 
-    void Attack()
+    void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab);
-        projectile.GetComponent<ProjectileBehaviour>().Initialize(shootOrigin, speed, range, damagePerAttack);
-
-        attackTimer = 0f;
+        if (targetIndex == -1)
+        {
+            projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, range, damage);
+        }
+        else
+        {
+            projectile.GetComponent<ProjectileBehaviour>().Initialize(this, enemies[targetIndex].transform, projectileSpeed, range, damage);
+        }
         weaponAudio.Play();
-        anim.SetBool("IsAttacking", true);
+    }
+
+    public void Attack(bool combo = false)
+    {
+        this.combo = combo;
+        attacking = true;
+
+        Shoot();
+
+        anim.speed = attackSpeed;
+
+        if (combo) animationDuration = comboClip.length;
+        else animationDuration = normalClip.length;
+
+        // Scaling to current speed
+        animationDuration /= attackSpeed;
+        // Cutting the duration time to 60% of the full clip length since clip includes some time margin
+        animationDuration *= 0.6f;
+    }
+
+    public void UpdateEnemies()
+    {
+        enemies = new List<EnemyHealth>();
+        GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemyObj in enemyObjects)
+        {
+            enemies.Add(enemyObj.GetComponent<EnemyHealth>());
+        }
+        targetIndex = -1;
+        //targetPointer.SetActive(false);
     }
 }

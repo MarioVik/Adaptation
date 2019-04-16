@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeModel: {fileID: 0}
-  randomAttacks:
+  attacks:
   - Attack01
   - Attack02
   vertical: 0
@@ -100,8 +100,10 @@ MonoBehaviour:
   moveDir: {x: 0, y: 0, z: 0}
   moveSpeed: 6
   sprintSpeed: 9
-  rotateSpeed: 6
+  rotateSpeed: 60
   jumpForce: 700
+  playerMeleeAttacking: {fileID: 265347124022140011}
+  playerRangedAttacking: {fileID: 4490881236577021202}
   onGround: 0
   sprint: 0
   jump: 0
@@ -126,7 +128,7 @@ GameObject:
   - component: {fileID: 707451114679324275}
   m_Layer: 0
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -267,7 +269,7 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: d36a393bca4582043982db9089e1694f, type: 3}
   flashSpeed: 5
   flashColour: {r: 1, g: 0, b: 0, a: 0.15686275}
-  playerBlocking: {fileID: 0}
+  playerBlocking: {fileID: 9203182338668119507}
 --- !u!114 &707451114679324275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5472,7 +5474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 9123719742604949998, guid: 4bae05321835c1a4dbc9938853732528,
     type: 3}
-  shootOrigin: {fileID: 4793414793545048}
+  shootOrigin: {fileID: 4412919469045156}
 --- !u!82 &307748026219607338
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5484,7 +5486,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: fa7f046ce321d4021b5e753bf1152916, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -5907,7 +5909,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4933245001564209812}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c77272cebcb676045abda2d9efa3469e, type: 3}
   m_Name: 
@@ -8613,7 +8615,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 749b22f625a17e945844288974f384f6, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

@@ -9,6 +9,7 @@ TagManager:
   - RightHand
   - MeleeWeapon
   - RangedWeapon
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - PostProcessing
   - Shootable
   - Floor
-  - 
+  - Player
   - 
   - 
   - 

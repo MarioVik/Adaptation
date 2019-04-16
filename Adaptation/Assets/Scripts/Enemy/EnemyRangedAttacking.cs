@@ -85,7 +85,7 @@ public class EnemyRangedAttacking : MonoBehaviour
     void Attack()
     {
         GameObject projectile = Instantiate(projectilePrefab);
-        projectile.GetComponent<ProjectileBehaviour>().Initialize(shootOrigin, speed, range, damagePerAttack);
+        projectile.GetComponent<ProjectileBehaviour>().Initialize(this, shootOrigin, speed, range, damagePerAttack);
 
         attackTimer = 0f;
         weaponAudio.Play();

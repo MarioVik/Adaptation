@@ -8,8 +8,8 @@ namespace DM
     {
         [Header("Initialize")]
         public GameObject activeModel;  // defines the current active model.
-        public string[] randomAttacks;  // array of normal attacks in string.
-        
+        public string[] attacks;  // array of normal attacks in string.
+
 
         [Header("Inputs")]
         public float vertical;  // stores vertical input.
@@ -20,9 +20,14 @@ namespace DM
         [Header("Stats")]
         public float moveSpeed = 3.5f;  //speed of running
         public float sprintSpeed = 5f;  //speed of sprinting(double time of running)
-        public float rotateSpeed = 5;   //speed of character's turning around
+        public float rotateSpeed = 60f;   //speed of character's turning around
         public float jumpForce = 600f;  //how high you can jump value.
-        
+
+        [Header("AttackBehaviours")]
+        public PlayerMeleeAttacking playerMeleeAttacking;
+        public PlayerRangedAttacking playerRangedAttacking;
+        bool melee;
+        bool ranged;
 
         [Header("States")]
         public bool onGround;   //shows you are on ground or not.
@@ -44,15 +49,17 @@ namespace DM
         [HideInInspector]
         public Rigidbody rigid;     //for caching Rigidbody component
         CameraManager camManager;   //for caching CameraManager script
-        
+
         void Start() // Initiallizing camera, animator, rigidboy
-        {                  
+        {
             camManager = CameraManager.singleton;
             camManager.Init(this.transform);
             SetupAnimator();
-            rigid = GetComponent<Rigidbody>();            
+            rigid = GetComponent<Rigidbody>();
+            melee = playerMeleeAttacking.gameObject.activeSelf;
+            ranged = playerRangedAttacking.gameObject.activeSelf;
         }
-        
+
         void SetupAnimator()//Setting up Animator component in the hierarchy.
         {
             if (activeModel == null)
@@ -69,38 +76,49 @@ namespace DM
             }
 
             if (anim == null)
-                anim = activeModel.GetComponent<Animator>();            
+                anim = activeModel.GetComponent<Animator>();
         }
-        
-        void FixedUpdate () //Since this is physics based controller, you have to use FixedUpdate.
+
+        void FixedUpdate() //Since this is physics based controller, you have to use FixedUpdate.
         {
             fixedDelta = Time.fixedDeltaTime;    //storing the last frame updated time.             
 
             FixedTick(fixedDelta);   //update anything related to character moving.
             camManager.FixedTick(fixedDelta);     //update anything related to camera moving.       
         }
-        
+
         void Update()
         {
-            
             GetInput();     //getting control input from keyboard or joypad
             UpdateStates();   //Updating anything related to character's actions.         
+
+            if (ranged)
+            {
+                Vector3 targetDir = moveDir;
+                targetDir.y = 0;
+                if (targetDir == Vector3.zero)
+                    targetDir = transform.forward;
+
+                Quaternion tr = Quaternion.LookRotation(targetDir);
+
+                playerRangedAttacking.ShootOrigin.SetPositionAndRotation(transform.position, tr);
+            }
         }
 
-        
+
 
         void GetInput() //getting various inputs from keyboard or joypad.
         {
-           vertical = Input.GetAxis("Vertical");    //for getting vertical input.
-           horizontal = Input.GetAxis("Horizontal");    //for getting horizontal input.
-           sprint = Input.GetButton("SprintInput");     //for getting sprint input.
-           jump = Input.GetButtonDown("Jump");      //for getting jump input.
-           normalAttack = Input.GetButtonDown("Fire1"); //for getting normal attack input.
-           comboAttack = Input.GetButtonDown("Fire2");    //for getting combo attack input.
-           roll = Input.GetButtonDown("Fire3");     //for getting roll input.
+            vertical = Input.GetAxis("Vertical");    //for getting vertical input.
+            horizontal = Input.GetAxis("Horizontal");    //for getting horizontal input.
+            sprint = Input.GetButton("SprintInput");     //for getting sprint input.
+            jump = Input.GetButtonDown("Jump");      //for getting jump input.
+            normalAttack = Input.GetButtonDown("Fire1"); //for getting normal attack input.
+            comboAttack = Input.GetButtonDown("Fire2");    //for getting combo attack input.
+            roll = Input.GetButtonDown("Fire3");     //for getting roll input.
         }
-        
-        
+
+
         void UpdateStates() //updates character's various actions.
         {
             canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".          
@@ -111,25 +129,25 @@ namespace DM
                 {
                     anim.CrossFade("falling", 0.1f); //play "falling" animation in 0.1 second as cross fade method.
                     rigid.AddForce(0, jumpForce, 0);  //Adding force to Y axis for jumping up.                  
-                }            
-            }   
-
-            if(comboAttack)     //I clicked for combo attack. right mouse button or X key in the joypad.
-            {
-                if(onGround)    //only when you are on ground.
-                {
-                    anim.SetTrigger("combo");   //Set trigger named "combo" on
-                    
                 }
             }
 
-            if(roll && onGround)    //I clicked for roll. middle mouse button or Y key in the joypad.
-            {                
+            //if(comboAttack)     //I clicked for combo attack. right mouse button or X key in the joypad.
+            //{
+            //    if(onGround)    //only when you are on ground.
+            //    {
+            //        anim.SetTrigger("combo");   //Set trigger named "combo" on
+
+            //    }
+            //}
+
+            if (roll && onGround)    //I clicked for roll. middle mouse button or Y key in the joypad.
+            {
                 anim.SetTrigger("roll");    //Set trigger named "roll" on
-            }            
-            
+            }
+
             float targetSpeed = moveSpeed;  //set run speed as target speed.
-             
+
             if (sprint)
             {
                 targetSpeed = sprintSpeed;    //set sprint speed as target speed.            
@@ -137,25 +155,31 @@ namespace DM
 
             //mixing camera rotation value to the character moving value.
             Vector3 v = vertical * camManager.transform.forward;
-            Vector3 h = horizontal * camManager.transform.right;            
+            Vector3 h = horizontal * camManager.transform.right;
 
             //multiplying target speed and move amount.
-            moveDir = ((v + h).normalized) * (targetSpeed * moveAmount);            
+            moveDir = ((v + h).normalized) * (targetSpeed * moveAmount);
 
             //This is for isolating y velocity from the character control. 
-            moveDir.y = rigid.velocity.y;            
-            
+            moveDir.y = rigid.velocity.y;
+
             //This is for limiting values from 0 to 1.
             float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
             moveAmount = Mathf.Clamp01(m);
-            
+
             if (normalAttack && canMove) // I clicked for normal attack when I can move around.
             {
+                if (melee && !ranged) playerMeleeAttacking.Attack();
+                if (ranged && !melee) playerRangedAttacking.Attack();
+                if (!ranged && !melee) throw new System.Exception("No attacks are available");
+                if (ranged && melee) throw new System.Exception("Error: both attacks are available");
+
                 string targetAnim;
 
                 //chosing random attack from array.
-                int r = Random.Range(0, randomAttacks.Length);
-                targetAnim = randomAttacks[r];
+                //int r = Random.Range(0, randomAttacks.Length);
+                //targetAnim = randomAttacks[r];
+                targetAnim = attacks[0];
 
                 anim.CrossFade(targetAnim, 0.1f); //play the target animation in 0.1 second.                 
 
@@ -165,21 +189,42 @@ namespace DM
                 }
 
                 normalAttack = false;
-            } 
-                       
+            }
+
+            if (comboAttack && canMove) // I clicked for normal attack when I can move around.
+            {
+                if (melee && !ranged) playerMeleeAttacking.Attack(combo: true);
+                if (ranged && !melee) playerRangedAttacking.Attack(combo: true);
+                if (!ranged && !melee) throw new System.Exception("No attacks are available");
+                if (ranged && melee) throw new System.Exception("Error: both attacks are available");
+
+                string targetAnim;
+
+                targetAnim = attacks[1];
+
+                anim.CrossFade(targetAnim, 0.1f); //play the target animation in 0.1 second.                 
+
+                if (!onGround)
+                {
+                    anim.CrossFade("JumpAttack", 0.1f); // When you are air born, you do this jump attack.
+                }
+
+                comboAttack = false;
+            }
+
         }
 
         void FixedTick(float d)
         {
-            float pDelta = d;            
+            float pDelta = d;
 
             if (onGround)
             {
-                if(canMove)
+                if (canMove)
                 {
                     rigid.velocity = moveDir;  //This controls the character movement.                  
-                }                 
-            }            
+                }
+            }
 
             //This can control character's rotation.
             if (canMove)
@@ -192,31 +237,31 @@ namespace DM
                 Quaternion tr = Quaternion.LookRotation(targetDir);
                 Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta * moveAmount * rotateSpeed);
                 transform.rotation = targetRotation;
-            }  
+            }
 
             HandleMovementAnimations(); //update character's animations.
         }
 
         void HandleMovementAnimations()
         {
-            
+
             anim.SetBool("sprint", sprint);   //syncing sprint bool value to animator's "Sprint" value.           
-            if(moveAmount == 0)
+            if (moveAmount == 0)
             {
                 anim.SetBool("sprint", false);
-            }            
-            
+            }
+
             anim.SetFloat("vertical", moveAmount, 0.2f, fixedDelta); //syncing moveAmount value to animator's "vertical" value.
         }
 
         //These mecanic detects whether you are on ground or not.
-        
+
         private void OnTriggerStay(Collider collision)
         {
             if (collision.gameObject.tag == "Ground")
             {
-                onGround = true;                
-                anim.SetBool("onGround", true);                
+                onGround = true;
+                anim.SetBool("onGround", true);
             }
         }
 
@@ -226,9 +271,9 @@ namespace DM
             if (collision.gameObject.tag == "Ground")
             {
                 onGround = false;
-                anim.SetBool("onGround", false);                
+                anim.SetBool("onGround", false);
             }
-        }        
+        }
 
     }
 }

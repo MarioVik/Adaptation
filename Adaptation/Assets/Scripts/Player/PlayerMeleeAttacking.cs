@@ -6,31 +6,33 @@ public class PlayerMeleeAttacking : MonoBehaviour
 {
     Collider weaponcollider;
 
-    int damagePerAttack = 40;
-    float timeBetweenAttacks = 0.8f;
+    int damage = 40;
+    float speed = 1.0f;
 
-    float attackTimer;
-    int shootableMask;
     AudioSource weaponAudio;
-    float animationDuration, animationTimer;
+    float animationDuration;
+    AnimationClip normalClip, comboClip;
+    float animationTimer = 0;
     Animator anim;
 
     List<EnemyHealth> hitEnemies;
 
+    bool attacking, combo;
+
     public void IncreaseAttackDamage(int increase)
     {
-        damagePerAttack += increase;
+        damage += increase;
     }
 
     public void IncreaseAttackSpeed(float increase)
     {
-        //Scale animation time                                  <<<<---- TODO        
+        speed += increase;
     }
 
-    public void IncreaseAttackRate(float increase)
-    {
-        timeBetweenAttacks -= increase;
-    }
+    //public void IncreaseAttackRate(float increase)
+    //{
+    //    timeBetweenAttacks -= increase;
+    //}
 
     public void IncreaseAttackRange(float increase)
     {
@@ -42,62 +44,85 @@ public class PlayerMeleeAttacking : MonoBehaviour
 
     private void Awake()
     {
-        shootableMask = LayerMask.GetMask("Shootable");
         weaponAudio = GetComponent<AudioSource>();
-        anim = GetComponentInParent<Animator>();
+
         weaponcollider = GetComponent<CapsuleCollider>();
         weaponcollider.enabled = false;
-        attackTimer = timeBetweenAttacks;
-        animationTimer = 0;
-        animationDuration = GetAnimationTime();
+
+        anim = GetComponentInParent<Animator>();
+
+        normalClip = GetAnimationTime("NormalAttack01_SwordShield");
+        comboClip = GetAnimationTime("NormalAttack02_SwordShield");
+
         hitEnemies = new List<EnemyHealth>();
     }
 
-    public float GetAnimationTime()
+    public AnimationClip GetAnimationTime(string name)
     {
         AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
         foreach (AnimationClip clip in clips)
-            if (clip.name == "NormalAttack01_SwordShield")
-                return clip.length;
+            if (clip.name == name)
+                return clip;
         throw new System.ArgumentNullException("No matching animation clip found for attack");
     }
 
     void Update()
     {
-        attackTimer += Time.deltaTime;
-
-        if (attackTimer >= timeBetweenAttacks && Time.timeScale != 0)
-        {
-            if (Input.GetButton("Attack"))
-                Attack();
-        }
-        else
+        if (attacking)
         {
             animationTimer += Time.deltaTime;
+            if (combo && animationTimer >= animationDuration / 2)
+            {
+                foreach (EnemyHealth tempEnemy in hitEnemies)
+                    tempEnemy.AlreadyHit = false;
+                combo = false;
+
+                Debug.Log("Collider hits reset");
+            }
             if (animationTimer >= animationDuration)
             {
                 animationTimer = 0;
+                attacking = false;
+
+                anim.speed = 1.0f;
+
                 weaponcollider.enabled = false;
-                anim.SetBool("IsAttacking", false);
+
                 foreach (EnemyHealth tempEnemy in hitEnemies)
                     tempEnemy.AlreadyHit = false;
+
+                Debug.Log("Attack Disabled");
             }
         }
     }
 
-    void Attack()
+    public void Attack(bool combo = false)
     {
-        attackTimer = 0f;
+        this.combo = combo;
+        attacking = true;
+
         weaponcollider.enabled = true;
+
         weaponAudio.Play();
-        anim.SetBool("IsAttacking", true);
+
+        anim.speed = speed;
+
+        if (combo) animationDuration = comboClip.length;
+        else animationDuration = normalClip.length;
+
+        // Scaling to current speed
+        animationDuration /= speed;
+        // Cutting the duration time to 60% of the full clip length since clip includes some time margin
+        animationDuration *= 0.6f;
+
+        Debug.Log("Attack Enabled");
     }
 
     public void HitEnemy(EnemyHealth enemyHealth, Vector3 hitPoint)
     {
         if (!enemyHealth.AlreadyHit)
         {
-            enemyHealth.TakeDamage(damagePerAttack, hitPoint);
+            enemyHealth.TakeDamage(damage, hitPoint);
             hitEnemies.Add(enemyHealth);
         }
         enemyHealth.AlreadyHit = true;

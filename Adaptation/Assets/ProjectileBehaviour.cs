@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour
 {
+    MonoBehaviour user;
+
     float speed, range;
     int damage;
 
     Vector3 startPos;
 
-    public void Initialize(Transform originTransform, float speed, float range, int damage)
+    public void Initialize(EnemyRangedAttacking user, Transform originTransform, float speed, float range, int damage)
     {
+        this.user = user;
         transform.SetPositionAndRotation(originTransform.position, originTransform.rotation);
         this.speed = speed;
         this.range = range;
@@ -19,9 +22,30 @@ public class ProjectileBehaviour : MonoBehaviour
         startPos = transform.position;
     }
 
-    void Awake()
+    public void Initialize(PlayerRangedAttacking player, float speed, float range, int damage)
     {
-        //hitEnemies = new List<EnemyHealth>();
+        user = player;
+        transform.SetPositionAndRotation(player.ShootOrigin.position, player.ShootOrigin.rotation);
+        this.speed = speed;
+        this.range = range;
+        this.damage = damage;
+
+        startPos = transform.position;
+    }
+
+    public void Initialize(PlayerRangedAttacking player, Transform target, float speed, float range, int damage)
+    {
+        user = player;
+
+        Vector3 direction = target.position - player.ShootOrigin.position;
+        direction.Normalize();
+        transform.SetPositionAndRotation(player.ShootOrigin.position, Quaternion.LookRotation(direction));
+
+        this.speed = speed;
+        this.range = range;
+        this.damage = damage;
+
+        startPos = transform.position;
     }
 
     void Update()
@@ -32,17 +56,31 @@ public class ProjectileBehaviour : MonoBehaviour
             Destroy(gameObject);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.tag != "Player")
+        if (user is PlayerRangedAttacking)
         {
-            EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
-            if (enemyHealth != null)
+            if (other.tag != "Player" && other.tag != "GameController")
             {
-                enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
+                EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
+                    if (enemyHealth.IsDead)
+                    {
+                        (user as PlayerRangedAttacking).UpdateEnemies();
+                    }
+                }
+                Destroy(gameObject);
+                Debug.Log("Enemy hit");
             }
-            Destroy(gameObject);
-            Debug.Log("Enemy hit");
+        }
+        else if (user is EnemyRangedAttacking)
+        {
+            if (other.tag != "Enemy")
+            {
+
+            }
         }
     }
 }
