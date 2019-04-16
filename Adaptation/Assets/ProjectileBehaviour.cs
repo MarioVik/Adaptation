@@ -33,21 +33,6 @@ public class ProjectileBehaviour : MonoBehaviour
         startPos = transform.position;
     }
 
-    public void Initialize(PlayerRangedAttacking player, Transform target, float speed, float range, int damage)
-    {
-        user = player;
-
-        Vector3 direction = target.position - player.ShootOrigin.position;
-        direction.Normalize();
-        transform.SetPositionAndRotation(player.ShootOrigin.position, Quaternion.LookRotation(direction));
-
-        this.speed = speed;
-        this.range = range;
-        this.damage = damage;
-
-        startPos = transform.position;
-    }
-
     void Update()
     {
         transform.position += transform.forward.normalized * speed * Time.deltaTime;
@@ -66,10 +51,6 @@ public class ProjectileBehaviour : MonoBehaviour
                 if (enemyHealth != null)
                 {
                     enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
-                    if (enemyHealth.IsDead)
-                    {
-                        (user as PlayerRangedAttacking).UpdateEnemies();
-                    }
                 }
                 Destroy(gameObject);
                 Debug.Log("Enemy hit");

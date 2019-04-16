@@ -7,8 +7,9 @@ public class PlayerRangedAttacking : MonoBehaviour
     [SerializeField]
     GameObject projectilePrefab;
     [SerializeField]
-    GameObject targetPointer;
-    public Transform ShootOrigin { get; set; }
+    Transform shootOrigin;
+
+    public Transform ShootOrigin { get { return shootOrigin; } }
 
     int damage = 40;
     float range = 8f;
@@ -24,9 +25,6 @@ public class PlayerRangedAttacking : MonoBehaviour
     Animator anim;
 
     bool attacking, combo;
-
-    List<EnemyHealth> enemies;
-    int targetIndex = -1;
 
     public void IncreaseAttackDamage(int increase)
     {
@@ -51,9 +49,6 @@ public class PlayerRangedAttacking : MonoBehaviour
 
     private void Awake()
     {
-        GameObject empyGo = new GameObject();
-        ShootOrigin = empyGo.transform;
-
         shootableMask = LayerMask.GetMask("Shootable");
         weaponAudio = GetComponent<AudioSource>();
 
@@ -88,63 +83,19 @@ public class PlayerRangedAttacking : MonoBehaviour
                 anim.speed = 1.0f;
             }
         }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                if (targetIndex == -1)
-                {
-                    targetPointer.SetActive(true);
-                    UpdateEnemies();
-                    TargetClosest();
-                }
-                else
-                {
-                    targetIndex++;
-                }
-
-            }
-        }
-        if (targetIndex != -1)
-        {
-            UpdateTargetPointer();
-        }
-    }
-
-    private void UpdateTargetPointer()
-    {
-        Vector3 position = enemies[targetIndex].transform.position;
-        position.y += 2;
-        Quaternion rotation = enemies[targetIndex].transform.rotation;
-        targetPointer.transform.SetPositionAndRotation(position, rotation);
-        //targetPointer.transform.position.y += 2;
-    }
-
-    private void TargetClosest()
-    {
-        float closestDistance = float.MaxValue;
-
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            if (closestDistance > Vector3.Distance(ShootOrigin.position, enemies[i].transform.position))
-            {
-                closestDistance = Vector3.Distance(ShootOrigin.position, enemies[i].transform.position);
-                targetIndex = i;
-            }
-        }
     }
 
     void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab);
-        if (targetIndex == -1)
-        {
-            projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, range, damage);
-        }
-        else
-        {
-            projectile.GetComponent<ProjectileBehaviour>().Initialize(this, enemies[targetIndex].transform, projectileSpeed, range, damage);
-        }
+        //if (targetIndex == -1)
+        //{
+        projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, range, damage);
+        //}
+        //else
+        //{
+        //    projectile.GetComponent<ProjectileBehaviour>().Initialize(this, enemies[targetIndex].transform, projectileSpeed, range, damage);
+        //}
         weaponAudio.Play();
     }
 
@@ -164,17 +115,5 @@ public class PlayerRangedAttacking : MonoBehaviour
         animationDuration /= attackSpeed;
         // Cutting the duration time to 60% of the full clip length since clip includes some time margin
         animationDuration *= 0.6f;
-    }
-
-    public void UpdateEnemies()
-    {
-        enemies = new List<EnemyHealth>();
-        GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemyObj in enemyObjects)
-        {
-            enemies.Add(enemyObj.GetComponent<EnemyHealth>());
-        }
-        targetIndex = -1;
-        //targetPointer.SetActive(false);
     }
 }

@@ -24,10 +24,13 @@ namespace DM
         public float jumpForce = 600f;  //how high you can jump value.
 
         [Header("AttackBehaviours")]
-        public PlayerMeleeAttacking playerMeleeAttacking;
-        public PlayerRangedAttacking playerRangedAttacking;
+        [SerializeField]
+        PlayerMeleeAttacking playerMeleeAttacking;
+        [SerializeField]
+        PlayerRangedAttacking playerRangedAttacking;
         bool melee;
         bool ranged;
+        TargetingHandler targeting;
 
         [Header("States")]
         public bool onGround;   //shows you are on ground or not.
@@ -56,8 +59,10 @@ namespace DM
             camManager.Init(this.transform);
             SetupAnimator();
             rigid = GetComponent<Rigidbody>();
+
             melee = playerMeleeAttacking.gameObject.activeSelf;
             ranged = playerRangedAttacking.gameObject.activeSelf;
+            targeting = GetComponent<TargetingHandler>();
         }
 
         void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -91,20 +96,7 @@ namespace DM
         {
             GetInput();     //getting control input from keyboard or joypad
             UpdateStates();   //Updating anything related to character's actions.         
-
-            if (ranged)
-            {
-                Vector3 targetDir = moveDir;
-                targetDir.y = 0;
-                if (targetDir == Vector3.zero)
-                    targetDir = transform.forward;
-
-                Quaternion tr = Quaternion.LookRotation(targetDir);
-
-                playerRangedAttacking.ShootOrigin.SetPositionAndRotation(transform.position, tr);
-            }
         }
-
 
 
         void GetInput() //getting various inputs from keyboard or joypad.
@@ -229,7 +221,16 @@ namespace DM
             //This can control character's rotation.
             if (canMove)
             {
-                Vector3 targetDir = moveDir;
+                Vector3 targetDir;
+                if (targeting.ActiveTarget)
+                {
+                    targetDir = targeting.TargetDirection;
+                }
+                else
+                {
+                    targetDir = moveDir;
+                }
+
                 targetDir.y = 0;
                 if (targetDir == Vector3.zero)
                     targetDir = transform.forward;

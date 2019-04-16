@@ -3,6 +3,8 @@
 public class EnemyHealth : MonoBehaviour
 {
     public bool AlreadyHit { get; set; }
+    
+    TargetingHandler targeting;
 
     public int startingHealth = 80;
     public int currentHealth;
@@ -26,6 +28,8 @@ public class EnemyHealth : MonoBehaviour
 
     void Awake()
     {
+        targeting = GameObject.FindGameObjectWithTag("GameController").GetComponent<TargetingHandler>();
+
         anim = GetComponent<Animator>();
         enemyAudio = GetComponent<AudioSource>();
         hitParticles = GetComponentInChildren<ParticleSystem>();
@@ -65,6 +69,8 @@ public class EnemyHealth : MonoBehaviour
     void Death()
     {
         IsDead = true;
+
+        targeting.UpdateEnemies();
 
         capsuleCollider.isTrigger = true;
 

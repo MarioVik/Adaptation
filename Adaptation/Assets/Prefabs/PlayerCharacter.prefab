@@ -10649,7 +10649,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 9123719742604949998, guid: 4bae05321835c1a4dbc9938853732528,
     type: 3}
-  shootOrigin: {fileID: 4711500458124366}
 --- !u!82 &5662027317975659916
 AudioSource:
   m_ObjectHideFlags: 0

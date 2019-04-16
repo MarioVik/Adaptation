@@ -260,6 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b9d14572410594cb85d40eedfb150c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targeting: {fileID: 86064873, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
   startingHealth: 100
   currentHealth: 0
   sinkSpeed: 2.5
@@ -276,6 +277,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: badbdfdbd7c87d9448a59e3a7e846ac6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meleeObject: {fileID: 0}
+  rangedObject: {fileID: 0}
+  blockObject: {fileID: 0}
 --- !u!1 &1430886545712854
 GameObject:
   m_ObjectHideFlags: 0

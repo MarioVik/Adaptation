@@ -1,3 +1,0 @@
-divide attack speed into:
-	- "rate of attack"(time delay between attacks)
-	- "attack speed" (speed of attack-animation or projectile speed depending on weapon)
