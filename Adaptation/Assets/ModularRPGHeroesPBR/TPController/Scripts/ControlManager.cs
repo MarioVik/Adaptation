@@ -24,33 +24,36 @@ namespace DM
         float moveSpeed = 3f;  //speed of running
         float sprintSpeed = 6f;  //speed of sprinting(double time of running)
         float rotateSpeed = 60f;   //speed of character's turning around    
-        float jumpForce = 600f;  //how high you can jump value.
+        //float jumpForce = 600f;  //how high you can jump value.
 
         [Header("FeatureBehaviours")]
         [SerializeField]
         PlayerMeleeAttacking playerMeleeAttacking;
         [SerializeField]
         PlayerRangedAttacking playerRangedAttacking;
-        bool melee;
-        bool ranged;
+        bool hasMelee;
+        bool hasRanged;
         TargetingHandler targeting;
 
+        [SerializeField]
+        PlayerBlocking playerBlocking;
         PlayerDashing playerDashing;
+        bool hasBlock;
+        bool hasDash;
+
 
         [Header("States")]
         public bool onGround;   //shows you are on ground or not.
         public bool sprint;     //shows you are sprinting or not.
-        [HideInInspector]
-        public bool jump;       //stores whether you jump or not
+        //[HideInInspector]
+        //public bool jump;       //stores whether you jump or not
         [HideInInspector]
         public bool normalAttack;   //stores whether you do normal attack or not
         [HideInInspector]
         public bool comboAttack;       //stores whether you combo or not
         public bool canMove;    //shows you can move or not
-        [HideInInspector]
-        public bool roll;       //stores whether you roll or not
-        [HideInInspector]
-        public bool block;       //stores whether you are blocking or not
+        //[HideInInspector]
+        //public bool roll;       //stores whether you roll or not
 
 
         float fixedDelta;        //stores Time.fixedDeltaTime
@@ -60,6 +63,12 @@ namespace DM
         public Rigidbody rigid;     //for caching Rigidbody component
         CameraManager camManager;   //for caching CameraManager script
 
+        public void IncreaseMovementSpeed(float increase)
+        {
+            moveSpeed += increase;
+            sprintSpeed += increase;
+        }
+
         void Start() // Initiallizing camera, animator, rigidboy
         {
             camManager = CameraManager.singleton;
@@ -67,11 +76,13 @@ namespace DM
             SetupAnimator();
             rigid = GetComponent<Rigidbody>();
 
-            melee = playerMeleeAttacking.gameObject.activeSelf;
-            ranged = playerRangedAttacking.gameObject.activeSelf;
+            hasMelee = playerMeleeAttacking.gameObject.activeSelf;
+            hasRanged = playerRangedAttacking.gameObject.activeSelf;
             targeting = GetComponent<TargetingHandler>();
 
+            hasBlock = playerBlocking.gameObject.activeSelf;
             playerDashing = GetComponentInChildren<PlayerDashing>();
+            hasDash = playerDashing.isActiveAndEnabled;
         }
 
         void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -113,11 +124,11 @@ namespace DM
             vertical = Input.GetAxis("Vertical");    //for getting vertical input.
             horizontal = Input.GetAxis("Horizontal");    //for getting horizontal input.
             sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
-            block = Input.GetButton("BlockInput");
-            jump = Input.GetButtonDown("Jump");      //for getting jump input.
+            //block = Input.GetButton("");
+            //jump = Input.GetButtonDown("Jump");      //for getting jump input.
             normalAttack = Input.GetButtonDown("NormalAttack"); //for getting normal attack input.
             comboAttack = Input.GetButtonDown("ComboAttack");    //for getting combo attack input.
-            roll = false; /*Input.GetButtonDown("Dash");*/     //for getting roll input.
+            //roll = Input.GetButtonDown("Dash");     //for getting roll input.
         }
 
 
@@ -125,18 +136,29 @@ namespace DM
         {
             canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".          
 
-            if (jump)   //I clicked jump, left mouse button or B key in the joypad.
+            if (hasDash)
             {
-                if (onGround && canMove) //do jump only when you are on ground and you can move.
+                if (playerDashing.DashStart && canMove)
                 {
-                    anim.CrossFade("falling", 0.1f); //play "falling" animation in 0.1 second as cross fade method.
-                    rigid.AddForce(0, jumpForce, 0);  //Adding force to Y axis for jumping up.                  
+                    anim.SetBool("dashing", true);
+                }
+                else if (playerDashing.DashStop)
+                {
+                    anim.SetBool("dashing", false);
                 }
             }
 
-            if (roll && onGround)    //I clicked for roll. middle mouse button or Y key in the joypad.
+            if (hasBlock)
             {
-                anim.SetTrigger("roll");    //Set trigger named "roll" on
+                if (playerBlocking.BlockStart && canMove)
+                {
+                    //anim.CrossFade("Block", 0.0f);
+                    anim.SetBool("blocking", true);
+                }
+                else if (playerBlocking.BlockStop)
+                {
+                    anim.SetBool("blocking", false);
+                }
             }
 
             float targetSpeed = moveSpeed;  //set run speed as target speed.
@@ -146,22 +168,23 @@ namespace DM
                 targetSpeed = sprintSpeed;    //set sprint speed as target speed.            
             }
 
+            if (playerBlocking.Blocking)
+            {
+                targetSpeed = 0;
+            }
+
             if (playerDashing.Dashing)
             {
                 targetSpeed = playerDashing.DashSpeed;
             }
 
-            if (!playerDashing.Dashing)
-            {
-                veritcalMovement = vertical * camManager.transform.forward;
-                horizontalMovement = horizontal * camManager.transform.right;
-            }
-            else if (playerDashing.DashStart && playerDashing.Dashing)
+
+            if (!playerDashing.Dashing
+                || (playerDashing.DashStart && playerDashing.Dashing))
             {
                 //mixing camera rotation value to the character moving value.
                 veritcalMovement = vertical * camManager.transform.forward;
                 horizontalMovement = horizontal * camManager.transform.right;
-                playerDashing.DashStart = false;
             }
 
             //multiplying target speed and move amount.
@@ -176,16 +199,16 @@ namespace DM
 
             if ((normalAttack || comboAttack) && canMove) // I clicked for normal attack when I can move around.
             {
-                if (melee && !ranged) playerMeleeAttacking.Attack(comboAttack);
-                if (ranged && !melee) playerRangedAttacking.Attack(comboAttack);
-                if (!ranged && !melee) throw new System.Exception("No attacks are available");
-                if (ranged && melee) throw new System.Exception("Error: both attacks are available");
+                if (hasMelee && !hasRanged) playerMeleeAttacking.Attack(comboAttack);
+                if (hasRanged && !hasMelee) playerRangedAttacking.Attack(comboAttack);
+                if (!hasRanged && !hasMelee) throw new System.Exception("No attacks are available");
+                if (hasRanged && hasMelee) throw new System.Exception("Error: both attacks are available");
 
                 string targetAnim;
 
                 targetAnim = attacks[comboAttack ? 1 : 0];
 
-                anim.CrossFade(targetAnim, 0.1f); //play the target animation in 0.1 second.                 
+                anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.1 second.                 
 
                 if (!onGround)
                 {
@@ -196,6 +219,19 @@ namespace DM
                 comboAttack = false;
             }
 
+            //if (jump)   //I clicked jump
+            //{
+            //    if (onGround && canMove) //do jump only when you are on ground and you can move.
+            //    {
+            //        anim.CrossFade("falling", 0.1f); //play "falling" animation in 0.1 second as cross fade method.
+            //        rigid.AddForce(0, jumpForce, 0);  //Adding force to Y axis for jumping up.                  
+            //    }
+            //}
+
+            //if (roll && onGround)    //I clicked for roll.
+            //{
+            //    anim.SetTrigger("roll");    //Set trigger named "roll" on
+            //}
         }
 
         void FixedTick(float d)
@@ -237,7 +273,6 @@ namespace DM
 
         void HandleMovementAnimations()
         {
-
             anim.SetBool("sprint", sprint);   //syncing sprint bool value to animator's "Sprint" value.           
             if (moveAmount == 0)
             {

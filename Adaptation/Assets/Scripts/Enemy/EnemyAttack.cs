@@ -3,6 +3,9 @@ using System.Collections;
 
 public class EnemyAttack : MonoBehaviour
 {
+    [SerializeField]
+    PlayerBlocking playerBlocking;
+
     public float timeBetweenAttacks = 0.5f;
     public int attackDamage = 10;
 
@@ -70,6 +73,9 @@ public class EnemyAttack : MonoBehaviour
     void Attack()
     {
         timer = 0f;
+
+        if (playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+            return;
 
         if (playerHealth.currentHealth > 0)
         {

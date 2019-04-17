@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using DM;
 
 public class PlayerTraits : MonoBehaviour
 {
     [SerializeField] GameObject meleeObject;
     [SerializeField] GameObject rangedObject;
     [SerializeField] GameObject blockObject;
-    //[SerializeField]
-    //GameObject dashObject;
-
+    
     bool ranged, melee;
 
     void Start()
@@ -51,12 +50,12 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 'r':
                 if (melee)
-                    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRange(0.1f);
+                    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRange(0.2f);
                 if (ranged)
                     GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRange(1f);
                 break;
             case 'm':
-                GetComponent<PlayerMovement>().IncreaseSpeed(1.5f);
+                GetComponentInParent<ControlManager>().IncreaseMovementSpeed(1.5f);
                 break;
             default:
                 throw new System.Exception("Player has unrecognized attribute");

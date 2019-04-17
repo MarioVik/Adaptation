@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerDashing : MonoBehaviour
 {
-    public bool DashStart { get; set; }
+    public bool DashStart { get; private set; }
+    public bool DashStop { get; private set; }
     public bool Dashing { get; private set; }
     public float DashSpeed { get { return dashSpeed; } }
 
@@ -32,6 +34,9 @@ public class PlayerDashing : MonoBehaviour
 
     void Update()
     {
+        if (DashStart) DashStart = false;
+        if (DashStop) DashStop = false;
+
         if (!Dashing) coolDownTimer += Time.deltaTime;
         if (coolDownTimer > coolDown) coolDownTimer = coolDown;
 
@@ -52,6 +57,7 @@ public class PlayerDashing : MonoBehaviour
                 /*|| Input.GetButtonUp("FeatureInput")*/)
             {
                 Dashing = false;
+                DashStop = true;
                 Debug.Log("Stopped dashing");
             }
         }

@@ -101,9 +101,9 @@ MonoBehaviour:
   moveDir: {x: 0, y: 0, z: 0}
   playerMeleeAttacking: {fileID: 265347124022140011}
   playerRangedAttacking: {fileID: 4490881236577021202}
+  playerBlocking: {fileID: 9203182338668119507}
   onGround: 0
   sprint: 0
-  jump: 0
   normalAttack: 0
   comboAttack: 0
   canMove: 0
@@ -6626,7 +6626,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5340979041483773908}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99fb3f42e7e72da4695b64f52f122b37, type: 3}
   m_Name: 

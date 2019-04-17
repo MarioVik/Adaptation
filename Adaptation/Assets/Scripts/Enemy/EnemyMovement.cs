@@ -4,6 +4,8 @@ using System.Collections;
 
 public class EnemyMovement : MonoBehaviour
 {
+    bool stopped;
+
     Transform player;
     PlayerHealth playerHealth;
     EnemyHealth enemyHealth;
@@ -29,6 +31,15 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.Space))
+            stopped = !stopped;
+            
+        if (stopped)
+        {
+            navAgent.SetDestination(transform.position);
+            return;
+        }
+
         if (enemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
         {
             navAgent.SetDestination(player.position);

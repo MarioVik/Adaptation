@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerBlocking : MonoBehaviour
 {
+    public bool BlockStart { get; private set; }
+    public bool BlockStop { get; private set; }
     public bool Blocking { get; private set; }
 
     [SerializeField]
@@ -25,6 +27,9 @@ public class PlayerBlocking : MonoBehaviour
 
     void Update()
     {
+        if (BlockStart) BlockStart = false;
+        if (BlockStop) BlockStop = false;
+
         if (!Blocking) coolDownTimer += Time.deltaTime;
         if (coolDownTimer > coolDown) coolDownTimer = coolDown;
 
@@ -32,15 +37,17 @@ public class PlayerBlocking : MonoBehaviour
         {
             coolDownTimer = 0;
             Blocking = true;
+            BlockStart = true;
             Debug.Log("Block Started");
         }
 
         if (Blocking)
         {
             activeTimer += Time.deltaTime;
-            if (activeTimer >= activeDuration)
+            if (activeTimer >= activeDuration || Input.GetButtonUp("FeatureInput"))
             {
                 Blocking = false;
+                BlockStop = true;
                 activeTimer = 0;
                 Debug.Log("Block Stopped");
             }
