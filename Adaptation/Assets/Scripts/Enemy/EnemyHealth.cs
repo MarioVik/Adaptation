@@ -3,7 +3,7 @@
 public class EnemyHealth : MonoBehaviour
 {
     public bool AlreadyHit { get; set; }
-    
+
     TargetingHandler targeting;
 
     public int startingHealth = 80;
@@ -70,7 +70,7 @@ public class EnemyHealth : MonoBehaviour
     {
         IsDead = true;
 
-        targeting.UpdateEnemies();
+        targeting.UpdateEnemies(calledByEnemy: true);
 
         capsuleCollider.isTrigger = true;
 

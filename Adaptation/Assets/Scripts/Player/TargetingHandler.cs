@@ -21,7 +21,6 @@ public class TargetingHandler : MonoBehaviour
             {
                 targetPointer.SetActive(true);
                 UpdateEnemies();
-                TargetClosest();
             }
             else
             {
@@ -35,20 +34,6 @@ public class TargetingHandler : MonoBehaviour
 
             Vector3 direction = enemies[targetIndex].transform.position - transform.position;
             TargetDirection = direction.normalized;
-        }
-    }
-
-    private void TargetClosest()
-    {
-        float closestDistance = float.MaxValue;
-
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            if (closestDistance > Vector3.Distance(transform.position, enemies[i].transform.position))
-            {
-                closestDistance = Vector3.Distance(transform.position, enemies[i].transform.position);
-                targetIndex = i;
-            }
         }
     }
 
@@ -67,7 +52,7 @@ public class TargetingHandler : MonoBehaviour
         targetPointer.transform.SetPositionAndRotation(position, rotation);
     }
 
-    public void UpdateEnemies()
+    public void UpdateEnemies(bool calledByEnemy = false)
     {
         enemies = new List<EnemyHealth>();
         GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
@@ -79,7 +64,11 @@ public class TargetingHandler : MonoBehaviour
             }
         }
 
-        if (enemies.Count > 0)
+        // Only retarget if there are enemies left AND 
+        // the function was called by dying enemy WHILE targeting was active
+        // OR function was called by input activation
+        if (enemies.Count > 0 &&
+            ((calledByEnemy && ActiveTarget) || !calledByEnemy))
         {
             TargetClosest();
         }
@@ -87,6 +76,20 @@ public class TargetingHandler : MonoBehaviour
         {
             targetIndex = -1;
             targetPointer.SetActive(false);
+        }
+    }
+
+    private void TargetClosest()
+    {
+        float closestDistance = float.MaxValue;
+
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            if (closestDistance > Vector3.Distance(transform.position, enemies[i].transform.position))
+            {
+                closestDistance = Vector3.Distance(transform.position, enemies[i].transform.position);
+                targetIndex = i;
+            }
         }
     }
 }
