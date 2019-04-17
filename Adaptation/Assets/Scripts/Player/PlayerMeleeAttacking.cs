@@ -71,7 +71,7 @@ public class PlayerMeleeAttacking : MonoBehaviour
         if (attacking)
         {
             animationTimer += Time.deltaTime;
-            if (combo && animationTimer >= animationDuration / 2)
+            if (combo && animationTimer >= (animationDuration * 0.4f))
             {
                 foreach (EnemyHealth tempEnemy in hitEnemies)
                     tempEnemy.AlreadyHit = false;

@@ -4,6 +4,8 @@ using System.Collections;
 public class EnemyAttack : MonoBehaviour
 {
     [SerializeField]
+    PlayerDashing playerDashing;
+    [SerializeField]
     PlayerBlocking playerBlocking;
 
     public float timeBetweenAttacks = 0.5f;
@@ -73,6 +75,9 @@ public class EnemyAttack : MonoBehaviour
     void Attack()
     {
         timer = 0f;
+
+        if (playerDashing.isActiveAndEnabled && playerDashing.Dashing)
+            return;
 
         if (playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
             return;
