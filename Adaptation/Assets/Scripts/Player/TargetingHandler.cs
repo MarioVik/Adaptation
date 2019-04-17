@@ -15,7 +15,7 @@ public class TargetingHandler : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetButtonDown("Target"))
         {
             if (!ActiveTarget)
             {
@@ -26,6 +26,10 @@ public class TargetingHandler : MonoBehaviour
             {
                 IterateTarget();
             }
+        }
+        else if (Input.GetButtonDown("Untarget"))
+        {
+            Untarget();
         }
 
         if (ActiveTarget)
@@ -74,9 +78,14 @@ public class TargetingHandler : MonoBehaviour
         }
         else
         {
-            targetIndex = -1;
-            targetPointer.SetActive(false);
+            Untarget();
         }
+    }
+
+    private void Untarget()
+    {
+        targetIndex = -1;
+        targetPointer.SetActive(false);
     }
 
     private void TargetClosest()

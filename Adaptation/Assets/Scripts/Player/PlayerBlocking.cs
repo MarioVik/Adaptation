@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerBlocking : MonoBehaviour
 {
     public bool Blocking { get; private set; }
+
+    [SerializeField]
+    Slider cooldownSlider;
 
     float coolDownTimer;
     float coolDown = 5f;
@@ -15,16 +19,19 @@ public class PlayerBlocking : MonoBehaviour
     private void Awake()
     {
         coolDownTimer = coolDown;
+        cooldownSlider.maxValue = coolDown;
+        cooldownSlider.value = coolDown;
     }
 
     void Update()
     {
-        coolDownTimer += Time.deltaTime;
+        if (!Blocking) coolDownTimer += Time.deltaTime;
+        if (coolDownTimer > coolDown) coolDownTimer = coolDown;
 
-        if (Input.GetButtonDown("Block") && coolDownTimer >= coolDown)
+        if (Input.GetButtonDown("FeatureInput") && coolDownTimer >= coolDown)
         {
-            Blocking = true;
             coolDownTimer = 0;
+            Blocking = true;
             Debug.Log("Block Started");
         }
 
@@ -38,5 +45,7 @@ public class PlayerBlocking : MonoBehaviour
                 Debug.Log("Block Stopped");
             }
         }
+
+        cooldownSlider.value = coolDownTimer;
     }
 }

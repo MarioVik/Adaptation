@@ -32,6 +32,7 @@ public class PlayerHealth : MonoBehaviour
     public void ResetHealth()
     {
         currentHealth = startingHealth;
+        healthSlider.maxValue = currentHealth;
         healthSlider.value = currentHealth;
     }
 

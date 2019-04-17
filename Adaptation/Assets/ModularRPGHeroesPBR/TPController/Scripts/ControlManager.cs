@@ -17,13 +17,16 @@ namespace DM
         public float moveAmount;    //shows the amount of movement from 0 to 1.
         public Vector3 moveDir;     //stores the moving vector value of main character.
 
-        [Header("Stats")]
-        public float moveSpeed = 3.5f;  //speed of running
-        public float sprintSpeed = 5f;  //speed of sprinting(double time of running)
-        public float rotateSpeed = 60f;   //speed of character's turning around
-        public float jumpForce = 600f;  //how high you can jump value.
+        Vector3 veritcalMovement = Vector3.zero;
+        Vector3 horizontalMovement = Vector3.zero;
 
-        [Header("AttackBehaviours")]
+        //[Header("Stats")]
+        float moveSpeed = 3f;  //speed of running
+        float sprintSpeed = 6f;  //speed of sprinting(double time of running)
+        float rotateSpeed = 60f;   //speed of character's turning around    
+        float jumpForce = 600f;  //how high you can jump value.
+
+        [Header("FeatureBehaviours")]
         [SerializeField]
         PlayerMeleeAttacking playerMeleeAttacking;
         [SerializeField]
@@ -31,6 +34,8 @@ namespace DM
         bool melee;
         bool ranged;
         TargetingHandler targeting;
+
+        PlayerDashing playerDashing;
 
         [Header("States")]
         public bool onGround;   //shows you are on ground or not.
@@ -44,6 +49,8 @@ namespace DM
         public bool canMove;    //shows you can move or not
         [HideInInspector]
         public bool roll;       //stores whether you roll or not
+        [HideInInspector]
+        public bool block;       //stores whether you are blocking or not
 
 
         float fixedDelta;        //stores Time.fixedDeltaTime
@@ -63,6 +70,8 @@ namespace DM
             melee = playerMeleeAttacking.gameObject.activeSelf;
             ranged = playerRangedAttacking.gameObject.activeSelf;
             targeting = GetComponent<TargetingHandler>();
+
+            playerDashing = GetComponentInChildren<PlayerDashing>();
         }
 
         void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -103,11 +112,12 @@ namespace DM
         {
             vertical = Input.GetAxis("Vertical");    //for getting vertical input.
             horizontal = Input.GetAxis("Horizontal");    //for getting horizontal input.
-            sprint = Input.GetButton("SprintInput");     //for getting sprint input.
+            sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
+            block = Input.GetButton("BlockInput");
             jump = Input.GetButtonDown("Jump");      //for getting jump input.
-            normalAttack = Input.GetButtonDown("Fire1"); //for getting normal attack input.
-            comboAttack = Input.GetButtonDown("Fire2");    //for getting combo attack input.
-            roll = Input.GetButtonDown("Fire3");     //for getting roll input.
+            normalAttack = Input.GetButtonDown("NormalAttack"); //for getting normal attack input.
+            comboAttack = Input.GetButtonDown("ComboAttack");    //for getting combo attack input.
+            roll = false; /*Input.GetButtonDown("Dash");*/     //for getting roll input.
         }
 
 
@@ -124,15 +134,6 @@ namespace DM
                 }
             }
 
-            //if(comboAttack)     //I clicked for combo attack. right mouse button or X key in the joypad.
-            //{
-            //    if(onGround)    //only when you are on ground.
-            //    {
-            //        anim.SetTrigger("combo");   //Set trigger named "combo" on
-
-            //    }
-            //}
-
             if (roll && onGround)    //I clicked for roll. middle mouse button or Y key in the joypad.
             {
                 anim.SetTrigger("roll");    //Set trigger named "roll" on
@@ -145,12 +146,26 @@ namespace DM
                 targetSpeed = sprintSpeed;    //set sprint speed as target speed.            
             }
 
-            //mixing camera rotation value to the character moving value.
-            Vector3 v = vertical * camManager.transform.forward;
-            Vector3 h = horizontal * camManager.transform.right;
+            if (playerDashing.Dashing)
+            {
+                targetSpeed = playerDashing.DashSpeed;
+            }
+
+            if (!playerDashing.Dashing)
+            {
+                veritcalMovement = vertical * camManager.transform.forward;
+                horizontalMovement = horizontal * camManager.transform.right;
+            }
+            else if (playerDashing.DashStart && playerDashing.Dashing)
+            {
+                //mixing camera rotation value to the character moving value.
+                veritcalMovement = vertical * camManager.transform.forward;
+                horizontalMovement = horizontal * camManager.transform.right;
+                playerDashing.DashStart = false;
+            }
 
             //multiplying target speed and move amount.
-            moveDir = ((v + h).normalized) * (targetSpeed * moveAmount);
+            moveDir = ((veritcalMovement + horizontalMovement).normalized) * (targetSpeed * moveAmount);
 
             //This is for isolating y velocity from the character control. 
             moveDir.y = rigid.velocity.y;
@@ -159,19 +174,16 @@ namespace DM
             float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
             moveAmount = Mathf.Clamp01(m);
 
-            if (normalAttack && canMove) // I clicked for normal attack when I can move around.
+            if ((normalAttack || comboAttack) && canMove) // I clicked for normal attack when I can move around.
             {
-                if (melee && !ranged) playerMeleeAttacking.Attack();
-                if (ranged && !melee) playerRangedAttacking.Attack();
+                if (melee && !ranged) playerMeleeAttacking.Attack(comboAttack);
+                if (ranged && !melee) playerRangedAttacking.Attack(comboAttack);
                 if (!ranged && !melee) throw new System.Exception("No attacks are available");
                 if (ranged && melee) throw new System.Exception("Error: both attacks are available");
 
                 string targetAnim;
 
-                //chosing random attack from array.
-                //int r = Random.Range(0, randomAttacks.Length);
-                //targetAnim = randomAttacks[r];
-                targetAnim = attacks[0];
+                targetAnim = attacks[comboAttack ? 1 : 0];
 
                 anim.CrossFade(targetAnim, 0.1f); //play the target animation in 0.1 second.                 
 
@@ -181,26 +193,6 @@ namespace DM
                 }
 
                 normalAttack = false;
-            }
-
-            if (comboAttack && canMove) // I clicked for normal attack when I can move around.
-            {
-                if (melee && !ranged) playerMeleeAttacking.Attack(combo: true);
-                if (ranged && !melee) playerRangedAttacking.Attack(combo: true);
-                if (!ranged && !melee) throw new System.Exception("No attacks are available");
-                if (ranged && melee) throw new System.Exception("Error: both attacks are available");
-
-                string targetAnim;
-
-                targetAnim = attacks[1];
-
-                anim.CrossFade(targetAnim, 0.1f); //play the target animation in 0.1 second.                 
-
-                if (!onGround)
-                {
-                    anim.CrossFade("JumpAttack", 0.1f); // When you are air born, you do this jump attack.
-                }
-
                 comboAttack = false;
             }
 
@@ -278,5 +270,3 @@ namespace DM
 
     }
 }
-
-
