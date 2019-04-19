@@ -33,12 +33,13 @@ public class EnemyMovement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
             stopped = !stopped;
-            
+
         if (stopped)
         {
-            navAgent.SetDestination(transform.position);
+            navAgent.isStopped = true;
             return;
         }
+
 
         if (enemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
         {
@@ -48,6 +49,7 @@ public class EnemyMovement : MonoBehaviour
         {
             navAgent.enabled = false;
         }
+        
     }
 
     public void EnableDash()

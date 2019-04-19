@@ -107,8 +107,6 @@ MonoBehaviour:
   normalAttack: 0
   comboAttack: 0
   canMove: 0
-  roll: 0
-  block: 0
   rigid: {fileID: 0}
 --- !u!114 &86064873
 MonoBehaviour:
@@ -293,6 +291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 714dcbfe04805d8408c799f42acc2025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 1919843589960360, guid: 961f9f66d46891b498e4129d7b89b9f8,
+    type: 3}
   cooldownSlider: {fileID: 0}
 --- !u!1 &262744830747606449
 GameObject:

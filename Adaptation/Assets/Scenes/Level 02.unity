@@ -506,17 +506,6 @@ PrefabInstance:
       propertyPath: cooldownSlider
       value: 
       objectReference: {fileID: 1086771281}
-    - target: {fileID: 707451114679324275, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: effectPrefab
-      value: 
-      objectReference: {fileID: 1919843589960360, guid: 961f9f66d46891b498e4129d7b89b9f8,
-        type: 3}
-    - target: {fileID: 707451114679324275, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: effectTransform
-      value: 
-      objectReference: {fileID: 1634171425}
     - target: {fileID: 9203182338668119507, guid: 6ccf4ddb3be542344b6f5ac473782628,
         type: 3}
       propertyPath: cooldownSlider
@@ -524,29 +513,9 @@ PrefabInstance:
       objectReference: {fileID: 1086771281}
     - target: {fileID: 4490881236577021202, guid: 6ccf4ddb3be542344b6f5ac473782628,
         type: 3}
-      propertyPath: effectPrefab
+      propertyPath: shootOrigin
       value: 
-      objectReference: {fileID: 1748139164946814, guid: 4f14e37b24a0f9c41a81220f59ae87f6,
-        type: 3}
-    - target: {fileID: 1482526539980724, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4933245001564209812, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4523233905093845874, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2030734783710176828, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 107938774}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
 --- !u!114 &86064871 stripped
@@ -561,6 +530,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 544f2064df03e95419b4a5147c506b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &107938774 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4412919469045156, guid: 6ccf4ddb3be542344b6f5ac473782628,
+    type: 3}
+  m_PrefabInstance: {fileID: 86064870}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &108720809
 GameObject:
   m_ObjectHideFlags: 0
@@ -6805,12 +6780,6 @@ RectTransform:
   m_AnchoredPosition: {x: 161, y: -110}
   m_SizeDelta: {x: 75, y: 60}
   m_Pivot: {x: 0, y: 1}
---- !u!4 &1634171425 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8816994381097313086, guid: 6ccf4ddb3be542344b6f5ac473782628,
-    type: 3}
-  m_PrefabInstance: {fileID: 86064870}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1684350448
 GameObject:
   m_ObjectHideFlags: 0

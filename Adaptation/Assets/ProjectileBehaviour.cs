@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour
 {
+    [SerializeField]
+    GameObject effectPrefab;
+
     MonoBehaviour user;
 
     float speed, range;
@@ -14,7 +17,10 @@ public class ProjectileBehaviour : MonoBehaviour
     public void Initialize(EnemyRangedAttacking user, Transform originTransform, float speed, float range, int damage)
     {
         this.user = user;
-        transform.SetPositionAndRotation(originTransform.position, originTransform.rotation);
+
+        transform.SetPositionAndRotation(new Vector3(originTransform.position.x, originTransform.position.y + 1, originTransform.position.z), originTransform.rotation);
+        transform.position += transform.forward;
+
         this.speed = speed;
         this.range = range;
         this.damage = damage;
@@ -25,7 +31,10 @@ public class ProjectileBehaviour : MonoBehaviour
     public void Initialize(PlayerRangedAttacking player, float speed, float range, int damage)
     {
         user = player;
-        transform.SetPositionAndRotation(player.ShootOrigin.position, player.ShootOrigin.rotation);
+
+        transform.SetPositionAndRotation(new Vector3(player.ShootOrigin.position.x, player.ShootOrigin.position.y + 1, player.ShootOrigin.position.z), player.ShootOrigin.rotation);
+        transform.position += transform.forward;
+
         this.speed = speed;
         this.range = range;
         this.damage = damage;
@@ -36,12 +45,17 @@ public class ProjectileBehaviour : MonoBehaviour
     public void Initialize(PlayerRangedAttacking player, Vector3 position, Quaternion rotation, float speed, float range, int damage)
     {
         user = player;
-        transform.SetPositionAndRotation(position, rotation);
+
+        transform.SetPositionAndRotation(new Vector3(position.x, position.y + 1, position.z), rotation);
+        transform.position += transform.forward;
+
         this.speed = speed;
         this.range = range;
         this.damage = damage;
 
         startPos = transform.position;
+
+        //Instantiate(effectPrefab, transform);
     }
 
     void Update()
