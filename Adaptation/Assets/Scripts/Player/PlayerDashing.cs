@@ -12,6 +12,10 @@ public class PlayerDashing : MonoBehaviour
     public float DashSpeed { get { return dashSpeed; } }
 
     [SerializeField]
+    GameObject effectPrefab;
+    GameObject effect;
+
+    [SerializeField]
     Slider cooldownSlider;
 
     float coolDown = 2f;
@@ -46,6 +50,8 @@ public class PlayerDashing : MonoBehaviour
             posBefore = transform.position;
             Dashing = true;
             DashStart = true;
+
+            effect = Instantiate(effectPrefab, transform.position, transform.rotation);
 
             Debug.Log("Dashing");
         }

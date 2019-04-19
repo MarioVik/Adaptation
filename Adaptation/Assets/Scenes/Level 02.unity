@@ -506,6 +506,12 @@ PrefabInstance:
       propertyPath: cooldownSlider
       value: 
       objectReference: {fileID: 1086771281}
+    - target: {fileID: 707451114679324275, guid: 6ccf4ddb3be542344b6f5ac473782628,
+        type: 3}
+      propertyPath: effectPrefab
+      value: 
+      objectReference: {fileID: 1919843589960360, guid: 961f9f66d46891b498e4129d7b89b9f8,
+        type: 3}
     - target: {fileID: 9203182338668119507, guid: 6ccf4ddb3be542344b6f5ac473782628,
         type: 3}
       propertyPath: cooldownSlider

@@ -76,6 +76,7 @@ public class PlayerMeleeAttacking : MonoBehaviour
                 foreach (EnemyHealth tempEnemy in hitEnemies)
                     tempEnemy.AlreadyHit = false;
                 combo = false;
+                weaponAudio.Play();
 
                 Debug.Log("Collider hits reset");
             }
