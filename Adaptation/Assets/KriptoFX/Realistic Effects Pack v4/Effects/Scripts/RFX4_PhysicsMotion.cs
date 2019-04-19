@@ -42,19 +42,19 @@ public class RFX4_PhysicsMotion : MonoBehaviour
     float currentSpeedOffset;
     private RFX4_EffectSettings effectSettings;
 
-    void OnEnable ()
+    void OnEnable()
     {
         effectSettings = GetComponentInParent<RFX4_EffectSettings>();
         foreach (var obj in DeactivateObjectsAfterCollision)
         {
             if (obj != null)
             {
-                if(obj.GetComponent<ParticleSystem>() != null) obj.SetActive(false);
+                if (obj.GetComponent<ParticleSystem>() != null) obj.SetActive(false);
                 obj.SetActive(true);
             }
         }
         currentSpeedOffset = Random.Range(-RandomSpeedOffset * 10000f, RandomSpeedOffset * 10000f) / 10000f;
-	    InitializeRigid();
+        InitializeRigid();
     }
 
     void InitializeRigid()
@@ -66,8 +66,8 @@ public class RFX4_PhysicsMotion : MonoBehaviour
         }
 
         isInitializedForce = false;
-        
-       
+
+
     }
 
     void InitializeForce()
@@ -85,6 +85,11 @@ public class RFX4_PhysicsMotion : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        //if (collision.collider.tag != "Player" && collision.collider.tag != "GameController")
+        //    return;
+        //if (collision.collider.tag != "Enemy")
+            //return;
+
         if (isCollided && !effectSettings.UseCollisionDetection) return;
         foreach (ContactPoint contact in collision.contacts)
         {
@@ -105,18 +110,18 @@ public class RFX4_PhysicsMotion : MonoBehaviour
                     targetAnchor.transform.rotation = transform.rotation;
                     //targetAnchor.transform.LookAt(contact.normal);
                 }
-                
+
             }
             var handler = CollisionEnter;
             if (handler != null)
-                handler(this, new RFX4_CollisionInfo { HitPoint = contact.point, HitCollider = contact.otherCollider, HitGameObject = contact.otherCollider.gameObject});
+                handler(this, new RFX4_CollisionInfo { HitPoint = contact.point, HitCollider = contact.otherCollider, HitGameObject = contact.otherCollider.gameObject });
 
             if (EffectOnCollision != null)
             {
                 var instance = Instantiate(EffectOnCollision, contact.point, new Quaternion()) as GameObject;
 
                 if (HUE > -0.9f) RFX4_ColorHelper.ChangeObjectColorByHUE(instance, HUE);
-                
+
                 if (LookAtNormal) instance.transform.LookAt(contact.point + contact.normal);
                 else instance.transform.rotation = transform.rotation;
                 if (!CollisionEffectInWorldSpace) instance.transform.parent = contact.otherCollider.transform.parent;
@@ -147,7 +152,7 @@ public class RFX4_PhysicsMotion : MonoBehaviour
         if (rigid != null && AddRealtimeForce.magnitude > 0.001f) rigid.AddForce(AddRealtimeForce);
         if (rigid != null && MinSpeed > 0.001f) rigid.AddForce(transform.forward * MinSpeed);
         if (rigid != null && effectSettings.MaxDistnace > 0 && transform.localPosition.magnitude > effectSettings.MaxDistnace) RemoveRigidbody();
-        
+
         if (UseTargetPositionAfterCollision && isCollided && targetAnchor != null)
         {
             transform.position = targetAnchor.transform.position;

@@ -33,6 +33,17 @@ public class ProjectileBehaviour : MonoBehaviour
         startPos = transform.position;
     }
 
+    public void Initialize(PlayerRangedAttacking player, Vector3 position, Quaternion rotation, float speed, float range, int damage)
+    {
+        user = player;
+        transform.SetPositionAndRotation(position, rotation);
+        this.speed = speed;
+        this.range = range;
+        this.damage = damage;
+
+        startPos = transform.position;
+    }
+
     void Update()
     {
         transform.position += transform.forward.normalized * speed * Time.deltaTime;

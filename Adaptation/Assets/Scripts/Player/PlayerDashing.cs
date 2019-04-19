@@ -9,19 +9,18 @@ public class PlayerDashing : MonoBehaviour
     public bool DashStart { get; private set; }
     public bool DashStop { get; private set; }
     public bool Dashing { get; private set; }
-    public float DashSpeed { get { return dashSpeed; } }
+    public float DashSpeed { get; } = 30f;
+
+    Rigidbody rigid;
 
     [SerializeField]
     GameObject effectPrefab;
-    GameObject effect;
 
     [SerializeField]
     Slider cooldownSlider;
 
     float coolDown = 2f;
     float coolDownTimer;
-
-    float dashSpeed = 50f;
     float dashDistance = 10f;
 
     Vector3 posBefore;
@@ -34,6 +33,8 @@ public class PlayerDashing : MonoBehaviour
         coolDownTimer = coolDown;
         cooldownSlider.maxValue = coolDown;
         cooldownSlider.value = coolDown;
+
+        rigid = GetComponentInParent<Rigidbody>();
     }
 
     void Update()
@@ -51,7 +52,7 @@ public class PlayerDashing : MonoBehaviour
             Dashing = true;
             DashStart = true;
 
-            effect = Instantiate(effectPrefab, transform.position, transform.rotation);
+             Instantiate(effectPrefab, rigid.position, rigid.rotation, rigid.transform);
 
             Debug.Log("Dashing");
         }
@@ -59,11 +60,12 @@ public class PlayerDashing : MonoBehaviour
         if (Dashing)
         {
             if (Vector3.Distance(transform.position, posBefore) >= dashDistance
-                || lastFramePos == transform.position
-                /*|| Input.GetButtonUp("FeatureInput")*/)
+                || lastFramePos == transform.position)
             {
                 Dashing = false;
                 DashStop = true;
+                //Destroy(effect);
+
                 Debug.Log("Stopped dashing");
             }
         }
@@ -76,7 +78,7 @@ public class PlayerDashing : MonoBehaviour
         if (Dashing)
         {
             lastFramePos = transform.position;
-            transform.position += direction.normalized * dashSpeed * Time.deltaTime;
+            transform.position += direction.normalized * DashSpeed * Time.deltaTime;
         }
     }
 

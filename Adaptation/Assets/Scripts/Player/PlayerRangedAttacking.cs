@@ -11,6 +11,11 @@ public class PlayerRangedAttacking : MonoBehaviour
 
     public Transform ShootOrigin { get { return shootOrigin; } }
 
+    Rigidbody rigid;
+
+    [SerializeField]
+    GameObject effectPrefab;
+
     int damage = 40;
     float range = 8f;
     float projectileSpeed = 20f;
@@ -55,6 +60,8 @@ public class PlayerRangedAttacking : MonoBehaviour
         anim = GetComponentInParent<Animator>();
         normalClip = GetAnimationTime("NormalAttack01_SwordShield");
         comboClip = GetAnimationTime("NormalAttack02_SwordShield");
+
+        rigid = GetComponentInParent<Rigidbody>();
     }
 
     public AnimationClip GetAnimationTime(string name)
@@ -88,14 +95,10 @@ public class PlayerRangedAttacking : MonoBehaviour
     void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab);
-        //if (targetIndex == -1)
-        //{
         projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, range, damage);
-        //}
-        //else
-        //{
-        //    projectile.GetComponent<ProjectileBehaviour>().Initialize(this, enemies[targetIndex].transform, projectileSpeed, range, damage);
-        //}
+
+        //Instantiate(effectPrefab, rigid.position, rigid.rotation, rigid.transform);
+        Instantiate(effectPrefab);
         weaponAudio.Play();
     }
 
