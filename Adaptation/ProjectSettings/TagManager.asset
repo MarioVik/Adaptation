@@ -10,6 +10,7 @@ TagManager:
   - MeleeWeapon
   - RangedWeapon
   - Ground
+  - Projectile
   layers:
   - Default
   - TransparentFX

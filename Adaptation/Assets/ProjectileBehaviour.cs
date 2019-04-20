@@ -55,7 +55,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
         startPos = transform.position;
 
-        //Instantiate(effectPrefab, transform);
+        Instantiate(effectPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
     }
 
     void Update()

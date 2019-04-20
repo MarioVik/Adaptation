@@ -88,9 +88,10 @@ public class RFX4_PhysicsMotion : MonoBehaviour
         //if (collision.collider.tag != "Player" && collision.collider.tag != "GameController")
         //    return;
         //if (collision.collider.tag != "Enemy")
-            //return;
+        //return;
+        if (collision.collider.tag == "Projectile")
 
-        if (isCollided && !effectSettings.UseCollisionDetection) return;
+            if (isCollided && !effectSettings.UseCollisionDetection) return;
         foreach (ContactPoint contact in collision.contacts)
         {
             if (!isCollided)
