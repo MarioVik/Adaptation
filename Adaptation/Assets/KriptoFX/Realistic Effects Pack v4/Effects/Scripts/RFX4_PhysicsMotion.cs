@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class RFX4_PhysicsMotion : MonoBehaviour
 {
+    public bool ProjectileDestroyed { get; set; }
+
     public bool UseCollisionDetect = true;
     public float MaxDistnace = -1;
     public float Mass = 1;
@@ -31,8 +33,8 @@ public class RFX4_PhysicsMotion : MonoBehaviour
 
     public event EventHandler<RFX4_CollisionInfo> CollisionEnter;
 
-    Rigidbody rigid;
-    SphereCollider collid;
+    //Rigidbody rigid;
+    //SphereCollider collid;
     ContactPoint lastContactPoint;
     Collider lastCollider;
     Vector3 offsetColliderPoint;
@@ -42,8 +44,65 @@ public class RFX4_PhysicsMotion : MonoBehaviour
     float currentSpeedOffset;
     private RFX4_EffectSettings effectSettings;
 
+    AudioSource explosionAudio;
+
+    public void Detonate(Collision collision)
+    {
+        if (isCollided && !effectSettings.UseCollisionDetection) return;
+
+        explosionAudio.Play();
+        foreach (ContactPoint contact in collision.contacts)
+        {
+            if (!isCollided)
+            {
+                isCollided = true;
+                //offsetColliderPoint = contact.otherCollider.transform.position - contact.point;
+                // lastCollider = contact.otherCollider;
+                // lastContactPoint = contact;
+                if (UseTargetPositionAfterCollision)
+                {
+                    if (targetAnchor != null) Destroy(targetAnchor);
+
+                    targetAnchor = new GameObject();
+                    targetAnchor.hideFlags = HideFlags.HideAndDontSave;
+                    targetAnchor.transform.parent = contact.otherCollider.transform;
+                    targetAnchor.transform.position = contact.point;
+                    targetAnchor.transform.rotation = transform.rotation;
+                    //targetAnchor.transform.LookAt(contact.normal);
+                }
+
+            }
+            var handler = CollisionEnter;
+            if (handler != null)
+                handler(this, new RFX4_CollisionInfo { HitPoint = contact.point, HitCollider = contact.otherCollider, HitGameObject = contact.otherCollider.gameObject });
+
+            if (EffectOnCollision != null)
+            {
+                var instance = Instantiate(EffectOnCollision, contact.point, new Quaternion()) as GameObject;
+
+                if (HUE > -0.9f) RFX4_ColorHelper.ChangeObjectColorByHUE(instance, HUE);
+
+                if (LookAtNormal) instance.transform.LookAt(contact.point + contact.normal);
+                else instance.transform.rotation = transform.rotation;
+                if (!CollisionEffectInWorldSpace) instance.transform.parent = contact.otherCollider.transform.parent;
+                Destroy(instance, CollisionEffectDestroyAfter);
+            }
+        }
+
+        foreach (var obj in DeactivateObjectsAfterCollision)
+        {
+            if (obj != null)
+            {
+                var ps = obj.GetComponent<ParticleSystem>();
+                if (ps != null) ps.Stop();
+                else obj.SetActive(false);
+            }
+        }
+    }
+
     void OnEnable()
     {
+        explosionAudio = GetComponent<AudioSource>();
         effectSettings = GetComponentInParent<RFX4_EffectSettings>();
         foreach (var obj in DeactivateObjectsAfterCollision)
         {
@@ -59,32 +118,33 @@ public class RFX4_PhysicsMotion : MonoBehaviour
 
     void InitializeRigid()
     {
-        if (effectSettings.UseCollisionDetection)
-        {
-            collid = gameObject.AddComponent<SphereCollider>();
-            collid.radius = ColliderRadius;
-        }
+        //if (effectSettings.UseCollisionDetection)
+        //{
+        //    collid = gameObject.AddComponent<SphereCollider>();
+        //    collid.radius = ColliderRadius;
+        //}
 
         isInitializedForce = false;
-
-
     }
 
     void InitializeForce()
     {
-        rigid = gameObject.AddComponent<Rigidbody>();
-        rigid.mass = effectSettings.Mass;
-        rigid.drag = effectSettings.AirDrag;
-        rigid.useGravity = effectSettings.UseGravity;
-        if (FreezeRotation) rigid.constraints = RigidbodyConstraints.FreezeRotation;
-        rigid.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-        rigid.interpolation = RigidbodyInterpolation.Interpolate;
-        rigid.AddForce(transform.forward * (effectSettings.Speed + currentSpeedOffset), ForceMode);
+        //rigid = gameObject.AddComponent<Rigidbody>();
+        //rigid.mass = effectSettings.Mass;
+        //rigid.drag = effectSettings.AirDrag;
+        //rigid.useGravity = effectSettings.UseGravity;
+        //if (FreezeRotation) rigid.constraints = RigidbodyConstraints.FreezeRotation;
+        //rigid.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        //rigid.interpolation = RigidbodyInterpolation.Interpolate;
+        //rigid.AddForce(transform.forward * (effectSettings.Speed + currentSpeedOffset), ForceMode);
+
         isInitializedForce = true;
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (ProjectileDestroyed)
+            return;
         //if (collision.collider.tag != "Player" && collision.collider.tag != "GameController")
         //    return;
         //if (collision.collider.tag != "Enemy")
@@ -141,8 +201,8 @@ public class RFX4_PhysicsMotion : MonoBehaviour
         }
 
 
-        if (rigid != null) Destroy(rigid);
-        if (collid != null) Destroy(collid);
+        //if (rigid != null) Destroy(rigid);
+        //if (collid != null) Destroy(collid);
     }
 
 
@@ -150,9 +210,9 @@ public class RFX4_PhysicsMotion : MonoBehaviour
     private void FixedUpdate()
     {
         if (!isInitializedForce) InitializeForce();
-        if (rigid != null && AddRealtimeForce.magnitude > 0.001f) rigid.AddForce(AddRealtimeForce);
-        if (rigid != null && MinSpeed > 0.001f) rigid.AddForce(transform.forward * MinSpeed);
-        if (rigid != null && effectSettings.MaxDistnace > 0 && transform.localPosition.magnitude > effectSettings.MaxDistnace) RemoveRigidbody();
+        //if (rigid != null && AddRealtimeForce.magnitude > 0.001f) rigid.AddForce(AddRealtimeForce);
+        //if (rigid != null && MinSpeed > 0.001f) rigid.AddForce(transform.forward * MinSpeed);
+        //if (rigid != null && effectSettings.MaxDistnace > 0 && transform.localPosition.magnitude > effectSettings.MaxDistnace) RemoveRigidbody();
 
         if (UseTargetPositionAfterCollision && isCollided && targetAnchor != null)
         {
@@ -185,8 +245,8 @@ public class RFX4_PhysicsMotion : MonoBehaviour
     void RemoveRigidbody()
     {
         isCollided = false;
-        if (rigid != null) Destroy(rigid);
-        if (collid != null) Destroy(collid);
+        //if (rigid != null) Destroy(rigid);
+        //if (collid != null) Destroy(collid);
     }
 
     void OnDrawGizmosSelected()

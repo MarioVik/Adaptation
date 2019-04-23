@@ -11,6 +11,7 @@ TagManager:
   - RangedWeapon
   - Ground
   - Projectile
+  - Effect
   layers:
   - Default
   - TransparentFX

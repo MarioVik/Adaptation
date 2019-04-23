@@ -116,7 +116,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 02e6208ec76314158a9f548f51fe9f11, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -246,6 +246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e15099f5ee559584089d5851df572def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerDashing: {fileID: 0}
+  playerBlocking: {fileID: 0}
   timeBetweenAttacks: 0.5
   attackDamage: 10
 --- !u!114 &114544936959548492
@@ -260,7 +262,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b9d14572410594cb85d40eedfb150c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targeting: {fileID: 86064873, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
   startingHealth: 100
   currentHealth: 0
   sinkSpeed: 2.5

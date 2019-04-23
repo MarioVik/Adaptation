@@ -13,7 +13,7 @@ public class PlayerRangedAttacking : MonoBehaviour
 
     int damage = 40;
     float range = 8f;
-    float projectileSpeed = 20f;
+    float projectileSpeed = 10f;
     float attackSpeed = 1.0f;
 
     int shootableMask;

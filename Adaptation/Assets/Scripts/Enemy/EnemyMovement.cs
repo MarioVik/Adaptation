@@ -31,7 +31,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.O))
             stopped = !stopped;
 
         if (stopped)

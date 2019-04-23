@@ -511,11 +511,14 @@ PrefabInstance:
       propertyPath: cooldownSlider
       value: 
       objectReference: {fileID: 1086771281}
-    - target: {fileID: 4490881236577021202, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: shootOrigin
+    - target: {fileID: 1390674709, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
+      propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 107938774}
+      objectReference: {fileID: 8300000, guid: 70b6e007003158e4fa167f9b0a084a77, type: 3}
+    - target: {fileID: 1390674709, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
 --- !u!114 &86064871 stripped
@@ -530,12 +533,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 544f2064df03e95419b4a5147c506b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &107938774 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4412919469045156, guid: 6ccf4ddb3be542344b6f5ac473782628,
-    type: 3}
-  m_PrefabInstance: {fileID: 86064870}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &108720809
 GameObject:
   m_ObjectHideFlags: 0
