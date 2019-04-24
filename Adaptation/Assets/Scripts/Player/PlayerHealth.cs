@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class PlayerHealth : MonoBehaviour
@@ -19,7 +19,7 @@ public class PlayerHealth : MonoBehaviour
 
     Animator anim;
     AudioSource playerAudio;
-    PlayerMovement playerMovement;
+    PlayerControlManager controlManager;
     bool isDead;
     bool damaged;
 
@@ -40,7 +40,7 @@ public class PlayerHealth : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
-        playerMovement = GetComponent<PlayerMovement>();
+        controlManager = GetComponentInParent<PlayerControlManager>();
         ResetHealth();
     }
 
@@ -76,12 +76,12 @@ public class PlayerHealth : MonoBehaviour
     {
         isDead = true;
 
-        anim.SetTrigger("Die");
+        anim.SetTrigger("die");
 
         playerAudio.clip = deathClip;
         playerAudio.Play();
 
-        playerMovement.enabled = false;
+        controlManager.Dead = true;
     }
 
     public void RestartLevel()

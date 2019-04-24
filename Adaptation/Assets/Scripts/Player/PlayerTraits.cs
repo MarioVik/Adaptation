@@ -55,7 +55,7 @@ public class PlayerTraits : MonoBehaviour
                     GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRange(1f);
                 break;
             case 'm':
-                GetComponentInParent<ControlManager>().IncreaseMovementSpeed(1.5f);
+                GetComponentInParent<PlayerControlManager>().IncreaseMovementSpeed(1.5f);
                 break;
             default:
                 throw new System.Exception("Player has unrecognized attribute");

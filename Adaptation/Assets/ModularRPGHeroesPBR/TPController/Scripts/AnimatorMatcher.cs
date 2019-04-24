@@ -8,7 +8,7 @@ namespace DM
     public class AnimatorMatcher : MonoBehaviour
     {
         Animator anim;
-        ControlManager control;
+        PlayerControlManager control;
         Vector3 dPosition;
         Vector3 vPosition;
 
@@ -16,16 +16,13 @@ namespace DM
         void Start()
         {
             anim = GetComponent<Animator>();
-            control = GetComponentInParent<ControlManager>();
+            control = GetComponentInParent<PlayerControlManager>();
         }
 
         
         private void OnAnimatorMove()   //It updates every frame when animator's animations in play.
         {
             if (control.canMove)
-                return;
-
-            if (!control.onGround)
                 return;
 
             control.rigid.drag = 0;

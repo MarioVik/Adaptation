@@ -1,11 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
-    [SerializeField]
     PlayerDashing playerDashing;
-    [SerializeField]
     PlayerBlocking playerBlocking;
 
     public float timeBetweenAttacks = 0.5f;
@@ -37,6 +35,8 @@ public class EnemyAttack : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
+        playerDashing = player.GetComponent<PlayerDashing>();
+        playerBlocking = player.GetComponentInChildren<PlayerBlocking>();
         enemyHealth = GetComponent<EnemyHealth>();
         anim = GetComponent<Animator>();
     }
