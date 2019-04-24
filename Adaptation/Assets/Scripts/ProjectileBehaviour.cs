@@ -12,7 +12,8 @@ public class ProjectileBehaviour : MonoBehaviour
 
     AudioSource explosionAudio;
 
-    float speed, range;
+    float rotationSpeed = 100;
+    float movementSpeed, range;
     int damage;
 
     Vector3 startPos;
@@ -24,7 +25,7 @@ public class ProjectileBehaviour : MonoBehaviour
         transform.SetPositionAndRotation(new Vector3(originTransform.position.x, originTransform.position.y + 1, originTransform.position.z), originTransform.rotation);
         transform.position += transform.forward;
 
-        this.speed = speed;
+        this.movementSpeed = speed;
         this.range = range;
         this.damage = damage;
 
@@ -40,7 +41,7 @@ public class ProjectileBehaviour : MonoBehaviour
         transform.SetPositionAndRotation(new Vector3(player.ShootOrigin.position.x, player.ShootOrigin.position.y + 1, player.ShootOrigin.position.z), player.ShootOrigin.rotation);
         transform.position += transform.forward;
 
-        this.speed = speed;
+        this.movementSpeed = speed;
         this.range = range;
         this.damage = damage;
 
@@ -56,7 +57,7 @@ public class ProjectileBehaviour : MonoBehaviour
         transform.SetPositionAndRotation(new Vector3(position.x, position.y + 1, position.z), rotation);
         transform.position += transform.forward;
 
-        this.speed = speed;
+        this.movementSpeed = speed;
         this.range = range;
         this.damage = damage;
 
@@ -69,7 +70,8 @@ public class ProjectileBehaviour : MonoBehaviour
 
     void Update()
     {
-        transform.position += transform.forward.normalized * speed * Time.deltaTime;
+        transform.position += transform.forward.normalized * movementSpeed * Time.deltaTime;
+        transform.Rotate(Vector3.forward, movementSpeed * rotationSpeed * Time.deltaTime);
 
         //effectIntance.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
 
