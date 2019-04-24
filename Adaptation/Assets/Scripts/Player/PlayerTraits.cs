@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using DM;
+using UnityEngine.UI;
 
 public class PlayerTraits : MonoBehaviour
 {
     [SerializeField] GameObject meleeObject;
     [SerializeField] GameObject rangedObject;
     [SerializeField] GameObject blockObject;
-    
+
+    [SerializeField]
+    Image featureImage;
+    [SerializeField]
+    Sprite blockImage;
+    [SerializeField]
+    Sprite dashImage;
+
     bool ranged, melee;
 
     void Start()
@@ -76,9 +84,11 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 'B':
                 blockObject.SetActive(true);
+                featureImage.sprite = blockImage;
                 break;
             case 'D':
                 GetComponent<PlayerDashing>().enabled = true;
+                featureImage.sprite = dashImage;
                 break;
             default:
                 throw new System.Exception("Player has unrecognized feature");

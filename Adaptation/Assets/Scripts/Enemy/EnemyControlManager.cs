@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControlManager : MonoBehaviour
+public class EnemyControlManager : MonoBehaviour
 {
     public bool Dead { get; set; }
 
@@ -52,7 +52,6 @@ public class PlayerControlManager : MonoBehaviour
     [HideInInspector]
     public bool comboAttack;       //stores whether you combo or not
     public bool canMove;    //shows you can move or not
-
 
     float fixedDelta;        //stores Time.fixedDeltaTime
     float delta;
@@ -122,11 +121,11 @@ public class PlayerControlManager : MonoBehaviour
 
     void GetInput() //getting various inputs from keyboard or joypad.
     {
-        vertical = Input.GetAxis("Vertical");    //for getting vertical input.
-        horizontal = Input.GetAxis("Horizontal");    //for getting horizontal input.
-        sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
-        normalAttack = Input.GetButtonDown("NormalAttack"); //for getting normal attack input.
-        comboAttack = Input.GetButtonDown("ComboAttack");    //for getting combo attack input.
+        //vertical = Input.GetAxis("Vertical");    //for getting vertical input.
+        //horizontal = Input.GetAxis("Horizontal");    //for getting horizontal input.
+        //sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
+        //normalAttack = Input.GetButtonDown("NormalAttack"); //for getting normal attack input.
+        //comboAttack = Input.GetButtonDown("ComboAttack");    //for getting combo attack input.
     }
 
 

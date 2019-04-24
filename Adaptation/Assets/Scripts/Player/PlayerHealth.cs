@@ -82,10 +82,12 @@ public class PlayerHealth : MonoBehaviour
         playerAudio.Play();
 
         controlManager.Dead = true;
+
+        Invoke("RestartLevel", 5.0f);
     }
 
     public void RestartLevel()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }
