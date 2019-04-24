@@ -65,11 +65,11 @@ public class EnemyTraits : MonoBehaviour
                 if (ranged)
                     GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackSpeed(10f);
                 break;
-            case 'o':
-                if (melee)
-                    GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackRate(0.1f);
-                if (ranged)
-                    GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRate(0.1f);
+            //case 'o':
+            //    if (melee)
+            //        GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackRate(0.1f);
+            //    if (ranged)
+            //        GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRate(0.1f);
                 break;
             case 'r':
                 if (melee)

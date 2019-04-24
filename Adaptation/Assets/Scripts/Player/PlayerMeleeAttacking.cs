@@ -119,17 +119,6 @@ public class PlayerMeleeAttacking : MonoBehaviour
         Debug.Log("Attack Enabled");
     }
 
-    public void HitEnemy(EnemyHealth enemyHealth, Vector3 hitPoint)
-    {
-        if (!enemyHealth.AlreadyHit)
-        {
-            enemyHealth.TakeDamage(damage, hitPoint);
-            hitEnemies.Add(enemyHealth);
-        }
-        enemyHealth.AlreadyHit = true;
-        Debug.Log("Enemy hit");
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
@@ -137,5 +126,16 @@ public class PlayerMeleeAttacking : MonoBehaviour
         {
             HitEnemy(enemyHealth, enemyHealth.transform.position);
         }
+    }
+
+    private void HitEnemy(EnemyHealth enemyHealth, Vector3 hitPoint)
+    {
+        if (!enemyHealth.AlreadyHit)
+        {
+            enemyHealth.TakeDamage(damage, hitPoint);
+            hitEnemies.Add(enemyHealth);
+            enemyHealth.AlreadyHit = true;
+        }
+        Debug.Log("Enemy hit");
     }
 }

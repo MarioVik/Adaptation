@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class EnemyDashing : MonoBehaviour
 {
-    bool activated;
-
+    public bool DashStart { get; private set; }
+    public bool DashStop { get; private set; }
     public bool Dashing { get; private set; }
+    public float DashSpeed { get; } = 30f;
+
+    Rigidbody rigid;
+
+    [SerializeField]
+    GameObject effectPrefab;
 
     float coolDown = 2f;
-    float timer;
-
-    float dashSpeed = 25f;
+    float coolDownTimer;
     float dashDistance = 10f;
 
     Vector3 posBefore;
@@ -19,20 +23,35 @@ public class EnemyDashing : MonoBehaviour
 
     Vector3 lastFramePos;
 
+    public void Activate()
+    {
+        if (coolDownTimer >= coolDown && !Dashing)
+        {
+            coolDownTimer = 0;
+            posBefore = transform.position;
+            Dashing = true;
+            DashStart = true;
+
+            Instantiate(effectPrefab, rigid.position, rigid.rotation, rigid.transform);
+
+            Debug.Log("Dashing");
+        }
+    }
+
     private void Awake()
     {
-        timer = coolDown;
+        coolDownTimer = coolDown;
+
+        rigid = GetComponentInParent<Rigidbody>();
     }
 
     void Update()
     {
-        timer += Time.deltaTime;
+        if (DashStart) DashStart = false;
+        if (DashStop) DashStop = false;
 
-        if (activated && timer >= coolDown && !Dashing)
-        {
-            ActivateDash();
-            Debug.Log("Dashing");
-        }
+        if (!Dashing) coolDownTimer += Time.deltaTime;
+        if (coolDownTimer > coolDown) coolDownTimer = coolDown;
 
         if (Dashing)
         {
@@ -40,7 +59,8 @@ public class EnemyDashing : MonoBehaviour
                 || lastFramePos == transform.position)
             {
                 Dashing = false;
-                timer = 0;
+                DashStop = true;
+
                 Debug.Log("Stopped dashing");
             }
         }
@@ -51,22 +71,7 @@ public class EnemyDashing : MonoBehaviour
         if (Dashing)
         {
             lastFramePos = transform.position;
-            transform.position += direction.normalized * dashSpeed * Time.deltaTime;
+            transform.position += direction.normalized * DashSpeed * Time.deltaTime;
         }
-    }
-
-    private void ActivateDash()
-    {
-        posBefore = transform.position;
-
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-
-        if (horizontal == 0 && vertical == 0)
-            direction = transform.forward;
-        else
-            direction.Set(horizontal, 0f, vertical);
-
-        Dashing = true;
     }
 }

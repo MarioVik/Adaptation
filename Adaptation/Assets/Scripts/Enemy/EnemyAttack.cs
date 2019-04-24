@@ -79,7 +79,7 @@ public class EnemyAttack : MonoBehaviour
         if (playerDashing.isActiveAndEnabled && playerDashing.Dashing)
             return;
 
-        if (playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+        if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
             return;
 
         if (playerHealth.currentHealth > 0)

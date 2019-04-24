@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EnemyBlocking : MonoBehaviour
 {
-    bool activated;
-
+    public bool BlockStart { get; private set; }
+    public bool BlockStop { get; private set; }
     public bool Blocking { get; private set; }
 
     float coolDownTimer;
@@ -14,6 +14,17 @@ public class EnemyBlocking : MonoBehaviour
     float activeTimer = 0;
     float activeDuration = 5f;
 
+    public void Activate()
+    {
+        if (coolDownTimer >= coolDown)
+        {
+            coolDownTimer = 0;
+            Blocking = true;
+            BlockStart = true;
+            Debug.Log("Block Started");
+        }
+    }
+
     private void Awake()
     {
         coolDownTimer = coolDown;
@@ -21,21 +32,19 @@ public class EnemyBlocking : MonoBehaviour
 
     void Update()
     {
-        coolDownTimer += Time.deltaTime;
+        if (BlockStart) BlockStart = false;
+        if (BlockStop) BlockStop = false;
 
-        if (activated && coolDownTimer >= coolDown)
-        {
-            Blocking = true;
-            coolDownTimer = 0;
-            Debug.Log("Block Started");
-        }
+        if (!Blocking) coolDownTimer += Time.deltaTime;
+        if (coolDownTimer > coolDown) coolDownTimer = coolDown;
 
         if (Blocking)
         {
             activeTimer += Time.deltaTime;
-            if (activeTimer >= activeDuration)
+            if (activeTimer >= activeDuration || Input.GetButtonUp("FeatureInput"))
             {
                 Blocking = false;
+                BlockStop = true;
                 activeTimer = 0;
                 Debug.Log("Block Stopped");
             }

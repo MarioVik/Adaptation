@@ -24,21 +24,20 @@ public class EnemyControlManager : MonoBehaviour
     //[Header("Stats")]
     float moveSpeed = 6f;  //speed of running
     float sprintSpeed = 9f;  //speed of sprinting(double time of running)
-    float rotateSpeed = 60f;   //speed of character's turning around    
-                               //float jumpForce = 600f;  //how high you can jump value.
+    float rotateSpeed = 60f;   //speed of character's turning around
 
     [Header("FeatureBehaviours")]
     [SerializeField]
-    PlayerMeleeAttacking playerMeleeAttacking;
+    EnemyMeleeAttacking enemyMeleeAttacking;
     [SerializeField]
-    PlayerRangedAttacking playerRangedAttacking;
+    EnemyRangedAttacking enemyRangedAttacking;
     bool hasMelee;
     bool hasRanged;
     TargetingHandler targeting;
 
     [SerializeField]
-    PlayerBlocking playerBlocking;
-    PlayerDashing playerDashing;
+    EnemyBlocking enemyBlocking;
+    EnemyDashing enemyDashing;
     bool hasBlock;
     bool hasDash;
 
@@ -58,7 +57,6 @@ public class EnemyControlManager : MonoBehaviour
     Animator anim;      //for caching Animator component
     [HideInInspector]
     public Rigidbody rigid;     //for caching Rigidbody component
-    CameraManager camManager;   //for caching CameraManager script
 
     public void IncreaseMovementSpeed(float increase)
     {
@@ -68,18 +66,16 @@ public class EnemyControlManager : MonoBehaviour
 
     void Start() // Initiallizing camera, animator, rigidboy
     {
-        camManager = CameraManager.singleton;
-        camManager.Init(this.transform);
         SetupAnimator();
         rigid = GetComponent<Rigidbody>();
 
-        hasMelee = playerMeleeAttacking.gameObject.activeSelf;
-        hasRanged = playerRangedAttacking.gameObject.activeSelf;
+        hasMelee = enemyMeleeAttacking.gameObject.activeSelf;
+        hasRanged = enemyRangedAttacking.gameObject.activeSelf;
         targeting = GetComponent<TargetingHandler>();
 
-        hasBlock = playerBlocking.gameObject.activeSelf;
-        playerDashing = GetComponentInChildren<PlayerDashing>();
-        hasDash = playerDashing.isActiveAndEnabled;
+        hasBlock = enemyBlocking.gameObject.activeSelf;
+        enemyDashing = GetComponentInChildren<EnemyDashing>();
+        hasDash = enemyDashing.isActiveAndEnabled;
     }
 
     void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -106,7 +102,6 @@ public class EnemyControlManager : MonoBehaviour
         fixedDelta = Time.fixedDeltaTime;    //storing the last frame updated time.             
 
         FixedTick(fixedDelta);   //update anything related to character moving.
-        camManager.FixedTick(fixedDelta);     //update anything related to camera moving.       
     }
 
     void Update()
@@ -135,11 +130,11 @@ public class EnemyControlManager : MonoBehaviour
 
         if (hasDash)
         {
-            if (playerDashing.DashStart && canMove)
+            if (enemyDashing.DashStart && canMove)
             {
                 anim.SetBool("dashing", true);
             }
-            else if (playerDashing.DashStop)
+            else if (enemyDashing.DashStop)
             {
                 anim.SetBool("dashing", false);
             }
@@ -147,12 +142,12 @@ public class EnemyControlManager : MonoBehaviour
 
         if (hasBlock)
         {
-            if (playerBlocking.BlockStart && canMove)
+            if (enemyBlocking.BlockStart && canMove)
             {
                 //anim.CrossFade("Block", 0.0f);
                 anim.SetBool("blocking", true);
             }
-            else if (playerBlocking.BlockStop)
+            else if (enemyBlocking.BlockStop)
             {
                 anim.SetBool("blocking", false);
             }
@@ -165,23 +160,22 @@ public class EnemyControlManager : MonoBehaviour
             targetSpeed = sprintSpeed;    //set sprint speed as target speed.            
         }
 
-        if (playerBlocking.Blocking)
+        if (enemyBlocking.Blocking)
         {
             targetSpeed = 0;
         }
 
-        if (playerDashing.Dashing)
+        if (enemyDashing.Dashing)
         {
-            targetSpeed = playerDashing.DashSpeed;
+            targetSpeed = enemyDashing.DashSpeed;
         }
 
 
-        if (!playerDashing.Dashing
-            || (playerDashing.DashStart && playerDashing.Dashing))
+        if (!enemyDashing.Dashing
+            || (enemyDashing.DashStart && enemyDashing.Dashing))
         {
-            //mixing camera rotation value to the character moving value.
-            veritcalMovement = vertical * camManager.transform.forward;
-            horizontalMovement = horizontal * camManager.transform.right;
+            //veritcalMovement = vertical * camManager.transform.forward;
+            //horizontalMovement = horizontal * camManager.transform.right;
         }
 
         //multiplying target speed and move amount.
@@ -196,8 +190,8 @@ public class EnemyControlManager : MonoBehaviour
 
         if ((normalAttack || comboAttack) && canMove) // I clicked for normal attack when I can move around.
         {
-            if (hasMelee && !hasRanged) playerMeleeAttacking.Attack(comboAttack);
-            if (hasRanged && !hasMelee) playerRangedAttacking.Attack(comboAttack);
+            if (hasMelee && !hasRanged) enemyMeleeAttacking.Attack(comboAttack);
+            if (hasRanged && !hasMelee) enemyRangedAttacking.Attack(comboAttack);
             if (!hasRanged && !hasMelee) throw new System.Exception("No attacks are available");
             if (hasRanged && hasMelee) throw new System.Exception("Error: both attacks are available");
 

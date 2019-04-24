@@ -3,9 +3,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
 public class PlayerHealth : MonoBehaviour
 {
+    public bool AlreadyHit { get; set; }
+
     public int startingHealth = 80;
     public int currentHealth;
     public Slider healthSlider;
@@ -83,7 +84,7 @@ public class PlayerHealth : MonoBehaviour
 
         controlManager.Dead = true;
 
-        Invoke("RestartLevel", 5.0f);
+        Invoke("RestartLevel", 3.0f);
     }
 
     public void RestartLevel()

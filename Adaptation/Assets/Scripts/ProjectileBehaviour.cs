@@ -18,65 +18,45 @@ public class ProjectileBehaviour : MonoBehaviour
 
     Vector3 startPos;
 
-    public void Initialize(EnemyRangedAttacking user, Transform originTransform, float speed, float range, int damage)
+    public void Initialize(EnemyRangedAttacking user, float speed, float range, int damage)
     {
         this.user = user;
 
-        transform.SetPositionAndRotation(new Vector3(originTransform.position.x, originTransform.position.y + 1, originTransform.position.z), originTransform.rotation);
-        transform.position += transform.forward;
+        Vector3 originPosition = user.ShootOrigin.position;
+        Quaternion originRotation = user.ShootOrigin.rotation;
 
-        this.movementSpeed = speed;
-        this.range = range;
-        this.damage = damage;
-
-        startPos = transform.position;
-
-        explosionAudio = GetComponent<AudioSource>();
+        Initialize(originPosition, originRotation, speed, range, damage);
     }
 
     public void Initialize(PlayerRangedAttacking player, float speed, float range, int damage)
     {
         user = player;
 
-        transform.SetPositionAndRotation(new Vector3(player.ShootOrigin.position.x, player.ShootOrigin.position.y + 1, player.ShootOrigin.position.z), player.ShootOrigin.rotation);
-        transform.position += transform.forward;
+        Vector3 originPosition = player.ShootOrigin.position;
+        Quaternion originRotation = player.ShootOrigin.rotation;
 
-        this.movementSpeed = speed;
-        this.range = range;
-        this.damage = damage;
-
-        startPos = transform.position;
-
-        explosionAudio = GetComponent<AudioSource>();
+        Initialize(originPosition, originRotation, speed, range, damage);
     }
 
-    public void Initialize(PlayerRangedAttacking player, Vector3 position, Quaternion rotation, float speed, float range, int damage)
+    private void Initialize(Vector3 originPosition, Quaternion originRotation, float speed, float range, int damage)
     {
-        user = player;
-
-        transform.SetPositionAndRotation(new Vector3(position.x, position.y + 1, position.z), rotation);
+        transform.SetPositionAndRotation(new Vector3(originPosition.x, originPosition.y + 1, originPosition.z), originRotation);
         transform.position += transform.forward;
 
-        this.movementSpeed = speed;
+        movementSpeed = speed;
         this.range = range;
         this.damage = damage;
 
         startPos = transform.position;
 
-        effectIntance = Instantiate(effectPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
-
         explosionAudio = GetComponent<AudioSource>();
+        effectIntance = Instantiate(effectPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
     }
 
     void Update()
     {
         transform.position += transform.forward.normalized * movementSpeed * Time.deltaTime;
         transform.Rotate(Vector3.forward, movementSpeed * rotationSpeed * Time.deltaTime);
-
-        //effectIntance.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
-
-        //Rigidbody rigid = effectIntance.GetComponentInChildren<Rigidbody>();
-        //rigid.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
 
         effectIntance.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
 
@@ -94,7 +74,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
         if (user is PlayerRangedAttacking)
         {
-            if (collision.collider.tag != "Player" && collision.collider.tag != "GameController")
+            if (collision.collider.tag != "Player")
             {
                 EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
                 if (enemyHealth != null)
@@ -103,10 +83,8 @@ public class ProjectileBehaviour : MonoBehaviour
                 }
 
                 effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Detonate(collision);
-                //explosionAudio.Play();
 
                 Destroy(effectIntance.gameObject, 1.0f);
-
                 Destroy(gameObject);
 
                 Debug.Log("Enemy hit");
@@ -116,37 +94,19 @@ public class ProjectileBehaviour : MonoBehaviour
         {
             if (collision.collider.tag != "Enemy")
             {
+                PlayerHealth playerHealth = collision.collider.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage(damage);
+                }
 
+                effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Detonate(collision);
+
+                Destroy(effectIntance.gameObject, 1.0f);
+                Destroy(gameObject);
+
+                Debug.Log("Player hit");
             }
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //if (other.tag == "Effect")
-        //    return;
-
-        //if (user is PlayerRangedAttacking)
-        //{
-        //    if (other.tag != "Player" && other.tag != "GameController")
-        //    {
-        //        EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
-        //        if (enemyHealth != null)
-        //        {
-        //            enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
-        //        }
-        //        effectIntance.GetComponent<RFX4_PhysicsMotion>().Detonate(other);
-        //        Destroy(effectIntance.gameObject, 1.0f);
-        //        Destroy(gameObject);
-        //        Debug.Log("Enemy hit");
-        //    }
-        //}
-        //else if (user is EnemyRangedAttacking)
-        //{
-        //    if (other.tag != "Enemy")
-        //    {
-
-        //    }
-        //}
     }
 }

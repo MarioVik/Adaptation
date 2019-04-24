@@ -246,8 +246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e15099f5ee559584089d5851df572def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDashing: {fileID: 0}
-  playerBlocking: {fileID: 0}
   timeBetweenAttacks: 0.5
   attackDamage: 10
 --- !u!114 &114544936959548492

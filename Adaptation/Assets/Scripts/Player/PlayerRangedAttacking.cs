@@ -37,11 +37,6 @@ public class PlayerRangedAttacking : MonoBehaviour
         attackSpeed += (increase / 10);
     }
 
-    //public void IncreaseAttackRate(float increase)
-    //{
-    //    timeBetweenAttacks -= increase;
-    //}
-
     public void IncreaseAttackRange(float increase)
     {
         range += increase;
@@ -88,7 +83,7 @@ public class PlayerRangedAttacking : MonoBehaviour
     void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab);
-        projectile.GetComponent<ProjectileBehaviour>().Initialize(this, ShootOrigin.transform.position, ShootOrigin.transform.rotation, projectileSpeed, range, damage);
+        projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, range, damage);
         weaponAudio.Play();
     }
 
