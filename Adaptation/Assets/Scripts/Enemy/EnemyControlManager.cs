@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyControlManager : MonoBehaviour
 {
@@ -33,7 +34,6 @@ public class EnemyControlManager : MonoBehaviour
     EnemyRangedAttacking enemyRangedAttacking;
     bool hasMelee;
     bool hasRanged;
-    TargetingHandler targeting;
 
     [SerializeField]
     EnemyBlocking enemyBlocking;
@@ -41,11 +41,9 @@ public class EnemyControlManager : MonoBehaviour
     bool hasBlock;
     bool hasDash;
 
-
     [Header("States")]
     public bool sprint;     //shows you are sprinting or not.
-                            //[HideInInspector]
-                            //public bool jump;       //stores whether you jump or not
+
     [HideInInspector]
     public bool normalAttack;   //stores whether you do normal attack or not
     [HideInInspector]
@@ -57,6 +55,15 @@ public class EnemyControlManager : MonoBehaviour
     Animator anim;      //for caching Animator component
     [HideInInspector]
     public Rigidbody rigid;     //for caching Rigidbody component
+
+    bool stopped;
+
+    Transform player;
+    PlayerHealth playerHealth;
+    EnemyHealth enemyHealth;
+    NavMeshAgent navAgent;
+
+
 
     public void IncreaseMovementSpeed(float increase)
     {
@@ -71,11 +78,15 @@ public class EnemyControlManager : MonoBehaviour
 
         hasMelee = enemyMeleeAttacking.gameObject.activeSelf;
         hasRanged = enemyRangedAttacking.gameObject.activeSelf;
-        targeting = GetComponent<TargetingHandler>();
 
         hasBlock = enemyBlocking.gameObject.activeSelf;
         enemyDashing = GetComponentInChildren<EnemyDashing>();
         hasDash = enemyDashing.isActiveAndEnabled;
+
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        playerHealth = player.GetComponent<PlayerHealth>();
+        enemyHealth = GetComponentInChildren<EnemyHealth>();
+        navAgent = GetComponent<NavMeshAgent>();
     }
 
     void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -109,6 +120,24 @@ public class EnemyControlManager : MonoBehaviour
         if (Dead)
             return;
 
+        if (Input.GetKey(KeyCode.O))
+            stopped = !stopped;
+
+        if (stopped)
+        {
+            navAgent.isStopped = true;
+            return;
+        }
+
+        if (enemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
+        {
+            navAgent.SetDestination(player.position);
+        }
+        else
+        {
+            navAgent.enabled = false;
+        }
+
         GetInput();     //getting control input from keyboard or joypad
         UpdateStates();   //Updating anything related to character's actions.         
     }
@@ -116,8 +145,8 @@ public class EnemyControlManager : MonoBehaviour
 
     void GetInput() //getting various inputs from keyboard or joypad.
     {
-        //vertical = Input.GetAxis("Vertical");    //for getting vertical input.
-        //horizontal = Input.GetAxis("Horizontal");    //for getting horizontal input.
+        vertical = navAgent.desiredVelocity.z;    //for getting vertical input.
+        horizontal = navAgent.desiredVelocity.x;    //for getting horizontal input.
         //sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
         //normalAttack = Input.GetButtonDown("NormalAttack"); //for getting normal attack input.
         //comboAttack = Input.GetButtonDown("ComboAttack");    //for getting combo attack input.
@@ -221,15 +250,7 @@ public class EnemyControlManager : MonoBehaviour
         //This can control character's rotation.
         if (canMove)
         {
-            Vector3 targetDir;
-            if (targeting.ActiveTarget)
-            {
-                targetDir = targeting.TargetDirection;
-            }
-            else
-            {
-                targetDir = moveDir;
-            }
+            Vector3 targetDir = moveDir;
 
             targetDir.y = 0;
             if (targetDir == Vector3.zero)

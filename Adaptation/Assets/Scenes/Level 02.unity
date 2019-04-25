@@ -611,7 +611,7 @@ PrefabInstance:
         type: 3}
       propertyPath: dashMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: 85b12138ed8ed6047a863e7395e78ad8, type: 2}
+      objectReference: {fileID: 2100000, guid: d90e2e3f6b63de145bfbb40e679a90b5, type: 2}
     - target: {fileID: 9203182338668119507, guid: 6ccf4ddb3be542344b6f5ac473782628,
         type: 3}
       propertyPath: cooldownSlider
