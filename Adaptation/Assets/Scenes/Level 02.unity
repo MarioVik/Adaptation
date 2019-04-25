@@ -607,6 +607,11 @@ PrefabInstance:
       propertyPath: playerMaterials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b9d89d46008d2be45afa4194bb119047, type: 2}
+    - target: {fileID: 707451114679324275, guid: 6ccf4ddb3be542344b6f5ac473782628,
+        type: 3}
+      propertyPath: dashMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 85b12138ed8ed6047a863e7395e78ad8, type: 2}
     - target: {fileID: 9203182338668119507, guid: 6ccf4ddb3be542344b6f5ac473782628,
         type: 3}
       propertyPath: cooldownSlider

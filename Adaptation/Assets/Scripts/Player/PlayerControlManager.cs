@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerControlManager : MonoBehaviour
 {
     public bool Dead { get; set; }
+    public bool MovementInput { get { return vertical != 0 || horizontal != 0; } }
 
     [Header("Initialize")]
     public GameObject activeModel;  // defines the current active model.

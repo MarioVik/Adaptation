@@ -18,7 +18,7 @@ public class PlayerDashing : MonoBehaviour
 
     [SerializeField]
     Material dashMaterial;
-    List<Material> playerMaterials;
+    Material[] playerMaterials;
     //Material[] currentMaterials;
 
     [SerializeField]
@@ -28,6 +28,7 @@ public class PlayerDashing : MonoBehaviour
     float coolDownTimer;
     float dashDistance = 10f;
 
+    PlayerControlManager controlManager;
     Vector3 posBefore;
     Vector3 direction;
 
@@ -40,13 +41,15 @@ public class PlayerDashing : MonoBehaviour
         cooldownSlider.maxValue = coolDown;
         cooldownSlider.value = coolDown;
 
+        controlManager = GetComponentInParent<PlayerControlManager>();
+
         rigid = GetComponentInParent<Rigidbody>();
         collider = GetComponent<Collider>();
 
-        playerMaterials = new List<Material>();
-        Renderer[] children = GetComponentsInChildren<Renderer>();
-        foreach (Renderer rend in children)
-            playerMaterials.Add(new Material(rend.material));
+        //Renderer[] children = GetComponentsInChildren<Renderer>();
+        //playerMaterials = new Material[children.Length];
+        //for (int i = 0; i < children.Length; i++)
+        //    playerMaterials[i] = new Material(children[i].material);
     }
 
     void Update()
@@ -57,7 +60,7 @@ public class PlayerDashing : MonoBehaviour
         if (!Dashing) coolDownTimer += Time.deltaTime;
         if (coolDownTimer > coolDown) coolDownTimer = coolDown;
 
-        if (Input.GetButtonDown("FeatureInput") && coolDownTimer >= coolDown && !Dashing)
+        if (Input.GetButtonDown("FeatureInput") && controlManager.MovementInput && coolDownTimer >= coolDown && !Dashing)
         {
             coolDownTimer = 0;
             posBefore = transform.position;
@@ -95,9 +98,13 @@ public class PlayerDashing : MonoBehaviour
     {
         Renderer[] children;
         children = GetComponentsInChildren<Renderer>();
-        foreach (Renderer rend in children)
+
+        playerMaterials = new Material[children.Length];
+
+        for (int i = 0; i < children.Length; i++)
         {
-            rend.material = newMat;
+            playerMaterials[i] = new Material(children[i].material);
+            children[i].material = newMat;
         }
     }
 
@@ -105,6 +112,7 @@ public class PlayerDashing : MonoBehaviour
     {
         Renderer[] children;
         children = GetComponentsInChildren<Renderer>();
+
         for (int i = 0; i < children.Length; i++)
         {
             children[i].material = new Material(playerMaterials[i]);
