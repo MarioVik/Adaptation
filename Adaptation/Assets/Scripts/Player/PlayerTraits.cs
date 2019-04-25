@@ -55,7 +55,7 @@ public class PlayerTraits : MonoBehaviour
                 //    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRate(0.1f);
                 //if (ranged)
                 //    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRate(0.1f);
-                break;
+                //break;
             case 'r':
                 if (melee)
                     GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRange(0.2f);

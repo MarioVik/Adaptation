@@ -24,8 +24,7 @@ public class PlayerControlManager : MonoBehaviour
     //[Header("Stats")]
     float moveSpeed = 6f;  //speed of running
     float sprintSpeed = 9f;  //speed of sprinting(double time of running)
-    float rotateSpeed = 60f;   //speed of character's turning around    
-                               //float jumpForce = 600f;  //how high you can jump value.
+    float rotateSpeed = 30f;   //speed of character's turning around    
 
     [Header("FeatureBehaviours")]
     [SerializeField]
@@ -243,7 +242,7 @@ public class PlayerControlManager : MonoBehaviour
                 targetDir = transform.forward;
 
             Quaternion tr = Quaternion.LookRotation(targetDir);
-            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta * moveAmount * rotateSpeed);
+            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta/* * moveAmount */* rotateSpeed);
             transform.rotation = targetRotation;
         }
 

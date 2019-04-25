@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TargetingHandler : MonoBehaviour
 {
-    public bool ActiveTarget { get { return targetIndex != -1; } }
+    public bool ActiveTarget => targetIndex != -1;
     public Vector3 TargetDirection { get; private set; }
 
     [SerializeField]
@@ -12,6 +12,8 @@ public class TargetingHandler : MonoBehaviour
 
     List<EnemyHealth> enemies;
     int targetIndex = -1;
+
+    float rotationSpeed = 50;
 
     private void Update()
     {
@@ -51,9 +53,10 @@ public class TargetingHandler : MonoBehaviour
     private void UpdateTargetPointer()
     {
         Vector3 position = enemies[targetIndex].transform.position;
-        position.y += 2;
-        Quaternion rotation = enemies[targetIndex].transform.rotation;
-        targetPointer.transform.SetPositionAndRotation(position, rotation);
+        position.y += 2f;
+
+        targetPointer.transform.position = new Vector3(position.x, position.y, position.z);
+        targetPointer.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
     }
 
     public void UpdateEnemies(bool calledByEnemy = false)

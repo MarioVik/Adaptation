@@ -56,7 +56,7 @@ public class ProjectileBehaviour : MonoBehaviour
     void Update()
     {
         transform.position += transform.forward.normalized * movementSpeed * Time.deltaTime;
-        transform.Rotate(Vector3.forward, movementSpeed * rotationSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
 
         effectIntance.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
 
@@ -69,21 +69,18 @@ public class ProjectileBehaviour : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "Effect")
-            return;
-
         if (collision.collider.tag == "Environment")
+        {
             Destroy(gameObject);
+            return;
+        }
 
         if (user is PlayerRangedAttacking)
         {
-            if (collision.collider.tag != "Player")
+            if (collision.collider.tag == "Enemy")
             {
                 EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
-                if (enemyHealth != null)
-                {
-                    enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
-                }
+                enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
 
                 effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Detonate(collision);
 
@@ -95,13 +92,10 @@ public class ProjectileBehaviour : MonoBehaviour
         }
         else if (user is EnemyRangedAttacking)
         {
-            if (collision.collider.tag != "Enemy")
+            if (collision.collider.tag == "Player")
             {
                 PlayerHealth playerHealth = collision.collider.GetComponent<PlayerHealth>();
-                if (playerHealth != null)
-                {
-                    playerHealth.TakeDamage(damage);
-                }
+                playerHealth.TakeDamage(damage);
 
                 effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Detonate(collision);
 

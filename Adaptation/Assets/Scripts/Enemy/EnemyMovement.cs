@@ -23,7 +23,7 @@ public class EnemyMovement : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerHealth = player.GetComponent<PlayerHealth>();
-        enemyHealth = GetComponent<EnemyHealth>();
+        enemyHealth = GetComponentInChildren<EnemyHealth>();
         navAgent = GetComponent<NavMeshAgent>();
         //nav.speed += 1.5f;
         //nav.acceleration += 1.5f;
