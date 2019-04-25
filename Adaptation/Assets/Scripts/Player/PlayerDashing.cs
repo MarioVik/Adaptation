@@ -26,7 +26,8 @@ public class PlayerDashing : MonoBehaviour
     Vector3 posBefore;
     Vector3 direction;
 
-    Vector3 lastFramePos;
+    Collider collider;
+    bool crashed;
 
     private void Awake()
     {
@@ -35,6 +36,7 @@ public class PlayerDashing : MonoBehaviour
         cooldownSlider.value = coolDown;
 
         rigid = GetComponentInParent<Rigidbody>();
+        collider = GetComponent<Collider>();
     }
 
     void Update()
@@ -52,7 +54,9 @@ public class PlayerDashing : MonoBehaviour
             Dashing = true;
             DashStart = true;
 
-             Instantiate(effectPrefab, rigid.position, rigid.rotation, rigid.transform);
+            collider.isTrigger = true;
+
+            Instantiate(effectPrefab, rigid.position, rigid.rotation, rigid.transform);
 
             Debug.Log("Dashing");
         }
@@ -60,11 +64,13 @@ public class PlayerDashing : MonoBehaviour
         if (Dashing)
         {
             if (Vector3.Distance(transform.position, posBefore) >= dashDistance
-                || lastFramePos == transform.position)
+                || crashed)
             {
                 Dashing = false;
                 DashStop = true;
-                //Destroy(effect);
+                crashed = false;
+
+                collider.isTrigger = false;
 
                 Debug.Log("Stopped dashing");
             }
@@ -76,24 +82,12 @@ public class PlayerDashing : MonoBehaviour
     private void FixedUpdate()
     {
         if (Dashing)
-        {
-            lastFramePos = transform.position;
             transform.position += direction.normalized * DashSpeed * Time.deltaTime;
-        }
     }
 
-    //private void ActivateDash()
-    //{
-    //    posBefore = transform.position;
-
-    //    float horizontal = Input.GetAxisRaw("Horizontal");
-    //    float vertical = Input.GetAxisRaw("Vertical");
-
-    //    if (horizontal == 0 && vertical == 0)
-    //        direction = transform.forward;
-    //    else
-    //        direction.Set(horizontal, 0f, vertical);
-
-    //    Dashing = true;
-    //}
+    private void OnTriggerEnter(Collider other)
+    {   
+        if (other.tag == "Environment" && Dashing)
+            crashed = true;
+    }
 }

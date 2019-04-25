@@ -72,6 +72,9 @@ public class ProjectileBehaviour : MonoBehaviour
         if (collision.collider.tag == "Effect")
             return;
 
+        if (collision.collider.tag == "Environment")
+            Destroy(gameObject);
+
         if (user is PlayerRangedAttacking)
         {
             if (collision.collider.tag != "Player")

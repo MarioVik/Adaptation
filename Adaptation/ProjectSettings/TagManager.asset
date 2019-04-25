@@ -5,13 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - LeftHand
-  - RightHand
   - MeleeWeapon
   - RangedWeapon
   - Ground
   - Projectile
   - Effect
+  - Environment
   layers:
   - Default
   - TransparentFX
