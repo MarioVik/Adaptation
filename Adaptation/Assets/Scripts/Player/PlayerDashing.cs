@@ -17,6 +17,11 @@ public class PlayerDashing : MonoBehaviour
     GameObject effectPrefab;
 
     [SerializeField]
+    Material dashMaterial;
+    List<Material> playerMaterials;
+    //Material[] currentMaterials;
+
+    [SerializeField]
     Slider cooldownSlider;
 
     float coolDown = 2f;
@@ -37,6 +42,11 @@ public class PlayerDashing : MonoBehaviour
 
         rigid = GetComponentInParent<Rigidbody>();
         collider = GetComponent<Collider>();
+
+        playerMaterials = new List<Material>();
+        Renderer[] children = GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in children)
+            playerMaterials.Add(new Material(rend.material));
     }
 
     void Update()
@@ -56,9 +66,10 @@ public class PlayerDashing : MonoBehaviour
 
             collider.isTrigger = true;
 
+            ChangeAllMaterials(dashMaterial);
             Instantiate(effectPrefab, rigid.position, rigid.rotation, rigid.transform);
 
-            Debug.Log("Dashing");
+            //Debug.Log("Dashing");
         }
 
         if (Dashing)
@@ -72,11 +83,32 @@ public class PlayerDashing : MonoBehaviour
 
                 collider.isTrigger = false;
 
-                Debug.Log("Stopped dashing");
+                ChangeBackMaterials();
+                //Debug.Log("Stopped dashing");
             }
         }
 
         cooldownSlider.value = coolDownTimer;
+    }
+
+    void ChangeAllMaterials(Material newMat)
+    {
+        Renderer[] children;
+        children = GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in children)
+        {
+            rend.material = newMat;
+        }
+    }
+
+    void ChangeBackMaterials()
+    {
+        Renderer[] children;
+        children = GetComponentsInChildren<Renderer>();
+        for (int i = 0; i < children.Length; i++)
+        {
+            children[i].material = new Material(playerMaterials[i]);
+        }
     }
 
     private void FixedUpdate()
@@ -86,7 +118,7 @@ public class PlayerDashing : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other)
-    {   
+    {
         if (other.tag == "Environment" && Dashing)
             crashed = true;
     }

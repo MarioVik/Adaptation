@@ -534,10 +534,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerController
       objectReference: {fileID: 0}
-    - target: {fileID: 1467028744492758, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4793414793545048, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -598,9 +594,19 @@ PrefabInstance:
       objectReference: {fileID: 1931506722}
     - target: {fileID: 707451114679324275, guid: 6ccf4ddb3be542344b6f5ac473782628,
         type: 3}
+      propertyPath: playerMaterials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 707451114679324275, guid: 6ccf4ddb3be542344b6f5ac473782628,
+        type: 3}
       propertyPath: cooldownSlider
       value: 
       objectReference: {fileID: 1086771281}
+    - target: {fileID: 707451114679324275, guid: 6ccf4ddb3be542344b6f5ac473782628,
+        type: 3}
+      propertyPath: playerMaterials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b9d89d46008d2be45afa4194bb119047, type: 2}
     - target: {fileID: 9203182338668119507, guid: 6ccf4ddb3be542344b6f5ac473782628,
         type: 3}
       propertyPath: cooldownSlider

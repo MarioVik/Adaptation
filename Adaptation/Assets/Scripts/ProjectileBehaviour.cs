@@ -87,7 +87,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 Destroy(effectIntance.gameObject, 1.0f);
                 Destroy(gameObject);
 
-                Debug.Log("Enemy hit");
+                //Debug.Log("Enemy hit");
             }
         }
         else if (user is EnemyRangedAttacking)
