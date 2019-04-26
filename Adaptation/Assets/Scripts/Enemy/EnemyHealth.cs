@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -69,38 +70,27 @@ public class EnemyHealth : MonoBehaviour
     void Death()
     {
         IsDead = true;
-
         targeting.UpdateEnemies(calledByEnemy: true);
 
         capsuleCollider.isTrigger = true;
 
         anim.SetTrigger("die");
-
         enemyAudio.clip = deathClip;
         enemyAudio.Play();
 
         GetComponent<EnemyTraits>().CalculateFitnessScore();
+
+        Invoke("StartSinking", 5.0f);
     }
 
     public void StartSinking()
     {
-        GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = false;
-        GetComponent<Rigidbody>().isKinematic = true;
         isSinking = true;
         IndividualsTextManager.killedIndividuals += 1;
-        Destroy(gameObject, 2f);
-    }
 
-    public void EnableBlock()
-    {
-        blockEnabled = false;
-    }
-
-    private void Block()
-    {
-        if (blockEnabled)
-        {
-            //Disable/reduce damage taken for certain duration
-        }
+        Rigidbody rigid = GetComponentInParent<Rigidbody>();
+        rigid.isKinematic = true;
+        rigid.constraints = RigidbodyConstraints.None;
+        Destroy(rigid.gameObject, 2f);
     }
 }

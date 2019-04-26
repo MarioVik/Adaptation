@@ -1,17 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 public class GenerationManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
-    public Transform spawnPoint;
     public PlayerHealth playerHealth;
+
+    [SerializeField]
+    Transform[] spawnPoints;
 
     static List<Individual> individuals;
     public static int InstantiatedIndividuals { get; private set; }
@@ -19,19 +21,25 @@ public class GenerationManager : MonoBehaviour
     public static int CurrentGeneration { get; private set; }
     public static int TotalGenerations { get; private set; }
 
-    readonly int generationSize = 8;
-    readonly int individualSize = 4;
+    readonly int generationSize = 2;
+    readonly int attributes = 8;
+    readonly int features = 1 /*2*/;
 
     System.Random rand = new System.Random();
-    char[] possibleAttributes = new char[] { 'h', 'd', 's', 'r', 'm' };
+    char[] possibleAttributes = new char[] { 'h', 'd', /*'s', */'r', 'm' };
+    //char[] possbleFeatures = new char[] { 'M', 'R', 'B', 'D' };
+    char[] possbleFeatures = new char[] { 'R' };
     char RandomAttribute { get { return possibleAttributes[rand.Next(0, possibleAttributes.Length)]; } }
+    char RandomFeature { get { return possbleFeatures[rand.Next(0, possbleFeatures.Length)]; } }
+
+    int mutationChance = 8;
 
     bool gameStarted = false;
 
     static public string FetchTraits(out int individualNumber)
     {
         if (InstantiatedIndividuals >= individuals.Count)
-            throw new System.Exception("exceeded generation amount");
+            throw new Exception("exceeded generation amount");
 
         string individualTraits = individuals[InstantiatedIndividuals].Traits;
         individualNumber = InstantiatedIndividuals;
@@ -90,8 +98,21 @@ public class GenerationManager : MonoBehaviour
     {
         for (int i = 0; i < amount; i++)
         {
+            Transform spawnPoint = GetSpawnPoint();
             Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
         }
+    }
+
+    Transform GetSpawnPoint()
+    {
+        Transform potentialSpawn;
+        do
+        {
+            potentialSpawn = spawnPoints[rand.Next(0, spawnPoints.Length)];
+        }
+        while (!potentialSpawn.GetComponent<SpawnPointDetection>().Available);
+
+        return potentialSpawn;
     }
 
     void RandomizeGeneration()
@@ -100,10 +121,17 @@ public class GenerationManager : MonoBehaviour
         for (int i = 0; i < generationSize; i++)
         {
             StringBuilder newIndividual = new StringBuilder();
-            for (int j = 0; j < individualSize; j++)
+
+            for (int j = 0; j < attributes; j++)
             {
                 newIndividual.Append(RandomAttribute);
             }
+            newIndividual.Append('|');
+            for (int j = 0; j < features; j++)
+            {
+                newIndividual.Append(RandomFeature);
+            }
+
             newGeneration.Add(newIndividual.ToString());
         }
         GenFilesManager.SaveGeneration(newGeneration);
@@ -173,13 +201,13 @@ public class GenerationManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Every child is sent here and considered for mutation, they have an 8% chance
+    /// Every child is sent here and considered for mutation, they have an x% chance
     /// of getting a random trait replaced with a new random one
     /// </summary>
     /// <param name="child">A newly bred child for the next generation</param>
     void ConsiderMutation(StringBuilder child)
     {
-        if (rand.Next(0, 101) <= 8)
+        if (rand.Next(0, 101) <= mutationChance)
         {
             /*Logging*/
             GenLogManager.LogMutatatedIndividual(child.ToString(), afterMutation: false);

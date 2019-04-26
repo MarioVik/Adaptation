@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4793414793545048}
   - component: {fileID: 54557829503407068}
   - component: {fileID: 8025321324826217478}
+  - component: {fileID: 6731381539057205646}
   - component: {fileID: 4488853099409273497}
-  - component: {fileID: 6269852219444338500}
   m_Layer: 11
   m_Name: EnemyController
   m_TagString: Untagged
@@ -79,6 +79,21 @@ MonoBehaviour:
   comboAttack: 0
   canMove: 0
   rigid: {fileID: 0}
+--- !u!114 &6731381539057205646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467028744492758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e08bd1d4969093409acdcb90ee2276c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeAttacking: {fileID: 6415002722224442686}
+  rangedAttacking: {fileID: 387577712262647932}
+  blocking: {fileID: 8591435721693871105}
 --- !u!195 &4488853099409273497
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -101,18 +116,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6269852219444338500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1467028744492758}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94f6618a0da65fa45b24d5105d5d8422, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1482526539980724
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,14 +126,14 @@ GameObject:
   m_Component:
   - component: {fileID: 4412919469045156}
   - component: {fileID: 95957857082640274}
+  - component: {fileID: 7264941489651212705}
+  - component: {fileID: 5373813351277938820}
+  - component: {fileID: 5748926288513601995}
   - component: {fileID: 114107903465912920}
   - component: {fileID: 7585787821855430466}
-  - component: {fileID: 7264941489651212705}
-  - component: {fileID: 5748926288513601995}
   - component: {fileID: 9187460136877920544}
   - component: {fileID: 3094670902388871208}
   - component: {fileID: 9102282930922546314}
-  - component: {fileID: 5373813351277938820}
   m_Layer: 11
   m_Name: Character
   m_TagString: Enemy
@@ -229,32 +232,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114107903465912920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482526539980724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6da3a7e4a89c784da4e7992264d1ddc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &7585787821855430466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482526539980724}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7880f5dec3dbd6e43a8a40f84fb83622, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effectPrefab: {fileID: 1919843589960360, guid: 961f9f66d46891b498e4129d7b89b9f8,
-    type: 3}
 --- !u!136 &7264941489651212705
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -268,6 +245,19 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
+  m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!135 &5373813351277938820
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482526539980724}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.8
   m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!82 &5748926288513601995
 AudioSource:
@@ -365,6 +355,33 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &114107903465912920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482526539980724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6da3a7e4a89c784da4e7992264d1ddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7585787821855430466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482526539980724}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7880f5dec3dbd6e43a8a40f84fb83622, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectPrefab: {fileID: 1919843589960360, guid: 961f9f66d46891b498e4129d7b89b9f8,
+    type: 3}
+  dashMaterial: {fileID: 0}
 --- !u!114 &9187460136877920544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,19 +427,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBetweenAttacks: 0.5
   attackDamage: 10
---- !u!135 &5373813351277938820
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482526539980724}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.8
-  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!1 &262744830747606449
 GameObject:
   m_ObjectHideFlags: 0

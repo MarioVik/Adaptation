@@ -39,11 +39,11 @@ public class EnemyTraits : MonoBehaviour
     {
         traits = GenerationManager.FetchTraits(out individualNumber).Split('|');
 
+        foreach (char tempChar in traits[1])
+            ApplyFeature(tempChar);
+
         foreach (char tempChar in traits[0])
             ApplyAttribute(tempChar);
-
-        //foreach (char tempChar in traits[1])
-        //    ApplyFeature(tempChar);
     }
 
     void ApplyAttribute(char attrChar)
@@ -70,7 +70,7 @@ public class EnemyTraits : MonoBehaviour
             //        GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackRate(0.1f);
             //    if (ranged)
             //        GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRate(0.1f);
-                //break;
+            //break;
             case 'r':
                 if (melee)
                     GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackRange(0.1f);
@@ -78,7 +78,7 @@ public class EnemyTraits : MonoBehaviour
                     GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRange(1f);
                 break;
             case 'm':
-                GetComponentInParent<EnemyMovement>().IncreaseSpeed(1.5f);
+                GetComponentInParent<EnemyControlManager>().IncreaseMovementSpeed(1.5f);
                 break;
             default:
                 throw new System.Exception("Enemy has unrecognized attribute");

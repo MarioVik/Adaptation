@@ -28,7 +28,6 @@ public class PlayerDashing : MonoBehaviour
     float coolDownTimer;
     float dashDistance = 10f;
 
-    PlayerControlManager controlManager;
     Vector3 posBefore;
     Vector3 direction;
 
@@ -40,8 +39,6 @@ public class PlayerDashing : MonoBehaviour
         coolDownTimer = coolDown;
         cooldownSlider.maxValue = coolDown;
         cooldownSlider.value = coolDown;
-
-        controlManager = GetComponentInParent<PlayerControlManager>();
 
         rigid = GetComponentInParent<Rigidbody>();
         collider = GetComponent<Collider>();
@@ -60,7 +57,9 @@ public class PlayerDashing : MonoBehaviour
         if (!Dashing) coolDownTimer += Time.deltaTime;
         if (coolDownTimer > coolDown) coolDownTimer = coolDown;
 
-        if (Input.GetButtonDown("FeatureInput") && controlManager.MovementInput && coolDownTimer >= coolDown && !Dashing)
+        if (Input.GetButtonDown("FeatureInput") && 
+            GetComponentInParent<PlayerControlManager>().MovementInput && 
+            coolDownTimer >= coolDown && !Dashing)
         {
             coolDownTimer = 0;
             posBefore = transform.position;

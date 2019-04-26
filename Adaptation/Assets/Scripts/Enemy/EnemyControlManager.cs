@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class EnemyControlManager : MonoBehaviour
 {
     public bool Dead { get; set; }
+    public bool MovementInput { get { return vertical != 0 || horizontal != 0; } }
 
     [Header("Initialize")]
     public GameObject activeModel;  // defines the current active model.
@@ -56,19 +57,38 @@ public class EnemyControlManager : MonoBehaviour
     [HideInInspector]
     public Rigidbody rigid;     //for caching Rigidbody component
 
-    bool stopped;
-
-    Transform player;
-    PlayerHealth playerHealth;
-    EnemyHealth enemyHealth;
-    NavMeshAgent navAgent;
-
-
-
     public void IncreaseMovementSpeed(float increase)
     {
         moveSpeed += increase;
         sprintSpeed += increase;
+    }
+
+    public void SetMoveInput(float horizontalInput, float verticalInput) //getting various inputs from keyboard or joypad.
+    {
+        horizontal = horizontalInput;    //for getting horizontal input.
+        vertical = verticalInput;    //for getting vertical input.
+        //sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
+
+    }
+
+    public void SetAttackInput(bool attackInput, bool combo = false)
+    {
+        if (attackInput)
+        {
+            if (combo)
+            {
+                comboAttack = true;
+            }
+            else
+            {
+                normalAttack = true;
+            }
+        }
+        else
+        {
+            normalAttack = false;
+            comboAttack = false;
+        }
     }
 
     void Start() // Initiallizing camera, animator, rigidboy
@@ -82,11 +102,6 @@ public class EnemyControlManager : MonoBehaviour
         hasBlock = enemyBlocking.gameObject.activeSelf;
         enemyDashing = GetComponentInChildren<EnemyDashing>();
         hasDash = enemyDashing.isActiveAndEnabled;
-
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        playerHealth = player.GetComponent<PlayerHealth>();
-        enemyHealth = GetComponentInChildren<EnemyHealth>();
-        navAgent = GetComponent<NavMeshAgent>();
     }
 
     void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -120,42 +135,12 @@ public class EnemyControlManager : MonoBehaviour
         if (Dead)
             return;
 
-        if (Input.GetKey(KeyCode.O))
-            stopped = !stopped;
-
-        if (stopped)
-        {
-            navAgent.isStopped = true;
-            return;
-        }
-
-        if (enemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
-        {
-            navAgent.SetDestination(player.position);
-        }
-        else
-        {
-            navAgent.enabled = false;
-        }
-
-        GetInput();     //getting control input from keyboard or joypad
         UpdateStates();   //Updating anything related to character's actions.         
     }
 
-
-    void GetInput() //getting various inputs from keyboard or joypad.
-    {
-        vertical = navAgent.desiredVelocity.z;    //for getting vertical input.
-        horizontal = navAgent.desiredVelocity.x;    //for getting horizontal input.
-        //sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
-        //normalAttack = Input.GetButtonDown("NormalAttack"); //for getting normal attack input.
-        //comboAttack = Input.GetButtonDown("ComboAttack");    //for getting combo attack input.
-    }
-
-
     void UpdateStates() //updates character's various actions.
     {
-        canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".          
+        canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".
 
         if (hasDash)
         {

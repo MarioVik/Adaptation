@@ -10,7 +10,10 @@ public class ProjectileBehaviour : MonoBehaviour
 
     MonoBehaviour user;
 
-    AudioSource explosionAudio;
+    [SerializeField]
+    AudioClip explosionAudio;
+    [SerializeField]
+    AudioClip sizzleAudio;
 
     float rotationSpeed = 100;
     float movementSpeed, range;
@@ -49,7 +52,6 @@ public class ProjectileBehaviour : MonoBehaviour
 
         startPos = transform.position;
 
-        explosionAudio = GetComponent<AudioSource>();
         effectIntance = Instantiate(effectPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
     }
 
@@ -62,8 +64,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
         if (Vector3.Distance(startPos, transform.position) >= range)
         {
-            Destroy(effectIntance.gameObject, 1.0f);
-            Destroy(gameObject);
+            Sizzle();
         }
     }
 
@@ -71,7 +72,7 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         if (collision.collider.tag == "Environment")
         {
-            Destroy(gameObject);
+            Sizzle();
             return;
         }
 
@@ -82,10 +83,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
                 enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
 
-                effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Detonate(collision);
-
-                Destroy(effectIntance.gameObject, 1.0f);
-                Destroy(gameObject);
+                Explode(collision);
 
                 //Debug.Log("Enemy hit");
             }
@@ -97,13 +95,26 @@ public class ProjectileBehaviour : MonoBehaviour
                 PlayerHealth playerHealth = collision.collider.GetComponent<PlayerHealth>();
                 playerHealth.TakeDamage(damage);
 
-                effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Detonate(collision);
-
-                Destroy(effectIntance.gameObject, 1.0f);
-                Destroy(gameObject);
+                Explode(collision);
 
                 Debug.Log("Player hit");
             }
         }
+    }
+
+    void Sizzle()
+    {
+        effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Sizzle(sizzleAudio);
+
+        Destroy(effectIntance.gameObject, 1.0f);
+        Destroy(gameObject);
+    }
+
+    void Explode(Collision collision)
+    {
+        effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Explode(collision, explosionAudio);
+
+        Destroy(effectIntance.gameObject, 1.0f);
+        Destroy(gameObject);
     }
 }

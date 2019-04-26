@@ -27,8 +27,8 @@ public class PlayerTraits : MonoBehaviour
         foreach (char tempChar in traits[1])
             ApplyFeature(tempChar);
 
-        //foreach (char tempChar in traits[0])
-        //    ApplyAttribute(tempChar);
+        foreach (char tempChar in traits[0])
+            ApplyAttribute(tempChar);
     }
 
     void ApplyAttribute(char attrChar)

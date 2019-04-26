@@ -10,6 +10,7 @@ public class EnemyRangedAttacking : MonoBehaviour
     Transform shootOrigin;
 
     public Transform ShootOrigin { get { return shootOrigin; } }
+    public float Range { get { return range; } }
 
     int damage = 40;
     float range = 8f;

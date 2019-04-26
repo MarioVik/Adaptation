@@ -42,7 +42,6 @@ public class PlayerControlManager : MonoBehaviour
     bool hasBlock;
     bool hasDash;
 
-
     [Header("States")]
     public bool sprint;     //shows you are sprinting or not.
                             //[HideInInspector]
@@ -125,8 +124,8 @@ public class PlayerControlManager : MonoBehaviour
         vertical = Input.GetAxis("Vertical");    //for getting vertical input.
         horizontal = Input.GetAxis("Horizontal");    //for getting horizontal input.
         sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
-        normalAttack = Input.GetButtonDown("NormalAttack"); //for getting normal attack input.
-        comboAttack = Input.GetButtonDown("ComboAttack");    //for getting combo attack input.
+        normalAttack = Input.GetButton("NormalAttack"); //for getting normal attack input.
+        comboAttack = Input.GetButton("ComboAttack");    //for getting combo attack input.
     }
 
 

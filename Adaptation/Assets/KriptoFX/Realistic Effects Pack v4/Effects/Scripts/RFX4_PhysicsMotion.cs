@@ -44,13 +44,20 @@ public class RFX4_PhysicsMotion : MonoBehaviour
     float currentSpeedOffset;
     private RFX4_EffectSettings effectSettings;
 
-    AudioSource explosionAudio;
+    AudioSource audioSource;
 
-    public void Detonate(Collision collision)
+    public void Sizzle(AudioClip audioClip)
+    {
+        audioSource.clip = audioClip;
+        audioSource.Play();
+    }
+
+    public void Explode(Collision collision, AudioClip audioClip)
     {
         if (isCollided && !effectSettings.UseCollisionDetection) return;
 
-        explosionAudio.Play();
+        audioSource.clip = audioClip;
+        audioSource.Play();
         foreach (ContactPoint contact in collision.contacts)
         {
             if (!isCollided)
@@ -102,7 +109,7 @@ public class RFX4_PhysicsMotion : MonoBehaviour
 
     void OnEnable()
     {
-        explosionAudio = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         effectSettings = GetComponentInParent<RFX4_EffectSettings>();
         foreach (var obj in DeactivateObjectsAfterCollision)
         {
