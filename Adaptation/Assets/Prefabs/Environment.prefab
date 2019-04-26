@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2387346}
   m_Layer: 9
   m_Name: Blox
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 482364}
   - {fileID: 438762}
   m_Father: {fileID: 495562}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: -122.16501, z: 0}
 --- !u!33 &3394756
 MeshFilter:
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 6549190}
   m_Layer: 9
   m_Name: BloxCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 6527644}
   m_Layer: 9
   m_Name: RobotCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 9533672}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -201,7 +201,7 @@ Transform:
   - {fileID: 468958}
   - {fileID: 438858}
   m_Father: {fileID: 495562}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &9533672
 Animator:
@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 2343206}
   m_Layer: 9
   m_Name: Robot
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -317,7 +317,7 @@ GameObject:
   - component: {fileID: 6552866}
   m_Layer: 9
   m_Name: ArchesCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 2340136}
   m_Layer: 9
   m_Name: Clock
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -441,7 +441,7 @@ GameObject:
   - component: {fileID: 2321136}
   m_Layer: 0
   m_Name: Planks
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -517,7 +517,7 @@ GameObject:
   - component: {fileID: 6508552}
   m_Layer: 9
   m_Name: FiretruckCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -563,7 +563,7 @@ GameObject:
   - component: {fileID: 6587708}
   m_Layer: 9
   m_Name: Dollhouse
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -581,7 +581,7 @@ Transform:
   m_Children:
   - {fileID: 491586}
   m_Father: {fileID: 495562}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3361140
 MeshFilter:
@@ -653,7 +653,7 @@ GameObject:
   - component: {fileID: 6581256}
   m_Layer: 9
   m_Name: WallCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -697,7 +697,7 @@ GameObject:
   - component: {fileID: 6540716}
   m_Layer: 9
   m_Name: ArchesCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -741,7 +741,7 @@ GameObject:
   - component: {fileID: 6550544}
   m_Layer: 9
   m_Name: FiretruckCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -785,7 +785,7 @@ GameObject:
   - component: {fileID: 6531806}
   m_Layer: 9
   m_Name: DollArmCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -829,7 +829,7 @@ GameObject:
   - component: {fileID: 13655338}
   m_Layer: 9
   m_Name: StoolCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -876,7 +876,7 @@ GameObject:
   - component: {fileID: 13693132}
   m_Layer: 9
   m_Name: SpinningTop
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -893,7 +893,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 495562}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3301854
 MeshFilter:
@@ -966,7 +966,7 @@ GameObject:
   - component: {fileID: 13662044}
   m_Layer: 9
   m_Name: StoolCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1011,7 +1011,7 @@ GameObject:
   - component: {fileID: 6532762}
   m_Layer: 9
   m_Name: LevelExtent
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1028,7 +1028,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 495562}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6532762
 BoxCollider:
@@ -1055,7 +1055,7 @@ GameObject:
   - component: {fileID: 6553368}
   m_Layer: 9
   m_Name: TrainCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1099,7 +1099,7 @@ GameObject:
   - component: {fileID: 6534802}
   m_Layer: 9
   m_Name: RobotCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1145,7 +1145,7 @@ GameObject:
   - component: {fileID: 6561858}
   m_Layer: 9
   m_Name: Bat
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1253,7 +1253,7 @@ GameObject:
   - component: {fileID: 6526178}
   m_Layer: 9
   m_Name: WallCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1544,7 +1544,7 @@ GameObject:
   - component: {fileID: 6511482}
   m_Layer: 9
   m_Name: DollArmCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1590,7 +1590,7 @@ GameObject:
   - component: {fileID: 9545848}
   m_Layer: 9
   m_Name: Arches
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1691,7 +1691,7 @@ GameObject:
   - component: {fileID: 6567114}
   m_Layer: 9
   m_Name: RobotCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1736,7 +1736,7 @@ GameObject:
   - component: {fileID: 2302232}
   m_Layer: 0
   m_Name: Base
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1812,7 +1812,7 @@ GameObject:
   - component: {fileID: 6585492}
   m_Layer: 9
   m_Name: ArchesCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1856,7 +1856,7 @@ GameObject:
   - component: {fileID: 13665740}
   m_Layer: 9
   m_Name: TrainCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1901,7 +1901,7 @@ GameObject:
   - component: {fileID: 6533952}
   m_Layer: 9
   m_Name: LevelExtent
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1918,7 +1918,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 495562}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6533952
 BoxCollider:
@@ -1945,7 +1945,7 @@ GameObject:
   - component: {fileID: 6563312}
   m_Layer: 9
   m_Name: FiretruckCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -1989,7 +1989,7 @@ GameObject:
   - component: {fileID: 6506162}
   m_Layer: 9
   m_Name: ClockCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2034,7 +2034,7 @@ GameObject:
   - component: {fileID: 2359398}
   m_Layer: 9
   m_Name: Firetruck
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2114,7 +2114,7 @@ GameObject:
   - component: {fileID: 6586560}
   m_Layer: 9
   m_Name: RobotCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2158,7 +2158,7 @@ GameObject:
   - component: {fileID: 13642992}
   m_Layer: 9
   m_Name: StoolCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2204,7 +2204,7 @@ GameObject:
   - component: {fileID: 2393528}
   m_Layer: 9
   m_Name: Train
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2223,7 +2223,7 @@ Transform:
   - {fileID: 426076}
   - {fileID: 421964}
   m_Father: {fileID: 495562}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3340350
 MeshFilter:
@@ -2282,7 +2282,7 @@ GameObject:
   - component: {fileID: 6591504}
   m_Layer: 9
   m_Name: DollArmCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2327,7 +2327,7 @@ GameObject:
   - component: {fileID: 2307820}
   m_Layer: 9
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2339,15 +2339,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 165982}
-  m_LocalRotation: {x: 0, y: -0.38268334, z: 0, w: 0.92387956}
+  m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
   m_LocalPosition: {x: -0.2, y: 0, z: 35.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 498982}
   - {fileID: 476038}
   m_Father: {fileID: 495562}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
 --- !u!33 &3329104
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2405,7 +2405,7 @@ GameObject:
   - component: {fileID: 6589050}
   m_Layer: 9
   m_Name: DollhouseDoorCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2449,7 +2449,7 @@ GameObject:
   - component: {fileID: 6568048}
   m_Layer: 9
   m_Name: RobotCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2495,7 +2495,7 @@ GameObject:
   - component: {fileID: 9521172}
   m_Layer: 9
   m_Name: DollArm
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2593,7 +2593,7 @@ GameObject:
   - component: {fileID: 6595118}
   m_Layer: 9
   m_Name: BloxCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2637,7 +2637,7 @@ GameObject:
   - component: {fileID: 6571510}
   m_Layer: 9
   m_Name: BloxCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2681,7 +2681,7 @@ GameObject:
   - component: {fileID: 6518380}
   m_Layer: 9
   m_Name: ArchesCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2725,7 +2725,7 @@ GameObject:
   - component: {fileID: 6558434}
   m_Layer: 9
   m_Name: ArchesCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2769,7 +2769,7 @@ GameObject:
   - component: {fileID: 6520560}
   m_Layer: 9
   m_Name: RobotCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2826,8 +2826,9 @@ Transform:
   m_GameObject: {fileID: 186378}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
+  - {fileID: 411924}
   - {fileID: 410292}
   - {fileID: 441198}
   - {fileID: 478000}
@@ -2835,7 +2836,6 @@ Transform:
   - {fileID: 474944}
   - {fileID: 443132}
   - {fileID: 413574}
-  - {fileID: 411924}
   - {fileID: 410184}
   - {fileID: 439084}
   - {fileID: 451588}
@@ -2860,7 +2860,7 @@ GameObject:
   - component: {fileID: 2313236}
   m_Layer: 0
   m_Name: Sides
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -2936,7 +2936,7 @@ GameObject:
   - component: {fileID: 13695810}
   m_Layer: 9
   m_Name: StoolCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -2984,7 +2984,7 @@ GameObject:
   - component: {fileID: 6545054}
   m_Layer: 9
   m_Name: Hearse
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -3092,7 +3092,7 @@ GameObject:
   - component: {fileID: 6566392}
   m_Layer: 9
   m_Name: BloxCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -3136,7 +3136,7 @@ GameObject:
   - component: {fileID: 6558422}
   m_Layer: 9
   m_Name: ArchesCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -3180,7 +3180,7 @@ GameObject:
   - component: {fileID: 6542738}
   m_Layer: 9
   m_Name: FiretruckCollider
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
@@ -3225,7 +3225,7 @@ GameObject:
   - component: {fileID: 2355912}
   m_Layer: 9
   m_Name: Stool
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 4294967295
