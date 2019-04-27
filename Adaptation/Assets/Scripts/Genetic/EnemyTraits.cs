@@ -12,7 +12,8 @@ public class EnemyTraits : MonoBehaviour
     [SerializeField]
     GameObject blockObject;
 
-    bool ranged, melee;
+    public bool Melee { get; private set; }
+    public bool Ranged { get; private set; }
 
     string[] traits;
     int individualNumber;
@@ -54,15 +55,15 @@ public class EnemyTraits : MonoBehaviour
                 GetComponent<EnemyHealth>().IncreaseHealth(10);
                 break;
             case 'd':
-                if (melee)
+                if (Melee)
                     GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackDamage(5);
-                if (ranged)
+                if (Ranged)
                     GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackDamage(5);
                 break;
             case 's':
-                if (melee)
+                if (Melee)
                     GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackSpeed(0.1f);
-                if (ranged)
+                if (Ranged)
                     GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackSpeed(10f);
                 break;
             //case 'o':
@@ -72,9 +73,9 @@ public class EnemyTraits : MonoBehaviour
             //        GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRate(0.1f);
             //break;
             case 'r':
-                if (melee)
+                if (Melee)
                     GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackRange(0.1f);
-                if (ranged)
+                if (Ranged)
                     GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRange(1f);
                 break;
             case 'm':
@@ -91,11 +92,11 @@ public class EnemyTraits : MonoBehaviour
         {
             case 'M':
                 meleeObject.SetActive(true);
-                melee = true;
+                Melee = true;
                 break;
             case 'R':
                 rangedObject.SetActive(true);
-                ranged = true;
+                Ranged = true;
                 break;
             case 'B':
                 blockObject.SetActive(true);

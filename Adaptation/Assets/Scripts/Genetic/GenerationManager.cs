@@ -23,12 +23,11 @@ public class GenerationManager : MonoBehaviour
 
     readonly int generationSize = 1;
     readonly int attributes = 8;
-    readonly int features = 1 /*2*/;
+    readonly int features = 2;
 
     System.Random rand = new System.Random();
     char[] possibleAttributes = new char[] { 'h', 'd', /*'s', */'r', 'm' };
-    //char[] possbleFeatures = new char[] { 'M', 'R', 'B', 'D' };
-    char[] possbleFeatures = new char[] { 'R' };
+    char[] possbleFeatures = new char[] { 'M', 'R', 'B', 'D' };
     char RandomAttribute { get { return possibleAttributes[rand.Next(0, possibleAttributes.Length)]; } }
     char RandomFeature { get { return possbleFeatures[rand.Next(0, possbleFeatures.Length)]; } }
 
@@ -127,10 +126,12 @@ public class GenerationManager : MonoBehaviour
                 newIndividual.Append(RandomAttribute);
             }
             newIndividual.Append('|');
-            for (int j = 0; j < features; j++)
-            {
-                newIndividual.Append(RandomFeature);
-            }
+
+            newIndividual.Append("MD");
+            //for (int j = 0; j < features; j++)
+            //{
+            //    newIndividual.Append(RandomFeature);
+            //}
 
             newGeneration.Add(newIndividual.ToString());
         }

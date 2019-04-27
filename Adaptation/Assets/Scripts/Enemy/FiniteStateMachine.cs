@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum EnemyState { Approach, Withdraw, MeleeAttack, RangedAttack, Dash, Block, Dead };
+public enum EnemyState { Idle, Approach, Withdraw, MeleeAttack, RangedAttack, Block, Dead, None };
 
 public class FiniteStateMachine : MonoBehaviour
 {
@@ -26,6 +26,7 @@ public class FiniteStateMachine : MonoBehaviour
     bool playerMelee;
 
     NavMeshAgent navAgent;
+    MeleeRangeTracker meleeRangeTracker;
 
     bool hasMelee;
     bool hasRanged;
@@ -34,10 +35,10 @@ public class FiniteStateMachine : MonoBehaviour
 
     Vector3 DirectionToPlayer { get { return (player.position - transform.position).normalized; } }
     float DistanceToPlayer { get { return Vector3.Distance(transform.position, player.position); } }
-    bool InMeleeDistance { get { return meleeAttacking.Range > DistanceToPlayer; } }
+    bool InMeleeDistance { get { return meleeRangeTracker.NormalRange || meleeRangeTracker.ComboRange; } }
     bool InRangedDistance { get { return rangedAttacking.Range > DistanceToPlayer; } }
-    bool FarRangeIncrement { get { return InRangedDistance && DistanceToPlayer > (rangedAttacking.Range / 4) * 3; } }
-    bool MidleRangeIncrement { get { return InRangedDistance && !FarRangeIncrement && DistanceToPlayer > rangedAttacking.Range / 4; } }
+    bool FarRangeIncrement { get { return InRangedDistance && DistanceToPlayer > (rangedAttacking.Range / 3) * 2; } }
+    bool MidleRangeIncrement { get { return InRangedDistance && !FarRangeIncrement && DistanceToPlayer > rangedAttacking.Range / 3; } }
     bool CloseRangeIncrement { get { return InRangedDistance && !FarRangeIncrement && !MidleRangeIncrement; } }
 
     bool stopped;
@@ -54,9 +55,10 @@ public class FiniteStateMachine : MonoBehaviour
         playerMelee = player.GetComponent<PlayerTraits>().Melee;
 
         navAgent = GetComponent<NavMeshAgent>();
+        meleeRangeTracker = GetComponentInChildren<MeleeRangeTracker>();
 
-        hasMelee = meleeAttacking.gameObject.activeSelf;
-        hasRanged = rangedAttacking.gameObject.activeSelf;
+        hasMelee = traits.Melee;
+        hasRanged = traits.Ranged;
         hasBlock = blocking.gameObject.activeSelf;
         hasDash = dashing.isActiveAndEnabled;
 
@@ -65,20 +67,14 @@ public class FiniteStateMachine : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.O))
-            stopped = !stopped;
-
-        if (stopped)
-        {
-            navAgent.isStopped = true;
-            return;
-        }
-
         if (health.IsDead)
             currentState = EnemyState.Dead;
 
         switch (currentState)
         {
+            case EnemyState.Idle:
+                UpdateIdle();
+                break;
             case EnemyState.Approach:
                 UpdateApproach();
                 break;
@@ -86,14 +82,13 @@ public class FiniteStateMachine : MonoBehaviour
                 UpdateWithraw();
                 break;
             case EnemyState.MeleeAttack:
-
+                UpdateMeleeAttack();
                 break;
             case EnemyState.RangedAttack:
                 UpdateRangedAttack();
                 break;
-            case EnemyState.Dash:
-                break;
             case EnemyState.Block:
+
                 break;
             case EnemyState.Dead:
                 navAgent.enabled = false;
@@ -101,7 +96,23 @@ public class FiniteStateMachine : MonoBehaviour
                 break;
         }
 
+        if (Input.GetKeyDown(KeyCode.O))
+            currentState = EnemyState.Idle;
+
         Debug.Log(currentState.ToString());
+    }
+
+    void UpdateIdle()
+    {
+        navAgent.SetDestination(transform.position);
+        navAgent.isStopped = true;
+
+        controlManager.MoveInput = new Vector3(navAgent.velocity.x, 0, navAgent.velocity.z);
+        controlManager.NormalAttackInput = false;
+        controlManager.ComboAttackInput = false;
+
+        if (Input.GetKeyDown(KeyCode.O))
+            currentState = EnemyState.Approach;
     }
 
     void UpdateApproach()
@@ -112,31 +123,47 @@ public class FiniteStateMachine : MonoBehaviour
         controlManager.NormalAttackInput = false;
         controlManager.ComboAttackInput = false;
 
-        if (InRangedDistance)
+        if (hasMelee && InMeleeDistance)
+            currentState = EnemyState.MeleeAttack;
+        else if (hasRanged && InRangedDistance)
             currentState = EnemyState.RangedAttack;
     }
 
     void UpdateWithraw()
     {
-        //if (hasDash)
-        //{
+        Vector3 newPos = transform.position + (DirectionToPlayer * -2);
+        navAgent.SetDestination(newPos);
 
-        //}
-        //else
-        {
-            Vector3 newPos = transform.position + (DirectionToPlayer * -2);
+        controlManager.MoveInput = new Vector3(navAgent.velocity.x, 0, navAgent.velocity.z);
+        controlManager.NormalAttackInput = false;
+        controlManager.ComboAttackInput = false;
 
-            navAgent.SetDestination(newPos);
+        if (dashing.isActiveAndEnabled && dashing.Ready)
+            dashing.Activate();
 
-            controlManager.MoveInput = new Vector3(navAgent.velocity.x, 0, navAgent.velocity.z);
-            controlManager.NormalAttackInput = false;
-            controlManager.ComboAttackInput = false;
-
-            if (!CloseRangeIncrement)
-                currentState = EnemyState.RangedAttack;
-        }
+        if (!CloseRangeIncrement)
+            currentState = EnemyState.RangedAttack;
     }
 
+    void UpdateMeleeAttack()
+    {
+        navAgent.SetDestination(transform.position);
+        controlManager.MoveInput = new Vector3(navAgent.velocity.x, 0, navAgent.velocity.z);
+
+        if (meleeRangeTracker.ComboRange)
+        {
+            controlManager.NormalAttackInput = false;
+            controlManager.ComboAttackInput = true;
+        }
+        else if (meleeRangeTracker.NormalRange)
+        {
+            controlManager.NormalAttackInput = true;
+            controlManager.ComboAttackInput = false;
+        }
+
+        if (!InMeleeDistance)
+            currentState = EnemyState.Approach;
+    }
 
     void UpdateRangedAttack()
     {
@@ -159,15 +186,15 @@ public class FiniteStateMachine : MonoBehaviour
         }
         else if (CloseRangeIncrement)
         {
-            //if (playerMelee)
+            if (playerMelee)
             {
                 currentState = EnemyState.Withdraw;
             }
-            //else
-            //{
-            //    controlManager.NormalAttackInput = true;
-            //    controlManager.ComboAttackInput = false;
-            //}
+            else
+            {
+                controlManager.NormalAttackInput = true;
+                controlManager.ComboAttackInput = false;
+            }
         }
         else
         {

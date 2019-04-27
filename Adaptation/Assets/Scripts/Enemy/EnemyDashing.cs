@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyDashing : MonoBehaviour
 {
+    public bool Ready { get { return coolDownTimer >= coolDown && !Dashing; } }
     public bool DashStart { get; private set; }
     public bool DashStop { get; private set; }
     public bool Dashing { get; private set; }
@@ -30,7 +31,7 @@ public class EnemyDashing : MonoBehaviour
 
     public void Activate()
     {
-        if (coolDownTimer >= coolDown && !Dashing)
+        if (Ready)
         {
             coolDownTimer = 0;
             posBefore = transform.position;
