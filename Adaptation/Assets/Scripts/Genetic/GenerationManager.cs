@@ -21,7 +21,7 @@ public class GenerationManager : MonoBehaviour
     public static int CurrentGeneration { get; private set; }
     public static int TotalGenerations { get; private set; }
 
-    readonly int generationSize = 2;
+    readonly int generationSize = 1;
     readonly int attributes = 8;
     readonly int features = 1 /*2*/;
 

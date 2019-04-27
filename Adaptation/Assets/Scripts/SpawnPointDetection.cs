@@ -12,10 +12,10 @@ public class SpawnPointDetection : MonoBehaviour
         Available = true;
     }
 
-    private void Update()
-    {
-        Debug.Log(gameObject.name + " Available: " + Available);
-    }
+    //private void Update()
+    //{
+    //    Debug.Log(gameObject.name + " Available: " + Available);
+    //}
 
     private void OnTriggerStay(Collider other)
     {

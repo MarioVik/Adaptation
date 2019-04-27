@@ -30,8 +30,7 @@ public class EnemyDashing : MonoBehaviour
 
     public void Activate()
     {
-        if (GetComponentInParent<EnemyControlManager>().MovementInput &&
-            coolDownTimer >= coolDown && !Dashing)
+        if (coolDownTimer >= coolDown && !Dashing)
         {
             coolDownTimer = 0;
             posBefore = transform.position;

@@ -6,8 +6,10 @@ public class EnemyMeleeAttacking : MonoBehaviour
 {
     Collider weaponcollider;
 
+    public float Range { get { return range; } }
     int damage = 40;
     float speed = 1.0f;
+    float range = 10;
 
     AudioSource weaponAudio;
     float animationDuration;

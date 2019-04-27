@@ -194,7 +194,7 @@ public class PlayerControlManager : MonoBehaviour
         float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
         moveAmount = Mathf.Clamp01(m);
 
-        if ((normalAttack || comboAttack) && canMove) // I clicked for normal attack when I can move around.
+        if ((normalAttack || comboAttack) && canMove) // I clicked for attack when I can move around.
         {
             if (hasMelee && !hasRanged) playerMeleeAttacking.Attack(comboAttack);
             if (hasRanged && !hasMelee) playerRangedAttacking.Attack(comboAttack);
@@ -205,7 +205,7 @@ public class PlayerControlManager : MonoBehaviour
 
             targetAnim = attacks[comboAttack ? 1 : 0];
 
-            anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.1 second.                 
+            anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.0 second.                 
 
             normalAttack = false;
             comboAttack = false;

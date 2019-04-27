@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Waves
+  m_Name: DashMaterial
   m_Shader: {fileID: 4800000, guid: 18cc8fe7d50c89741b56c1ae6a5baa66, type: 3}
   m_ShaderKeywords: BlendAdd Clip_OFF FrameBlend_OFF SoftParticles_ON VertLight_OFF
     _BLENDMODE_ADD _FADING_ON

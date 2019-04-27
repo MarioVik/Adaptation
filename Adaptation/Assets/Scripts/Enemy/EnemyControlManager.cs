@@ -6,8 +6,13 @@ using UnityEngine.AI;
 
 public class EnemyControlManager : MonoBehaviour
 {
+    public Vector3 MoveInput { get; set; }
+    public bool NormalAttackInput { get; set; }
+    public bool ComboAttackInput { get; set; }
+
     public bool Dead { get; set; }
-    public bool MovementInput { get { return vertical != 0 || horizontal != 0; } }
+
+    Transform playerTransform;
 
     [Header("Initialize")]
     public GameObject activeModel;  // defines the current active model.
@@ -63,36 +68,10 @@ public class EnemyControlManager : MonoBehaviour
         sprintSpeed += increase;
     }
 
-    public void SetMoveInput(float horizontalInput, float verticalInput) //getting various inputs from keyboard or joypad.
-    {
-        horizontal = horizontalInput;    //for getting horizontal input.
-        vertical = verticalInput;    //for getting vertical input.
-        //sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
-
-    }
-
-    public void SetAttackInput(bool attackInput, bool combo = false)
-    {
-        if (attackInput)
-        {
-            if (combo)
-            {
-                comboAttack = true;
-            }
-            else
-            {
-                normalAttack = true;
-            }
-        }
-        else
-        {
-            normalAttack = false;
-            comboAttack = false;
-        }
-    }
-
     void Start() // Initiallizing camera, animator, rigidboy
     {
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+
         SetupAnimator();
         rigid = GetComponent<Rigidbody>();
 
@@ -135,7 +114,17 @@ public class EnemyControlManager : MonoBehaviour
         if (Dead)
             return;
 
+        GetInput();
         UpdateStates();   //Updating anything related to character's actions.         
+    }
+
+    void GetInput() //getting various inputs from keyboard or joypad.
+    {
+        horizontal = MoveInput.x;    //for getting horizontal input.
+        vertical = MoveInput.z;    //for getting vertical input.
+        sprint = true;                              //for getting sprint input.
+        normalAttack = NormalAttackInput; //for getting normal attack input.
+        comboAttack = ComboAttackInput;    //for getting combo attack input.
     }
 
     void UpdateStates() //updates character's various actions.
@@ -220,6 +209,8 @@ public class EnemyControlManager : MonoBehaviour
         }
     }
 
+    Vector3 DirectionToPlayer { get { return (playerTransform.position - transform.position).normalized; } }
+
     void FixedTick(float d)
     {
         if (Dead)
@@ -235,14 +226,16 @@ public class EnemyControlManager : MonoBehaviour
         //This can control character's rotation.
         if (canMove)
         {
-            Vector3 targetDir = moveDir;
+            //Vector3 targetDir = moveDir;
+
+            Vector3 targetDir = DirectionToPlayer;
 
             targetDir.y = 0;
             if (targetDir == Vector3.zero)
                 targetDir = transform.forward;
 
             Quaternion tr = Quaternion.LookRotation(targetDir);
-            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta * moveAmount * rotateSpeed);
+            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta * /*moveAmount **/ rotateSpeed);
             transform.rotation = targetRotation;
         }
 

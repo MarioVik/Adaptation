@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using DM;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using DM;
 using UnityEngine.UI;
 
 public class PlayerTraits : MonoBehaviour
@@ -18,7 +18,8 @@ public class PlayerTraits : MonoBehaviour
     [SerializeField]
     Sprite dashImage;
 
-    bool ranged, melee;
+    public bool Ranged { get; private set; }
+    public bool Melee { get; private set; }
 
     void Start()
     {
@@ -39,27 +40,27 @@ public class PlayerTraits : MonoBehaviour
                 GetComponent<PlayerHealth>().IncreaseHealth(10);
                 break;
             case 'd':
-                if (melee)
+                if (Melee)
                     GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackDamage(5);
-                if (ranged)
+                if (Ranged)
                     GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackDamage(5);
                 break;
             case 's':
-                if (melee)
+                if (Melee)
                     GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackSpeed(0.2f);
-                if (ranged)
+                if (Ranged)
                     GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackSpeed(10f);
                 break;
             case 'o':
-                //if (melee)
-                //    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRate(0.1f);
-                //if (ranged)
-                //    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRate(0.1f);
-                //break;
+            //if (melee)
+            //    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRate(0.1f);
+            //if (ranged)
+            //    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRate(0.1f);
+            //break;
             case 'r':
-                if (melee)
+                if (Melee)
                     GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRange(0.2f);
-                if (ranged)
+                if (Ranged)
                     GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRange(1f);
                 break;
             case 'm':
@@ -76,11 +77,11 @@ public class PlayerTraits : MonoBehaviour
         {
             case 'M':
                 meleeObject.SetActive(true);
-                melee = true;
+                Melee = true;
                 break;
             case 'R':
                 rangedObject.SetActive(true);
-                ranged = true;
+                Ranged = true;
                 break;
             case 'B':
                 blockObject.SetActive(true);
