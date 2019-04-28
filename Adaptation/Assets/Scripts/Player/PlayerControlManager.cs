@@ -17,13 +17,14 @@ public class PlayerControlManager : MonoBehaviour
     bool normalAttackInput;   //stores whether you do normal attack or not
     bool comboAttackInput;       //stores whether you combo or not
     bool featureInput;
+    float dashVertical, dashHorizontal;
 
     public bool canMove;    //shows you can move or not
 
     public float moveAmount;    //shows the amount of movement from 0 to 1.
-    public Vector3 moveDir;     //stores the moving vector value of main character.
+    public Vector3 moveDirection;     //stores the moving vector value of main character.
 
-    Vector3 veritcalMovement = Vector3.zero;
+    Vector3 verticalMovement = Vector3.zero;
     Vector3 horizontalMovement = Vector3.zero;
 
     float moveSpeed = 9f;  //speed of running
@@ -31,28 +32,24 @@ public class PlayerControlManager : MonoBehaviour
 
     [Header("FeatureBehaviours")]
     [SerializeField]
-    PlayerMeleeAttacking playerMeleeAttacking;
+    PlayerMeleeAttacking meleeAttacking;
     [SerializeField]
-    PlayerRangedAttacking playerRangedAttacking;
+    PlayerRangedAttacking rangedAttacking;
+    [SerializeField]
+    BlockingFeature blocking;
+    DashingFeature dashing;
+
     bool hasMelee, hasRanged;
+    bool hasBlock, hasDash;
     TargetingHandler targeting;
 
-    [SerializeField]
-    PlayerBlocking playerBlocking;
-    PlayerDashing playerDashing;
-    bool hasBlock, hasDash;
-
     float fixedDelta;        //stores Time.fixedDeltaTime
-    float delta;
     Animator anim;      //for caching Animator component
     [HideInInspector]
     public Rigidbody rigid;     //for caching Rigidbody component
     CameraManager camManager;   //for caching CameraManager script
 
-    public void IncreaseMovementSpeed(float increase)
-    {
-        moveSpeed += increase;
-    }
+    public void IncreaseMovementSpeed(float increase) => moveSpeed += increase;
 
     void Start() // Initiallizing camera, animator, rigidboy
     {
@@ -61,13 +58,13 @@ public class PlayerControlManager : MonoBehaviour
         SetupAnimator();
         rigid = GetComponent<Rigidbody>();
 
-        hasMelee = playerMeleeAttacking.gameObject.activeSelf;
-        hasRanged = playerRangedAttacking.gameObject.activeSelf;
+        hasMelee = meleeAttacking.gameObject.activeSelf;
+        hasRanged = rangedAttacking.gameObject.activeSelf;
         targeting = GetComponent<TargetingHandler>();
 
-        hasBlock = playerBlocking.gameObject.activeSelf;
-        playerDashing = GetComponentInChildren<PlayerDashing>();
-        hasDash = playerDashing.isActiveAndEnabled;
+        hasBlock = blocking.gameObject.activeSelf;
+        dashing = GetComponentInChildren<DashingFeature>();
+        hasDash = dashing.isActiveAndEnabled;
     }
 
     void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -112,84 +109,113 @@ public class PlayerControlManager : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");    //for getting horizontal input.
         normalAttackInput = Input.GetButton("NormalAttack"); //for getting normal attack input.
         comboAttackInput = Input.GetButton("ComboAttack");    //for getting combo attack input.
-        
+        featureInput = Input.GetButton("FeatureInput");
     }
 
     void UpdateStates() //updates character's various actions.
     {
-        canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".          
+        canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".
 
-        if (hasDash)
-        {
-            if (playerDashing.DashStart && canMove)
-            {
-                anim.SetBool("dashing", true);
-            }
-            else if (playerDashing.DashStop)
-            {
-                anim.SetBool("dashing", false);
-            }
-        }
-
-        if (hasBlock)
-        {
-            if (playerBlocking.BlockStart && canMove)
-            {
-                //anim.CrossFade("Block", 0.0f);
-                anim.SetBool("blocking", true);
-            }
-            else if (playerBlocking.BlockStop)
-            {
-                anim.SetBool("blocking", false);
-            }
-        }
+        UpdateAttack();
 
         float targetSpeed = moveSpeed;  //set run speed as target speed.
 
-        if (playerBlocking.Blocking)
-        {
-            targetSpeed = 0;
-        }
+        //mixing camera rotation value to the character moving value.
+        verticalMovement = verticalInput * camManager.transform.forward;
+        horizontalMovement = horizontalInput * camManager.transform.right;
 
-        if (playerDashing.Dashing)
-        {
-            targetSpeed = playerDashing.DashSpeed;
-        }
+        if (hasBlock)
+            UpdateBlock(ref targetSpeed);
 
-
-        if (!playerDashing.Dashing
-            || (playerDashing.DashStart && playerDashing.Dashing))
-        {
-            //mixing camera rotation value to the character moving value.
-            veritcalMovement = verticalInput * camManager.transform.forward;
-            horizontalMovement = horizontalInput * camManager.transform.right;
-        }
-
-        //multiplying target speed and move amount.
-        moveDir = ((veritcalMovement + horizontalMovement).normalized) * (targetSpeed * moveAmount);
-
-        //This is for isolating y velocity from the character control. 
-        moveDir.y = rigid.velocity.y;
+        if (hasDash)
+            UpdateDash(ref targetSpeed);
 
         //This is for limiting values from 0 to 1.
-        float m = Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput);
+        float m;
+
+        if (!dashing.Dashing)
+            m = Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput);
+        else
+            m = Mathf.Abs(dashHorizontal) + Mathf.Abs(dashVertical);
+
         moveAmount = Mathf.Clamp01(m);
 
+        //multiplying target speed and move amount.
+        moveDirection = ((verticalMovement + horizontalMovement).normalized) * (targetSpeed * moveAmount);
+    }
+
+    void UpdateAttack()
+    {
         if ((normalAttackInput || comboAttackInput) && canMove) // I clicked for attack when I can move around.
         {
-            if (hasMelee && !hasRanged) playerMeleeAttacking.Attack(comboAttackInput);
-            if (hasRanged && !hasMelee) playerRangedAttacking.Attack(comboAttackInput);
             if (!hasRanged && !hasMelee) throw new System.Exception("No attacks are available");
             if (hasRanged && hasMelee) throw new System.Exception("Error: both attacks are available");
 
-            string targetAnim;
+            if (hasMelee && !hasRanged) meleeAttacking.Activate(comboAttackInput);
+            if (hasRanged && !hasMelee) rangedAttacking.Activate(comboAttackInput);
 
-            targetAnim = attacks[comboAttackInput ? 1 : 0];
-
+            string targetAnim = attacks[comboAttackInput ? 1 : 0];
             anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.0 second.                 
 
             normalAttackInput = false;
             comboAttackInput = false;
+        }
+    }
+
+    void UpdateBlock(ref float targetSpeed)
+    {
+        if (blocking.Ready)
+        {
+            if (featureInput && canMove)
+            {
+                blocking.Activate();
+                anim.SetBool("blocking", true);
+            }
+        }
+
+        if (blocking.Blocking)
+        {
+            targetSpeed = 0;
+
+            if (!featureInput)
+            {
+                blocking.Deactivate();
+            }
+        }
+
+        if (blocking.BlockStop)
+        {
+            anim.SetBool("blocking", false);
+        }
+    }
+
+    void UpdateDash(ref float targetSpeed)
+    {
+        if (dashing.Ready)
+        {
+            if (featureInput && canMove)
+            {
+                if (!MovementInput)
+                    verticalInput = 1;
+
+                dashVertical = verticalInput;
+                dashHorizontal = horizontalInput;
+
+                dashing.Activate();
+                anim.SetBool("dashing", true);
+            }
+        }
+
+        if (dashing.Dashing)
+        {
+            targetSpeed = dashing.DashSpeed;
+            verticalMovement = dashVertical * camManager.transform.forward;
+            horizontalMovement = dashHorizontal * camManager.transform.right;
+        }
+
+        if (dashing.DashStop)
+        {
+            anim.SetBool("dashing", false);
         }
     }
 
@@ -202,10 +228,10 @@ public class PlayerControlManager : MonoBehaviour
 
         if (canMove)
         {
-            rigid.velocity = moveDir;  //This controls the character movement.                  
+            rigid.velocity = moveDirection;  //This controls the character movement.                  
         }
 
-        //This can control character's rotation.
+        //This can control character's rotation
         if (canMove)
         {
             Vector3 targetDir;
@@ -215,7 +241,7 @@ public class PlayerControlManager : MonoBehaviour
             }
             else
             {
-                targetDir = moveDir;
+                targetDir = moveDirection;
             }
 
             targetDir.y = 0;
@@ -223,7 +249,7 @@ public class PlayerControlManager : MonoBehaviour
                 targetDir = transform.forward;
 
             Quaternion tr = Quaternion.LookRotation(targetDir);
-            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta/* * moveAmount */* rotateSpeed);
+            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta * moveAmount * rotateSpeed);
             transform.rotation = targetRotation;
         }
 
@@ -234,5 +260,4 @@ public class PlayerControlManager : MonoBehaviour
     {
         anim.SetFloat("vertical", moveAmount, 0.2f, fixedDelta); //syncing moveAmount value to animator's "vertical" value.
     }
-
 }

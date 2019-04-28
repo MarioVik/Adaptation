@@ -88,7 +88,7 @@ public class PlayerTraits : MonoBehaviour
                 featureImage.sprite = blockImage;
                 break;
             case 'D':
-                GetComponent<PlayerDashing>().enabled = true;
+                GetComponent<DashingFeature>().enabled = true;
                 featureImage.sprite = dashImage;
                 break;
             default:

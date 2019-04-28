@@ -1,27 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class EnemyDashing : MonoBehaviour
+public class DashingFeature : MonoBehaviour
 {
+    [Header("Only if user is player")]
+    [SerializeField]
+    bool isPlayer;
+    [SerializeField]
+    Slider cooldownSlider;
+
     public bool Ready { get { return coolDownTimer >= coolDown && !Dashing; } }
-    public bool DashStart { get; private set; }
     public bool DashStop { get; private set; }
     public bool Dashing { get; private set; }
     public float DashSpeed { get; } = 30f;
-    public float DashDistance { get; } = 10f;
 
-    Rigidbody rigid;
-
+    [Header("For all users")]
     [SerializeField]
     GameObject effectPrefab;
-
     [SerializeField]
     Material dashMaterial;
-    Material[] enemyMaterials;
+    Material[] normalMaterials;
+    //Material[] currentMaterials;
 
     float coolDown = 2f;
     float coolDownTimer;
+    float dashDistance = 10f;
 
     Vector3 posBefore;
     Vector3 direction;
@@ -31,33 +37,38 @@ public class EnemyDashing : MonoBehaviour
 
     public void Activate()
     {
-        if (Ready)
-        {
-            coolDownTimer = 0;
-            posBefore = transform.position;
-            Dashing = true;
-            DashStart = true;
+        coolDownTimer = 0;
+        posBefore = transform.position;
+        Dashing = true;
 
-            collider.isTrigger = true;
+        collider.isTrigger = true;
 
-            ChangeAllMaterials(dashMaterial);
-            Instantiate(effectPrefab, rigid.position, rigid.rotation, rigid.transform);
+        ChangeAllMaterials(dashMaterial);
+        Instantiate(effectPrefab, transform.position, transform.rotation, transform);
 
-            //Debug.Log("Dashing");
-        }
+        //Debug.Log("Dashing");
     }
 
     private void Awake()
     {
         coolDownTimer = coolDown;
 
-        rigid = GetComponentInParent<Rigidbody>();
+        if (isPlayer)
+        {
+            cooldownSlider.maxValue = coolDown;
+            cooldownSlider.value = coolDown;
+        }
+
         collider = GetComponent<Collider>();
+
+        //Renderer[] children = GetComponentsInChildren<Renderer>();
+        //playerMaterials = new Material[children.Length];
+        //for (int i = 0; i < children.Length; i++)
+        //    playerMaterials[i] = new Material(children[i].material);
     }
 
     void Update()
     {
-        if (DashStart) DashStart = false;
         if (DashStop) DashStop = false;
 
         if (!Dashing) coolDownTimer += Time.deltaTime;
@@ -65,7 +76,7 @@ public class EnemyDashing : MonoBehaviour
 
         if (Dashing)
         {
-            if (Vector3.Distance(transform.position, posBefore) >= DashDistance
+            if (Vector3.Distance(transform.position, posBefore) >= dashDistance
                 || crashed)
             {
                 Dashing = false;
@@ -78,6 +89,12 @@ public class EnemyDashing : MonoBehaviour
                 //Debug.Log("Stopped dashing");
             }
         }
+
+        if (isPlayer)
+        {
+            cooldownSlider.value = coolDownTimer;
+        }
+
     }
 
     void ChangeAllMaterials(Material newMat)
@@ -85,11 +102,11 @@ public class EnemyDashing : MonoBehaviour
         Renderer[] children;
         children = GetComponentsInChildren<Renderer>();
 
-        enemyMaterials = new Material[children.Length];
+        normalMaterials = new Material[children.Length];
 
         for (int i = 0; i < children.Length; i++)
         {
-            enemyMaterials[i] = new Material(children[i].material);
+            normalMaterials[i] = new Material(children[i].material);
             children[i].material = newMat;
         }
     }
@@ -101,14 +118,8 @@ public class EnemyDashing : MonoBehaviour
 
         for (int i = 0; i < children.Length; i++)
         {
-            children[i].material = new Material(enemyMaterials[i]);
+            children[i].material = new Material(normalMaterials[i]);
         }
-    }
-
-    private void FixedUpdate()
-    {
-        if (Dashing)
-            transform.position += direction.normalized * DashSpeed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)

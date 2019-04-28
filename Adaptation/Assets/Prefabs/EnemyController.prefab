@@ -67,17 +67,12 @@ MonoBehaviour:
   attacks:
   - Attack01
   - Attack02
-  vertical: 0
-  horizontal: 0
-  moveAmount: 0
-  moveDir: {x: 0, y: 0, z: 0}
-  enemyMeleeAttacking: {fileID: 6415002722224442686}
-  enemyRangedAttacking: {fileID: 387577712262647932}
-  enemyBlocking: {fileID: 8591435721693871105}
-  sprint: 0
-  normalAttack: 0
-  comboAttack: 0
   canMove: 0
+  moveAmount: 0
+  moveDirection: {x: 0, y: 0, z: 0}
+  meleeAttacking: {fileID: 6415002722224442686}
+  rangedAttacking: {fileID: 387577712262647932}
+  blocking: {fileID: 3740758683100328238}
   rigid: {fileID: 0}
 --- !u!114 &6731381539057205646
 MonoBehaviour:
@@ -93,7 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleeAttacking: {fileID: 6415002722224442686}
   rangedAttacking: {fileID: 387577712262647932}
-  blocking: {fileID: 8591435721693871105}
+  blocking: {fileID: 3740758683100328238}
 --- !u!195 &4488853099409273497
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -130,10 +125,10 @@ GameObject:
   - component: {fileID: 5373813351277938820}
   - component: {fileID: 5748926288513601995}
   - component: {fileID: 114107903465912920}
-  - component: {fileID: 7585787821855430466}
   - component: {fileID: 9187460136877920544}
   - component: {fileID: 3094670902388871208}
   - component: {fileID: 9102282930922546314}
+  - component: {fileID: 4394633779200846915}
   m_Layer: 11
   m_Name: Character
   m_TagString: Enemy
@@ -368,21 +363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6da3a7e4a89c784da4e7992264d1ddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7585787821855430466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482526539980724}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7880f5dec3dbd6e43a8a40f84fb83622, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effectPrefab: {fileID: 1919843589960360, guid: d07fd8e3b7e78f2429519d5ba3419855,
-    type: 3}
-  dashMaterial: {fileID: 2100000, guid: 7c75edb2339741245a59264d753c2a84, type: 2}
 --- !u!114 &9187460136877920544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -428,6 +408,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBetweenAttacks: 0.5
   attackDamage: 10
+--- !u!114 &4394633779200846915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482526539980724}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 714dcbfe04805d8408c799f42acc2025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlayer: 0
+  cooldownSlider: {fileID: 0}
+  effectPrefab: {fileID: 1919843589960360, guid: d07fd8e3b7e78f2429519d5ba3419855,
+    type: 3}
+  dashMaterial: {fileID: 2100000, guid: 7c75edb2339741245a59264d753c2a84, type: 2}
 --- !u!1 &262744830747606449
 GameObject:
   m_ObjectHideFlags: 0
@@ -6685,7 +6682,7 @@ GameObject:
   - component: {fileID: 7494017080577945174}
   - component: {fileID: 5867306325298048266}
   - component: {fileID: 6045119464058596459}
-  - component: {fileID: 8591435721693871105}
+  - component: {fileID: 3740758683100328238}
   m_Layer: 11
   m_Name: BlockObject
   m_TagString: LeftHand
@@ -6752,7 +6749,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8591435721693871105
+--- !u!114 &3740758683100328238
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6761,9 +6758,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5340979041483773908}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 483a8028decd64b439b5227a622989fb, type: 3}
+  m_Script: {fileID: 11500000, guid: 99fb3f42e7e72da4695b64f52f122b37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
+  cooldownSlider: {fileID: 0}
 --- !u!1 &5453425561702790075
 GameObject:
   m_ObjectHideFlags: 0

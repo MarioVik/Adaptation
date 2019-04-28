@@ -6,10 +6,13 @@ using UnityEngine.AI;
 
 public class EnemyControlManager : MonoBehaviour
 {
-    public Vector3 MoveInput { get; set; }
+    public float VerticalInput { get; set; }
+    public float HorizontalInput { get; set; }
     public bool NormalAttackInput { get; set; }
     public bool ComboAttackInput { get; set; }
+    public bool FeatureInput { get; set; }
 
+    public bool MovementInput { get { return VerticalInput != 0 || HorizontalInput != 0; } }
     public bool Dead { get; set; }
 
     Transform playerTransform;
@@ -18,54 +21,40 @@ public class EnemyControlManager : MonoBehaviour
     public GameObject activeModel;  // defines the current active model.
     public string[] attacks;  // array of normal attacks in string.
 
+    public bool canMove;    //shows you can move or not
 
-    [Header("Inputs")]
-    public float vertical;  // stores vertical input.
-    public float horizontal; // stores horizontal input.
     public float moveAmount;    //shows the amount of movement from 0 to 1.
-    public Vector3 moveDir;     //stores the moving vector value of main character.
+    public Vector3 moveDirection;     //stores the moving vector value of main character.
+    float dashVertical, dashHorizontal;
 
-    Vector3 veritcalMovement = Vector3.zero;
+    Vector3 verticalMovement = Vector3.zero;
     Vector3 horizontalMovement = Vector3.zero;
 
-    //[Header("Stats")]
-    float moveSpeed = 6f;  //speed of running
-    float sprintSpeed = 9f;  //speed of sprinting(double time of running)
-    float rotateSpeed = 60f;   //speed of character's turning around
+    float moveSpeed = 9f;  //speed of running
+    float rotateSpeed = 30f;   //speed of character's turning around    
 
     [Header("FeatureBehaviours")]
     [SerializeField]
-    EnemyMeleeAttacking enemyMeleeAttacking;
+    EnemyMeleeAttacking meleeAttacking;
     [SerializeField]
-    EnemyRangedAttacking enemyRangedAttacking;
-    bool hasMelee;
-    bool hasRanged;
-
+    EnemyRangedAttacking rangedAttacking;
     [SerializeField]
-    EnemyBlocking enemyBlocking;
-    EnemyDashing enemyDashing;
-    bool hasBlock;
-    bool hasDash;
+    BlockingFeature blocking;
+    DashingFeature dashing;
 
-    [Header("States")]
-    public bool sprint;     //shows you are sprinting or not.
-
-    [HideInInspector]
-    public bool normalAttack;   //stores whether you do normal attack or not
-    [HideInInspector]
-    public bool comboAttack;       //stores whether you combo or not
-    public bool canMove;    //shows you can move or not
+    bool hasMelee, hasRanged;
+    bool hasBlock, hasDash;
+    TargetingHandler targeting;
 
     float fixedDelta;        //stores Time.fixedDeltaTime
-    float delta;
     Animator anim;      //for caching Animator component
     [HideInInspector]
     public Rigidbody rigid;     //for caching Rigidbody component
+    CameraManager camManager;   //for caching CameraManager script
 
     public void IncreaseMovementSpeed(float increase)
     {
         moveSpeed += increase;
-        sprintSpeed += increase;
     }
 
     void Start() // Initiallizing camera, animator, rigidboy
@@ -75,12 +64,12 @@ public class EnemyControlManager : MonoBehaviour
         SetupAnimator();
         rigid = GetComponent<Rigidbody>();
 
-        hasMelee = enemyMeleeAttacking.gameObject.activeSelf;
-        hasRanged = enemyRangedAttacking.gameObject.activeSelf;
+        hasMelee = meleeAttacking.gameObject.activeSelf;
+        hasRanged = rangedAttacking.gameObject.activeSelf;
 
-        hasBlock = enemyBlocking.gameObject.activeSelf;
-        enemyDashing = GetComponentInChildren<EnemyDashing>();
-        hasDash = enemyDashing.isActiveAndEnabled;
+        hasBlock = blocking.gameObject.activeSelf;
+        dashing = GetComponentInChildren<DashingFeature>();
+        hasDash = dashing.isActiveAndEnabled;
     }
 
     void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -114,98 +103,113 @@ public class EnemyControlManager : MonoBehaviour
         if (Dead)
             return;
 
-        GetInput();
         UpdateStates();   //Updating anything related to character's actions.         
-    }
-
-    void GetInput() //getting various inputs from keyboard or joypad.
-    {
-        horizontal = MoveInput.x;    //for getting horizontal input.
-        vertical = MoveInput.z;    //for getting vertical input.
-        sprint = true;                              //for getting sprint input.
-        normalAttack = NormalAttackInput; //for getting normal attack input.
-        comboAttack = ComboAttackInput;    //for getting combo attack input.
     }
 
     void UpdateStates() //updates character's various actions.
     {
         canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".
 
-        if (hasDash)
-        {
-            if (enemyDashing.DashStart && canMove)
-            {
-                anim.SetBool("dashing", true);
-            }
-            else if (enemyDashing.DashStop)
-            {
-                anim.SetBool("dashing", false);
-            }
-        }
-
-        if (hasBlock)
-        {
-            if (enemyBlocking.BlockStart && canMove)
-            {
-                //anim.CrossFade("Block", 0.0f);
-                anim.SetBool("blocking", true);
-            }
-            else if (enemyBlocking.BlockStop)
-            {
-                anim.SetBool("blocking", false);
-            }
-        }
+        UpdateAttack();
 
         float targetSpeed = moveSpeed;  //set run speed as target speed.
 
-        if (sprint)
-        {
-            targetSpeed = sprintSpeed;    //set sprint speed as target speed.            
-        }
+        //mixing camera rotation value to the character moving value.
+        verticalMovement = VerticalInput * transform.forward;
+        horizontalMovement = HorizontalInput * transform.right;
 
-        if (enemyBlocking.Blocking)
-        {
-            targetSpeed = 0;
-        }
+        if (hasBlock)
+            UpdateBlock(ref targetSpeed);
 
-        if (enemyDashing.Dashing)
-        {
-            targetSpeed = enemyDashing.DashSpeed;
-        }
-
-
-        if (!enemyDashing.Dashing
-            || (enemyDashing.DashStart && enemyDashing.Dashing))
-        {
-            //veritcalMovement = vertical * camManager.transform.forward;
-            //horizontalMovement = horizontal * camManager.transform.right;
-        }
-
-        //multiplying target speed and move amount.
-        moveDir = ((veritcalMovement + horizontalMovement).normalized) * (targetSpeed * moveAmount);
-
-        //This is for isolating y velocity from the character control. 
-        moveDir.y = rigid.velocity.y;
+        if (hasDash)
+            UpdateDash(ref targetSpeed);
 
         //This is for limiting values from 0 to 1.
-        float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
+        float m;
+
+        if (!dashing.Dashing)
+            m = Mathf.Abs(HorizontalInput) + Mathf.Abs(VerticalInput);
+        else
+            m = Mathf.Abs(dashHorizontal) + Mathf.Abs(dashVertical);
+
         moveAmount = Mathf.Clamp01(m);
 
-        if ((normalAttack || comboAttack) && canMove) // I clicked for normal attack when I can move around.
+        //multiplying target speed and move amount.
+        moveDirection = ((verticalMovement + horizontalMovement).normalized) * (targetSpeed * moveAmount);
+    }
+
+    void UpdateAttack()
+    {
+        if ((NormalAttackInput || ComboAttackInput) && canMove) // I clicked for attack when I can move around.
         {
-            if (hasMelee && !hasRanged) enemyMeleeAttacking.Attack(comboAttack);
-            if (hasRanged && !hasMelee) enemyRangedAttacking.Attack(comboAttack);
             if (!hasRanged && !hasMelee) throw new System.Exception("No attacks are available");
             if (hasRanged && hasMelee) throw new System.Exception("Error: both attacks are available");
 
-            string targetAnim;
+            if (hasMelee && !hasRanged) meleeAttacking.Activate(ComboAttackInput);
+            if (hasRanged && !hasMelee) rangedAttacking.Activate(ComboAttackInput);
 
-            targetAnim = attacks[comboAttack ? 1 : 0];
+            string targetAnim = attacks[ComboAttackInput ? 1 : 0];
+            anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.0 second.                 
 
-            anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.1 second.                 
+            NormalAttackInput = false;
+            ComboAttackInput = false;
+        }
+    }
 
-            normalAttack = false;
-            comboAttack = false;
+    void UpdateBlock(ref float targetSpeed)
+    {
+        if (blocking.Ready)
+        {
+            if (FeatureInput && canMove)
+            {
+                blocking.Activate();
+                anim.SetBool("blocking", true);
+            }
+        }
+
+        if (blocking.Blocking)
+        {
+            targetSpeed = 0;
+
+            if (!FeatureInput)
+            {
+                blocking.Deactivate();
+            }
+        }
+
+        if (blocking.BlockStop)
+        {
+            anim.SetBool("blocking", false);
+        }
+    }
+
+    void UpdateDash(ref float targetSpeed)
+    {
+        if (dashing.Ready)
+        {
+            if (FeatureInput && canMove)
+            {
+                if (!MovementInput)
+                    VerticalInput = 1;
+
+                dashVertical = VerticalInput;
+                dashHorizontal = HorizontalInput;
+
+                dashing.Activate();
+                anim.SetBool("dashing", true);
+            }
+        }
+
+        if (dashing.Dashing)
+        {
+            targetSpeed = dashing.DashSpeed;
+            verticalMovement = dashVertical * camManager.transform.forward;
+            horizontalMovement = dashHorizontal * camManager.transform.right;
+        }
+
+        if (dashing.DashStop)
+        {
+            anim.SetBool("dashing", false);
         }
     }
 
@@ -220,7 +224,7 @@ public class EnemyControlManager : MonoBehaviour
 
         if (canMove)
         {
-            rigid.velocity = moveDir;  //This controls the character movement.                  
+            rigid.velocity = moveDirection;  //This controls the character movement.                  
         }
 
         //This can control character's rotation.
@@ -244,13 +248,6 @@ public class EnemyControlManager : MonoBehaviour
 
     void HandleMovementAnimations()
     {
-        anim.SetBool("sprint", sprint);   //syncing sprint bool value to animator's "Sprint" value.           
-        if (moveAmount == 0)
-        {
-            anim.SetBool("sprint", false);
-        }
-
         anim.SetFloat("vertical", moveAmount, 0.2f, fixedDelta); //syncing moveAmount value to animator's "vertical" value.
     }
-
 }

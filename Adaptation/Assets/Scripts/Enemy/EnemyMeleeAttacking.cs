@@ -16,8 +16,8 @@ public class EnemyMeleeAttacking : MonoBehaviour
     Animator anim;
 
     PlayerHealth playerHealth;
-    PlayerDashing playerDashing;
-    PlayerBlocking playerBlocking;
+    DashingFeature playerDashing;
+    BlockingFeature playerBlocking;
 
     bool attacking, combo;
 
@@ -53,8 +53,8 @@ public class EnemyMeleeAttacking : MonoBehaviour
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        playerDashing = player.GetComponent<PlayerDashing>();
-        playerBlocking = player.GetComponentInChildren<PlayerBlocking>();
+        playerDashing = player.GetComponent<DashingFeature>();
+        playerBlocking = player.GetComponentInChildren<BlockingFeature>();
     }
 
     public AnimationClip GetAnimationTime(string name)
@@ -95,7 +95,7 @@ public class EnemyMeleeAttacking : MonoBehaviour
         }
     }
 
-    public void Attack(bool combo = false)
+    public void Activate(bool combo = false)
     {
         this.combo = combo;
         attacking = true;

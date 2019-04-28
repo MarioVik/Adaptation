@@ -23,8 +23,8 @@ public class ProjectileBehaviour : MonoBehaviour
 
     // If user is enemy
     PlayerHealth playerHealth;
-    PlayerDashing playerDashing;
-    PlayerBlocking playerBlocking;
+    DashingFeature playerDashing;
+    BlockingFeature playerBlocking;
 
     public void Initialize(EnemyRangedAttacking user, float speed, float range, int damage)
     {
@@ -37,8 +37,8 @@ public class ProjectileBehaviour : MonoBehaviour
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
-        playerDashing = player.GetComponent<PlayerDashing>();
-        playerBlocking = player.GetComponentInChildren<PlayerBlocking>();
+        playerDashing = player.GetComponent<DashingFeature>();
+        playerBlocking = player.GetComponentInChildren<BlockingFeature>();
     }
 
     public void Initialize(PlayerRangedAttacking player, float speed, float range, int damage)

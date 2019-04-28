@@ -14,9 +14,9 @@ public class FiniteStateMachine : MonoBehaviour
     [SerializeField]
     EnemyRangedAttacking rangedAttacking;
     [SerializeField]
-    EnemyBlocking blocking;
+    BlockingFeature blocking;
 
-    EnemyDashing dashing;
+    DashingFeature dashing;
     EnemyControlManager controlManager;
     EnemyHealth health;
     EnemyTraits traits;
@@ -45,7 +45,7 @@ public class FiniteStateMachine : MonoBehaviour
 
     void Start()
     {
-        dashing = GetComponentInChildren<EnemyDashing>();
+        dashing = GetComponentInChildren<DashingFeature>();
         controlManager = GetComponent<EnemyControlManager>();
         health = GetComponentInChildren<EnemyHealth>();
         traits = GetComponentInChildren<EnemyTraits>();
@@ -107,7 +107,8 @@ public class FiniteStateMachine : MonoBehaviour
         navAgent.SetDestination(transform.position);
         navAgent.isStopped = true;
 
-        controlManager.MoveInput = new Vector3(navAgent.velocity.x, 0, navAgent.velocity.z);
+        controlManager.VerticalInput = navAgent.velocity.z;
+        controlManager.HorizontalInput = navAgent.velocity.x;
         controlManager.NormalAttackInput = false;
         controlManager.ComboAttackInput = false;
 
@@ -119,7 +120,8 @@ public class FiniteStateMachine : MonoBehaviour
     {
         navAgent.SetDestination(player.position);
 
-        controlManager.MoveInput = new Vector3(navAgent.velocity.x, 0, navAgent.velocity.z);
+        controlManager.VerticalInput = navAgent.velocity.z;
+        controlManager.HorizontalInput = navAgent.velocity.x;
         controlManager.NormalAttackInput = false;
         controlManager.ComboAttackInput = false;
 
@@ -134,12 +136,13 @@ public class FiniteStateMachine : MonoBehaviour
         Vector3 newPos = transform.position + (DirectionToPlayer * -2);
         navAgent.SetDestination(newPos);
 
-        controlManager.MoveInput = new Vector3(navAgent.velocity.x, 0, navAgent.velocity.z);
+        controlManager.VerticalInput = navAgent.velocity.z;
+        controlManager.HorizontalInput = navAgent.velocity.x;
         controlManager.NormalAttackInput = false;
         controlManager.ComboAttackInput = false;
 
-        if (dashing.isActiveAndEnabled && dashing.Ready)
-            dashing.Activate();
+        //if (dashing.isActiveAndEnabled && dashing.Ready)
+        //    dashing.Activate();
 
         if (!CloseRangeIncrement)
             currentState = EnemyState.RangedAttack;
@@ -148,7 +151,8 @@ public class FiniteStateMachine : MonoBehaviour
     void UpdateMeleeAttack()
     {
         navAgent.SetDestination(transform.position);
-        controlManager.MoveInput = new Vector3(navAgent.velocity.x, 0, navAgent.velocity.z);
+        controlManager.VerticalInput = navAgent.velocity.z;
+        controlManager.HorizontalInput = navAgent.velocity.x;
 
         if (meleeRangeTracker.ComboRange)
         {
@@ -168,7 +172,8 @@ public class FiniteStateMachine : MonoBehaviour
     void UpdateRangedAttack()
     {
         navAgent.SetDestination(transform.position);
-        controlManager.MoveInput = new Vector3(navAgent.velocity.x, 0, navAgent.velocity.z);
+        controlManager.VerticalInput = navAgent.velocity.z;
+        controlManager.HorizontalInput = navAgent.velocity.x;
 
         if (!InRangedDistance)
         {

@@ -87,7 +87,7 @@ public class PlayerRangedAttacking : MonoBehaviour
         weaponAudio.Play();
     }
 
-    public void Attack(bool combo = false)
+    public void Activate(bool combo = false)
     {
         this.combo = combo;
         attacking = true;

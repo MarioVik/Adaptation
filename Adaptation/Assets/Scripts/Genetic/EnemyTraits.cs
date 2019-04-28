@@ -102,7 +102,7 @@ public class EnemyTraits : MonoBehaviour
                 blockObject.SetActive(true);
                 break;
             case 'D':
-                GetComponent<EnemyDashing>().enabled = true;
+                GetComponent<DashingFeature>().enabled = true;
                 break;
             default:
                 throw new System.Exception("Enemy has unrecognized feature");

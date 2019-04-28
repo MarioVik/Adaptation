@@ -31,7 +31,7 @@ public class PlayerMeleeAttacking : MonoBehaviour
             weaponcollider.transform.localScale.z);
     }
 
-    public void Attack(bool combo = false)
+    public void Activate(bool combo = false)
     {
         this.combo = combo;
         attacking = true;
