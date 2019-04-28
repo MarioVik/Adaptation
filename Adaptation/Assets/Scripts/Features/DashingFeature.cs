@@ -24,6 +24,7 @@ public class DashingFeature : MonoBehaviour
     Material dashMaterial;
     Material[] normalMaterials;
     //Material[] currentMaterials;
+    Renderer[] renderers;
 
     float coolDown = 2f;
     float coolDownTimer;
@@ -99,26 +100,22 @@ public class DashingFeature : MonoBehaviour
 
     void ChangeAllMaterials(Material newMat)
     {
-        Renderer[] children;
-        children = GetComponentsInChildren<Renderer>();
+        renderers = GetComponentsInChildren<Renderer>();
 
-        normalMaterials = new Material[children.Length];
+        normalMaterials = new Material[renderers.Length];
 
-        for (int i = 0; i < children.Length; i++)
+        for (int i = 0; i < renderers.Length; i++)
         {
-            normalMaterials[i] = new Material(children[i].material);
-            children[i].material = newMat;
+            normalMaterials[i] = new Material(renderers[i].material);
+            renderers[i].material = newMat;
         }
     }
 
     void ChangeBackMaterials()
     {
-        Renderer[] children;
-        children = GetComponentsInChildren<Renderer>();
-
-        for (int i = 0; i < children.Length; i++)
+        for (int i = 0; i < renderers.Length; i++)
         {
-            children[i].material = new Material(normalMaterials[i]);
+            renderers[i].material = new Material(normalMaterials[i]);
         }
     }
 

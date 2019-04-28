@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class EnemyControlManager : MonoBehaviour
 {
+    // All input is controlled by the Finite State Machine
     public float VerticalInput { get; set; }
     public float HorizontalInput { get; set; }
     public bool NormalAttackInput { get; set; }
@@ -203,9 +204,10 @@ public class EnemyControlManager : MonoBehaviour
         if (dashing.Dashing)
         {
             targetSpeed = dashing.DashSpeed;
-            verticalMovement = dashVertical * camManager.transform.forward;
-            horizontalMovement = dashHorizontal * camManager.transform.right;
+            verticalMovement = dashVertical * transform.forward;
+            horizontalMovement = dashHorizontal * transform.right;
         }
+
 
         if (dashing.DashStop)
         {
@@ -222,9 +224,13 @@ public class EnemyControlManager : MonoBehaviour
 
         float pDelta = d;
 
-        if (canMove)
+        if (dashing.Dashing && canMove)
         {
             rigid.velocity = moveDirection;  //This controls the character movement.                  
+        }
+        if (dashing.DashStop)
+        {
+            rigid.velocity = Vector3.zero;
         }
 
         //This can control character's rotation.

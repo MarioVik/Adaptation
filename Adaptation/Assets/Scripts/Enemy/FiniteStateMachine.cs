@@ -111,6 +111,7 @@ public class FiniteStateMachine : MonoBehaviour
         controlManager.HorizontalInput = navAgent.velocity.x;
         controlManager.NormalAttackInput = false;
         controlManager.ComboAttackInput = false;
+        controlManager.FeatureInput = false;
 
         if (Input.GetKeyDown(KeyCode.O))
             currentState = EnemyState.Approach;
@@ -124,6 +125,17 @@ public class FiniteStateMachine : MonoBehaviour
         controlManager.HorizontalInput = navAgent.velocity.x;
         controlManager.NormalAttackInput = false;
         controlManager.ComboAttackInput = false;
+        controlManager.FeatureInput = false;
+
+        if (dashing.isActiveAndEnabled && dashing.Ready)
+        {
+            controlManager.FeatureInput = true;
+            navAgent.isStopped = true;
+        }
+        else
+        {
+            navAgent.isStopped = false;
+        }
 
         if (hasMelee && InMeleeDistance)
             currentState = EnemyState.MeleeAttack;
@@ -140,9 +152,17 @@ public class FiniteStateMachine : MonoBehaviour
         controlManager.HorizontalInput = navAgent.velocity.x;
         controlManager.NormalAttackInput = false;
         controlManager.ComboAttackInput = false;
+        controlManager.FeatureInput = false;
 
-        //if (dashing.isActiveAndEnabled && dashing.Ready)
-        //    dashing.Activate();
+        if (dashing.isActiveAndEnabled && dashing.Ready)
+        {
+            controlManager.FeatureInput = true;
+            navAgent.isStopped = true;
+        }
+        else
+        {
+            navAgent.isStopped = false;
+        }
 
         if (!CloseRangeIncrement)
             currentState = EnemyState.RangedAttack;
@@ -153,6 +173,7 @@ public class FiniteStateMachine : MonoBehaviour
         navAgent.SetDestination(transform.position);
         controlManager.VerticalInput = navAgent.velocity.z;
         controlManager.HorizontalInput = navAgent.velocity.x;
+        controlManager.FeatureInput = false;
 
         if (meleeRangeTracker.ComboRange)
         {
@@ -174,6 +195,7 @@ public class FiniteStateMachine : MonoBehaviour
         navAgent.SetDestination(transform.position);
         controlManager.VerticalInput = navAgent.velocity.z;
         controlManager.HorizontalInput = navAgent.velocity.x;
+        controlManager.FeatureInput = false;
 
         if (!InRangedDistance)
         {
