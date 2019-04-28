@@ -6,10 +6,8 @@ public class EnemyMeleeAttacking : MonoBehaviour
 {
     Collider weaponcollider;
 
-    public float Range { get { return range; } }
     int damage = 40;
     float speed = 1.0f;
-    float range = 10;
 
     AudioSource weaponAudio;
     float animationDuration;
@@ -18,6 +16,8 @@ public class EnemyMeleeAttacking : MonoBehaviour
     Animator anim;
 
     PlayerHealth playerHealth;
+    PlayerDashing playerDashing;
+    PlayerBlocking playerBlocking;
 
     bool attacking, combo;
 
@@ -30,12 +30,7 @@ public class EnemyMeleeAttacking : MonoBehaviour
     {
         speed += increase;
     }
-
-    //public void IncreaseAttackRate(float increase)
-    //{
-    //    timeBetweenAttacks -= increase;
-    //}
-
+    
     public void IncreaseAttackRange(float increase)
     {
         weaponcollider.transform.localScale = new Vector3(
@@ -58,6 +53,8 @@ public class EnemyMeleeAttacking : MonoBehaviour
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
+        playerDashing = player.GetComponent<PlayerDashing>();
+        playerBlocking = player.GetComponentInChildren<PlayerBlocking>();
     }
 
     public AnimationClip GetAnimationTime(string name)
@@ -132,8 +129,19 @@ public class EnemyMeleeAttacking : MonoBehaviour
     {
         if (!playerHealth.AlreadyHit)
         {
-            playerHealth.TakeDamage(damage);
             playerHealth.AlreadyHit = true;
+
+            if (playerDashing.isActiveAndEnabled && playerDashing.Dashing)
+                return;
+
+            if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+                return;
+
+            if (playerHealth.currentHealth > 0)
+            {
+                playerHealth.TakeDamage(damage);
+                GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
+            }
         }
         Debug.Log("Player hit");
     }

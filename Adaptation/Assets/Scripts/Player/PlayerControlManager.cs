@@ -6,25 +6,27 @@ using UnityEngine;
 public class PlayerControlManager : MonoBehaviour
 {
     public bool Dead { get; set; }
-    public bool MovementInput { get { return vertical != 0 || horizontal != 0; } }
+    public bool MovementInput { get { return verticalInput != 0 || horizontalInput != 0; } }
 
     [Header("Initialize")]
     public GameObject activeModel;  // defines the current active model.
     public string[] attacks;  // array of normal attacks in string.
 
+    float verticalInput;  // stores vertical input.
+    float horizontalInput; // stores horizontal input.
+    bool normalAttackInput;   //stores whether you do normal attack or not
+    bool comboAttackInput;       //stores whether you combo or not
+    bool featureInput;
 
-    [Header("Inputs")]
-    public float vertical;  // stores vertical input.
-    public float horizontal; // stores horizontal input.
+    public bool canMove;    //shows you can move or not
+
     public float moveAmount;    //shows the amount of movement from 0 to 1.
     public Vector3 moveDir;     //stores the moving vector value of main character.
 
     Vector3 veritcalMovement = Vector3.zero;
     Vector3 horizontalMovement = Vector3.zero;
 
-    //[Header("Stats")]
-    float moveSpeed = 6f;  //speed of running
-    float sprintSpeed = 9f;  //speed of sprinting(double time of running)
+    float moveSpeed = 9f;  //speed of running
     float rotateSpeed = 30f;   //speed of character's turning around    
 
     [Header("FeatureBehaviours")]
@@ -32,26 +34,13 @@ public class PlayerControlManager : MonoBehaviour
     PlayerMeleeAttacking playerMeleeAttacking;
     [SerializeField]
     PlayerRangedAttacking playerRangedAttacking;
-    bool hasMelee;
-    bool hasRanged;
+    bool hasMelee, hasRanged;
     TargetingHandler targeting;
 
     [SerializeField]
     PlayerBlocking playerBlocking;
     PlayerDashing playerDashing;
-    bool hasBlock;
-    bool hasDash;
-
-    [Header("States")]
-    public bool sprint;     //shows you are sprinting or not.
-                            //[HideInInspector]
-                            //public bool jump;       //stores whether you jump or not
-    [HideInInspector]
-    public bool normalAttack;   //stores whether you do normal attack or not
-    [HideInInspector]
-    public bool comboAttack;       //stores whether you combo or not
-    public bool canMove;    //shows you can move or not
-
+    bool hasBlock, hasDash;
 
     float fixedDelta;        //stores Time.fixedDeltaTime
     float delta;
@@ -63,13 +52,12 @@ public class PlayerControlManager : MonoBehaviour
     public void IncreaseMovementSpeed(float increase)
     {
         moveSpeed += increase;
-        sprintSpeed += increase;
     }
 
     void Start() // Initiallizing camera, animator, rigidboy
     {
         camManager = CameraManager.singleton;
-        camManager.Init(this.transform);
+        camManager.Init(transform);
         SetupAnimator();
         rigid = GetComponent<Rigidbody>();
 
@@ -118,16 +106,14 @@ public class PlayerControlManager : MonoBehaviour
         UpdateStates();   //Updating anything related to character's actions.         
     }
 
-
     void GetInput() //getting various inputs from keyboard or joypad.
     {
-        vertical = Input.GetAxis("Vertical");    //for getting vertical input.
-        horizontal = Input.GetAxis("Horizontal");    //for getting horizontal input.
-        sprint = true; /*Input.GetButton("SprintInput");*/      //for getting sprint input.
-        normalAttack = Input.GetButton("NormalAttack"); //for getting normal attack input.
-        comboAttack = Input.GetButton("ComboAttack");    //for getting combo attack input.
+        verticalInput = Input.GetAxis("Vertical");    //for getting vertical input.
+        horizontalInput = Input.GetAxis("Horizontal");    //for getting horizontal input.
+        normalAttackInput = Input.GetButton("NormalAttack"); //for getting normal attack input.
+        comboAttackInput = Input.GetButton("ComboAttack");    //for getting combo attack input.
+        
     }
-
 
     void UpdateStates() //updates character's various actions.
     {
@@ -160,11 +146,6 @@ public class PlayerControlManager : MonoBehaviour
 
         float targetSpeed = moveSpeed;  //set run speed as target speed.
 
-        if (sprint)
-        {
-            targetSpeed = sprintSpeed;    //set sprint speed as target speed.            
-        }
-
         if (playerBlocking.Blocking)
         {
             targetSpeed = 0;
@@ -180,8 +161,8 @@ public class PlayerControlManager : MonoBehaviour
             || (playerDashing.DashStart && playerDashing.Dashing))
         {
             //mixing camera rotation value to the character moving value.
-            veritcalMovement = vertical * camManager.transform.forward;
-            horizontalMovement = horizontal * camManager.transform.right;
+            veritcalMovement = verticalInput * camManager.transform.forward;
+            horizontalMovement = horizontalInput * camManager.transform.right;
         }
 
         //multiplying target speed and move amount.
@@ -191,24 +172,24 @@ public class PlayerControlManager : MonoBehaviour
         moveDir.y = rigid.velocity.y;
 
         //This is for limiting values from 0 to 1.
-        float m = Mathf.Abs(horizontal) + Mathf.Abs(vertical);
+        float m = Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput);
         moveAmount = Mathf.Clamp01(m);
 
-        if ((normalAttack || comboAttack) && canMove) // I clicked for attack when I can move around.
+        if ((normalAttackInput || comboAttackInput) && canMove) // I clicked for attack when I can move around.
         {
-            if (hasMelee && !hasRanged) playerMeleeAttacking.Attack(comboAttack);
-            if (hasRanged && !hasMelee) playerRangedAttacking.Attack(comboAttack);
+            if (hasMelee && !hasRanged) playerMeleeAttacking.Attack(comboAttackInput);
+            if (hasRanged && !hasMelee) playerRangedAttacking.Attack(comboAttackInput);
             if (!hasRanged && !hasMelee) throw new System.Exception("No attacks are available");
             if (hasRanged && hasMelee) throw new System.Exception("Error: both attacks are available");
 
             string targetAnim;
 
-            targetAnim = attacks[comboAttack ? 1 : 0];
+            targetAnim = attacks[comboAttackInput ? 1 : 0];
 
             anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.0 second.                 
 
-            normalAttack = false;
-            comboAttack = false;
+            normalAttackInput = false;
+            comboAttackInput = false;
         }
     }
 
@@ -251,12 +232,6 @@ public class PlayerControlManager : MonoBehaviour
 
     void HandleMovementAnimations()
     {
-        anim.SetBool("sprint", sprint);   //syncing sprint bool value to animator's "Sprint" value.           
-        if (moveAmount == 0)
-        {
-            anim.SetBool("sprint", false);
-        }
-
         anim.SetFloat("vertical", moveAmount, 0.2f, fixedDelta); //syncing moveAmount value to animator's "vertical" value.
     }
 

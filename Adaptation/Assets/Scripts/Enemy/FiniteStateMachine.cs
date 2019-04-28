@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum EnemyState { Idle, Approach, Withdraw, MeleeAttack, RangedAttack, Block, Dead, None };
+public enum EnemyState { Idle, Approach, Withdraw, MeleeAttack, RangedAttack, Block, Dead };
 
 public class FiniteStateMachine : MonoBehaviour
 {

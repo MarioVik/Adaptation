@@ -21,6 +21,11 @@ public class ProjectileBehaviour : MonoBehaviour
 
     Vector3 startPos;
 
+    // If user is enemy
+    PlayerHealth playerHealth;
+    PlayerDashing playerDashing;
+    PlayerBlocking playerBlocking;
+
     public void Initialize(EnemyRangedAttacking user, float speed, float range, int damage)
     {
         this.user = user;
@@ -29,6 +34,11 @@ public class ProjectileBehaviour : MonoBehaviour
         Quaternion originRotation = user.ShootOrigin.rotation;
 
         Initialize(originPosition, originRotation, speed, range, damage);
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
+        playerDashing = player.GetComponent<PlayerDashing>();
+        playerBlocking = player.GetComponentInChildren<PlayerBlocking>();
     }
 
     public void Initialize(PlayerRangedAttacking player, float speed, float range, int damage)
@@ -92,10 +102,19 @@ public class ProjectileBehaviour : MonoBehaviour
         {
             if (collision.collider.tag == "Player")
             {
-                PlayerHealth playerHealth = collision.collider.GetComponent<PlayerHealth>();
-                playerHealth.TakeDamage(damage);
-
                 Explode(collision);
+
+                if (playerDashing.isActiveAndEnabled && playerDashing.Dashing)
+                    return;
+
+                if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+                    return;
+
+                if (playerHealth.currentHealth > 0)
+                {
+                    playerHealth.TakeDamage(damage);
+                    user.GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
+                }
 
                 Debug.Log("Player hit");
             }

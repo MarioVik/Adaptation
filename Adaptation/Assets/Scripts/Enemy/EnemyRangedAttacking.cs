@@ -10,10 +10,9 @@ public class EnemyRangedAttacking : MonoBehaviour
     Transform shootOrigin;
 
     public Transform ShootOrigin { get { return shootOrigin; } }
-    public float Range { get { return range; } }
 
+    public float Range { get; private set; } = 8f;
     int damage = 40;
-    float range = 8f;
     float projectileSpeed = 10f;
     float attackSpeed = 1.0f;
 
@@ -40,7 +39,7 @@ public class EnemyRangedAttacking : MonoBehaviour
 
     public void IncreaseAttackRange(float increase)
     {
-        range += increase;
+        Range += increase;
     }
 
     private void Awake()
@@ -84,7 +83,7 @@ public class EnemyRangedAttacking : MonoBehaviour
     void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab);
-        projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, range, damage);
+        projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, Range, damage);
         weaponAudio.Play();
     }
 

@@ -118,11 +118,11 @@ public class PlayerDashing : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        if (Dashing)
-            transform.position += direction.normalized * DashSpeed * Time.deltaTime;
-    }
+    //private void FixedUpdate()
+    //{
+    //    if (Dashing)
+    //        transform.position += direction.normalized * DashSpeed * Time.deltaTime;
+    //}
 
     private void OnTriggerEnter(Collider other)
     {

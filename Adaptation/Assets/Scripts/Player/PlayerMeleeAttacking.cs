@@ -19,20 +19,9 @@ public class PlayerMeleeAttacking : MonoBehaviour
 
     bool attacking, combo;
 
-    public void IncreaseAttackDamage(int increase)
-    {
-        damage += increase;
-    }
+    public void IncreaseAttackDamage(int increase) => damage += increase;
 
-    public void IncreaseAttackSpeed(float increase)
-    {
-        speed += increase;
-    }
-
-    //public void IncreaseAttackRate(float increase)
-    //{
-    //    timeBetweenAttacks -= increase;
-    //}
+    public void IncreaseAttackSpeed(float increase) => speed += increase;
 
     public void IncreaseAttackRange(float increase)
     {
@@ -40,6 +29,28 @@ public class PlayerMeleeAttacking : MonoBehaviour
             weaponcollider.transform.localScale.x,
             weaponcollider.transform.localScale.y + increase,
             weaponcollider.transform.localScale.z);
+    }
+
+    public void Attack(bool combo = false)
+    {
+        this.combo = combo;
+        attacking = true;
+
+        weaponcollider.enabled = true;
+
+        weaponAudio.Play();
+
+        anim.speed = speed;
+
+        if (combo) animationDuration = comboClip.length;
+        else animationDuration = normalClip.length;
+
+        // Scaling to current speed
+        animationDuration /= speed;
+        // Cutting the duration time to 60% of the full clip length since clip includes some time margin
+        animationDuration *= 0.6f;
+
+        Debug.Log("Attack Enabled");
     }
 
     private void Awake()
@@ -95,28 +106,6 @@ public class PlayerMeleeAttacking : MonoBehaviour
                 Debug.Log("Attack Disabled");
             }
         }
-    }
-
-    public void Attack(bool combo = false)
-    {
-        this.combo = combo;
-        attacking = true;
-
-        weaponcollider.enabled = true;
-
-        weaponAudio.Play();
-
-        anim.speed = speed;
-
-        if (combo) animationDuration = comboClip.length;
-        else animationDuration = normalClip.length;
-
-        // Scaling to current speed
-        animationDuration /= speed;
-        // Cutting the duration time to 60% of the full clip length since clip includes some time margin
-        animationDuration *= 0.6f;
-
-        Debug.Log("Attack Enabled");
     }
 
     private void OnTriggerEnter(Collider other)

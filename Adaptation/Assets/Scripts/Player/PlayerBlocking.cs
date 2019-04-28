@@ -13,7 +13,7 @@ public class PlayerBlocking : MonoBehaviour
     Slider cooldownSlider;
 
     float coolDownTimer;
-    float coolDown = 5f;
+    float coolDown = 0f;
 
     float activeTimer = 0;
     float activeDuration = 5f;

@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace DM
 {
-
     public class AnimatorMatcher : MonoBehaviour
     {
         Animator anim;
@@ -57,7 +56,6 @@ namespace DM
             else
                 enemyControl.rigid.velocity = vPosition;
         }
-
 
     }
 }
