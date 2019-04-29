@@ -14,6 +14,8 @@ public class EnemyTraits : MonoBehaviour
 
     public bool Melee { get; private set; }
     public bool Ranged { get; private set; }
+    public bool Block { get; private set; }
+    public bool Dash { get; private set; }
 
     string[] traits;
     int individualNumber;
@@ -101,9 +103,11 @@ public class EnemyTraits : MonoBehaviour
                 break;
             case 'B':
                 blockObject.SetActive(true);
+                Block = true;
                 break;
             case 'D':
                 GetComponent<DashingFeature>().enabled = true;
+                Dash = true;
                 break;
             default:
                 throw new System.Exception("Enemy has unrecognized feature");

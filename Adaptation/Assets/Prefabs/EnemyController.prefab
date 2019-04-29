@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4793414793545048}
   - component: {fileID: 54557829503407068}
+  - component: {fileID: 4488853099409273497}
   - component: {fileID: 8025321324826217478}
   - component: {fileID: 6731381539057205646}
-  - component: {fileID: 4488853099409273497}
+  - component: {fileID: 7189790893491124847}
   m_Layer: 11
   m_Name: EnemyController
   m_TagString: Untagged
@@ -51,6 +52,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!195 &4488853099409273497
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467028744492758}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.3
+  m_Speed: 5
+  m_Acceleration: 10
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 1.3
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.1
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &8025321324826217478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,28 +112,20 @@ MonoBehaviour:
   meleeAttacking: {fileID: 8672751372468455041}
   rangedAttacking: {fileID: 8998885933963737106}
   blocking: {fileID: 3740758683100328238}
---- !u!195 &4488853099409273497
-NavMeshAgent:
+--- !u!136 &7189790893491124847
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1467028744492758}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.3
-  m_Speed: 3
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 1.3
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1.1
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!1 &1482526539980724
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +137,6 @@ GameObject:
   - component: {fileID: 4412919469045156}
   - component: {fileID: 95957857082640274}
   - component: {fileID: 7264941489651212705}
-  - component: {fileID: 5373813351277938820}
   - component: {fileID: 5748926288513601995}
   - component: {fileID: 114107903465912920}
   - component: {fileID: 9187460136877920544}
@@ -240,19 +254,6 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0.8, z: 0}
---- !u!135 &5373813351277938820
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482526539980724}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.8
   m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!82 &5748926288513601995
 AudioSource:
@@ -15626,6 +15627,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AttackArea
+      objectReference: {fileID: 0}
+    - target: {fileID: 8102284070730283477, guid: 4947b503cb72bb145b62689e78b84301,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 337579648173105202, guid: 4947b503cb72bb145b62689e78b84301,
         type: 3}

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour
 {
+    public bool ByPlayer { get { return user.IsPlayer; } }
+
     [SerializeField]
     GameObject effectPrefab;
     GameObject effectIntance;
@@ -79,14 +81,15 @@ public class ProjectileBehaviour : MonoBehaviour
             return;
         }
 
-        if (collision.collider.tag == "Projectile")
+        if (ByPlayer)
         {
-            Explode(collision);
-            return;
-        }
+            if (collision.collider.tag == "Projectile" &&
+                !collision.collider.GetComponent<ProjectileBehaviour>().ByPlayer)
+            {
+                Explode(collision);
+                return;
+            }
 
-        if (user.IsPlayer)
-        {
             if (collision.collider.tag == "Enemy")
             {
                 EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
@@ -99,6 +102,13 @@ public class ProjectileBehaviour : MonoBehaviour
         }
         else
         {
+            if (collision.collider.tag == "Projectile" &&
+                collision.collider.GetComponent<ProjectileBehaviour>().ByPlayer)
+            {
+                Explode(collision);
+                return;
+            }
+
             if (collision.collider.tag == "Player")
             {
                 Explode(collision);

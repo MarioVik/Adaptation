@@ -5,13 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - MeleeWeapon
-  - RangedWeapon
   - Ground
   - Projectile
   - Effect
   - Environment
-  - Block
+  - OuterProjectile
   layers:
   - Default
   - TransparentFX

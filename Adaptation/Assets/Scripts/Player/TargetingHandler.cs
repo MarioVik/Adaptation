@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TargetingHandler : MonoBehaviour
 {
-    public bool ActiveTarget => targetIndex != -1;
+    public bool ActiveTarget { get { return targetIndex != -1; } }
     public Vector3 TargetDirection { get; private set; }
 
     [SerializeField]

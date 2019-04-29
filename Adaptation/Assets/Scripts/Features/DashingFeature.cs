@@ -16,6 +16,7 @@ public class DashingFeature : MonoBehaviour
     public bool DashStop { get; private set; }
     public bool Dashing { get; private set; }
     public float DashSpeed { get; } = 30f;
+    public float Range { get { return dashDistance; } }
 
     [Header("For all users")]
     [SerializeField]
@@ -26,7 +27,11 @@ public class DashingFeature : MonoBehaviour
     //Material[] currentMaterials;
     Renderer[] renderers;
 
-    float coolDown = 2f;
+    // Only if user is enemy
+    EnemyHealth enemyHealth;
+    //
+
+    float coolDown = 5f;
     float coolDownTimer;
     float dashDistance = 10f;
 
@@ -58,6 +63,10 @@ public class DashingFeature : MonoBehaviour
         {
             cooldownSlider.maxValue = coolDown;
             cooldownSlider.value = coolDown;
+        }
+        else
+        {
+            enemyHealth = GetComponent<EnemyHealth>();
         }
 
         collider = GetComponent<Collider>();
@@ -95,7 +104,10 @@ public class DashingFeature : MonoBehaviour
         {
             cooldownSlider.value = coolDownTimer;
         }
-
+        else
+        {
+            enemyHealth.Dashing = Dashing;
+        }
     }
 
     void ChangeAllMaterials(Material newMat)

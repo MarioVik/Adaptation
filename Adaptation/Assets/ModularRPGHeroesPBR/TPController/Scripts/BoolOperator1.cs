@@ -11,8 +11,5 @@ public class BoolOperator1 : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {        
             animator.SetBool(boolName, status);
-            animator.ResetTrigger("combo");     //reseting combo trigger.
-            animator.ResetTrigger("roll");      //resetng roll trigger.
     }
-
 }

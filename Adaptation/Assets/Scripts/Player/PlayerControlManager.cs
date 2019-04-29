@@ -249,7 +249,7 @@ public class PlayerControlManager : MonoBehaviour
                 targetDir = transform.forward;
 
             Quaternion tr = Quaternion.LookRotation(targetDir);
-            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta * moveAmount * rotateSpeed);
+            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta * /*moveAmount * */rotateSpeed);
             transform.rotation = targetRotation;
         }
 

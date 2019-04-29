@@ -4,6 +4,8 @@ using UnityEngine.AI;
 public class EnemyHealth : MonoBehaviour
 {
     public bool AlreadyHit { get; set; }
+    public bool Dashing { private get; set; }
+    public bool Blocking { private get; set; }
 
     TargetingHandler targeting;
 
@@ -18,8 +20,6 @@ public class EnemyHealth : MonoBehaviour
     CapsuleCollider capsuleCollider;
     public bool IsDead { get; set; }
     bool isSinking;
-
-    bool blockEnabled;
 
     public void IncreaseHealth(int increase)
     {
@@ -50,7 +50,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int amount, Vector3 hitPoint)
     {
-        if (IsDead)
+        if (IsDead || Dashing || Blocking)
             return;
 
         enemyAudio.Play();

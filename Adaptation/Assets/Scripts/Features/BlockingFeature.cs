@@ -15,8 +15,12 @@ public class BlockingFeature : MonoBehaviour
     public bool BlockStop { get; private set; }
     public bool Blocking { get; private set; }
 
+    // Only if user is enemy
+    EnemyHealth enemyHealth;
+    //
+
     float coolDownTimer;
-    float coolDown = 0f;
+    float coolDown = 5f;
 
     float activeTimer = 0;
     float activeDuration = 5f;
@@ -44,6 +48,10 @@ public class BlockingFeature : MonoBehaviour
             cooldownSlider.maxValue = coolDown;
             cooldownSlider.value = coolDown;
         }
+        else
+        {
+            enemyHealth = GetComponentInParent<EnemyHealth>();
+        }
     }
 
     void Update()
@@ -65,6 +73,10 @@ public class BlockingFeature : MonoBehaviour
         if (isPlayer)
         {
             cooldownSlider.value = coolDownTimer;
+        }
+        else
+        {
+            enemyHealth.Blocking = Blocking;
         }
     }
 }

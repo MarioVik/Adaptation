@@ -164,6 +164,7 @@ public class EnemyControlManager : MonoBehaviour
             if (FeatureInput && canMove)
             {
                 blocking.Activate();
+                canMove = false;
                 anim.SetBool("blocking", true);
             }
         }
@@ -174,12 +175,14 @@ public class EnemyControlManager : MonoBehaviour
 
             if (!FeatureInput)
             {
+                canMove = true;
                 blocking.Deactivate();
             }
         }
 
         if (blocking.BlockStop)
         {
+            canMove = true;
             anim.SetBool("blocking", false);
         }
     }
@@ -196,6 +199,7 @@ public class EnemyControlManager : MonoBehaviour
                 dashVertical = VerticalInput;
                 dashHorizontal = HorizontalInput;
 
+                canMove = false;
                 dashing.Activate();
                 anim.SetBool("dashing", true);
             }
@@ -211,6 +215,8 @@ public class EnemyControlManager : MonoBehaviour
 
         if (dashing.DashStop)
         {
+            canMove = true;
+            targetSpeed = moveSpeed;
             anim.SetBool("dashing", false);
         }
     }
@@ -224,14 +230,14 @@ public class EnemyControlManager : MonoBehaviour
 
         float pDelta = d;
 
-        if (dashing.Dashing && canMove)
+        if (dashing.Dashing)
         {
             rigid.velocity = moveDirection;  //This controls the character movement.                  
         }
-        if (dashing.DashStop)
-        {
-            rigid.velocity = Vector3.zero;
-        }
+        //if (dashing.DashStop)
+        //{
+        //    rigid.velocity = Vector3.zero;
+        //}
 
         //This can control character's rotation.
         if (canMove)
