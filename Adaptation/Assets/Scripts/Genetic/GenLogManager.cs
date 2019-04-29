@@ -115,7 +115,7 @@ static public class GenLogManager
         StreamWriter writer = new StreamWriter(path, false);
         writer.Write(log);
         writer.Close();
-        AssetDatabase.ImportAsset(path);
+        //AssetDatabase.ImportAsset(path);
         if (logType == LogType.Individual) individualDetailsLog = new StringBuilder();
     }
 }

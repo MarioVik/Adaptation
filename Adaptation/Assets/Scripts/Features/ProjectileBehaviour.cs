@@ -79,6 +79,12 @@ public class ProjectileBehaviour : MonoBehaviour
             return;
         }
 
+        if (collision.collider.tag == "Projectile")
+        {
+            Explode(collision);
+            return;
+        }
+
         if (user.IsPlayer)
         {
             if (collision.collider.tag == "Enemy")

@@ -69,8 +69,10 @@ public class GenerationManager : MonoBehaviour
 
         if (!gameStarted)
         {
-            RandomizeGeneration();
-            individuals = GenFilesManager.LoadGeneration();
+            //RandomizeGeneration();
+            //individuals = GenFilesManager.LoadGeneration();
+            individuals = StringsToIndividuals(RandomizeGeneration());
+
             ResetVariables();
             Spawn(generationSize);
             gameStarted = true;
@@ -79,11 +81,25 @@ public class GenerationManager : MonoBehaviour
             && CurrentGeneration < TotalGenerations)
         {
 
-            CreateNextGeneration();
-            individuals = GenFilesManager.LoadGeneration();
+            //CreateNextGeneration();
+            //individuals = GenFilesManager.LoadGeneration();
+            individuals = StringsToIndividuals(CreateNextGeneration());
+
             ResetVariables();
             Spawn(generationSize);
         }
+    }
+
+    public List<Individual> StringsToIndividuals(List<string> stringList)
+    {
+        List<Individual> individualList = new List<Individual>();
+
+        foreach (string tempString in stringList)
+        {
+            individualList.Add(new Individual(tempString));
+        }
+
+        return individualList;
     }
 
     void ResetVariables()
@@ -114,7 +130,7 @@ public class GenerationManager : MonoBehaviour
         return potentialSpawn;
     }
 
-    void RandomizeGeneration()
+    List<string> RandomizeGeneration()
     {
         List<string> newGeneration = new List<string>();
         for (int i = 0; i < generationSize; i++)
@@ -136,14 +152,17 @@ public class GenerationManager : MonoBehaviour
             newGeneration.Add(newIndividual.ToString());
         }
         GenFilesManager.SaveGeneration(newGeneration);
+        return newGeneration;
     }
 
     /// <summary>
     /// Breeds a new generation and saves it as a .txt file 
     /// </summary>
-    void CreateNextGeneration()
+    List<string> CreateNextGeneration()
     {
-        GenFilesManager.SaveGeneration(BreedNewGeneration());
+        List<string> newGeneration = BreedNewGeneration();
+        GenFilesManager.SaveGeneration(newGeneration);
+        return newGeneration;
     }
 
     /// <summary>

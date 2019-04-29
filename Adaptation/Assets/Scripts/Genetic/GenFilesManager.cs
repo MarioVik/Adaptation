@@ -7,7 +7,7 @@ using UnityEngine;
 static public class GenFilesManager
 {
     //static public string DirectoryPath { get { return @"C:\Users\vikto\OneDrive\År3\Examensarbete\Adaptation\Adaptation\Assets\Generations\"; } }
-    static public string DirectoryPath { get { return @"Assets\Generations\"; } }
+    static public string DirectoryPath { get { return @"GeneticData\"; } }
     static public string PlayerFilename { get { return "PlayerTraits.txt"; } }
     static public string PlayerFilepath { get { return DirectoryPath + PlayerFilename; } }
     static public string EnemyFilename { get { return "Generation_" + GenerationManager.CurrentGeneration + ".txt"; } }
@@ -18,7 +18,7 @@ static public class GenFilesManager
         StreamWriter writer = new StreamWriter(PlayerFilepath);
         writer.WriteLine(playerTraits);
         writer.Close();
-        AssetDatabase.ImportAsset(PlayerFilepath);
+        //AssetDatabase.ImportAsset(PlayerFilepath);
     }
 
     static public void SaveGeneration(List<string> genToSave)
@@ -29,7 +29,7 @@ static public class GenFilesManager
             writer.WriteLine(tempString);
         }
         writer.Close();
-        AssetDatabase.ImportAsset(EnemyFilepath);
+        //AssetDatabase.ImportAsset(EnemyFilepath);
         //TextAsset asset = (TextAsset)Resources.Load(Filename);
     }
 

@@ -1,0 +1,7 @@
+
+Individual number: 0
+Damage done to player: 90
+Time spent alive: 30,5077
+Distance to player: 5,86734
+Fitness score: 96,45284
+
