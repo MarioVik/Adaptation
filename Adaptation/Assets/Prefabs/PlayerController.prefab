@@ -6232,6 +6232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82b93689990cf174aa713baf3dc6bbcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 1
   projectilePrefab: {fileID: 9123719742604949998, guid: 4bae05321835c1a4dbc9938853732528,
     type: 3}
   shootOrigin: {fileID: 4412919469045156}
@@ -6674,6 +6675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c77272cebcb676045abda2d9efa3469e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 1
 --- !u!82 &8035435853377647443
 AudioSource:
   m_ObjectHideFlags: 0

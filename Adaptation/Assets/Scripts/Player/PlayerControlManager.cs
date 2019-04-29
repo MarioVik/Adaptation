@@ -32,9 +32,9 @@ public class PlayerControlManager : MonoBehaviour
 
     [Header("FeatureBehaviours")]
     [SerializeField]
-    PlayerMeleeAttacking meleeAttacking;
+    MeleeAttackFeature meleeAttacking;
     [SerializeField]
-    PlayerRangedAttacking rangedAttacking;
+    RangedAttackFeature rangedAttacking;
     [SerializeField]
     BlockingFeature blocking;
     DashingFeature dashing;

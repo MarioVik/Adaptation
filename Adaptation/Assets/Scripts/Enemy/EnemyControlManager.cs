@@ -36,9 +36,9 @@ public class EnemyControlManager : MonoBehaviour
 
     [Header("FeatureBehaviours")]
     [SerializeField]
-    EnemyMeleeAttacking meleeAttacking;
+    MeleeAttackFeature meleeAttacking;
     [SerializeField]
-    EnemyRangedAttacking rangedAttacking;
+    RangedAttackFeature rangedAttacking;
     [SerializeField]
     BlockingFeature blocking;
     DashingFeature dashing;

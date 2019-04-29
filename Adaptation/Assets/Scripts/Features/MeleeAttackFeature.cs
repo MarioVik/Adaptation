@@ -2,8 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMeleeAttacking : MonoBehaviour
+public class MeleeAttackFeature : MonoBehaviour
 {
+    [SerializeField]
+    bool isPlayer;
+
+    // Only if user is player
+    List<EnemyHealth> hitEnemies;
+    //
+
+    // Only if user is enemy
+    PlayerHealth playerHealth;
+    DashingFeature playerDashing;
+    BlockingFeature playerBlocking;
+    //
+
     Collider weaponcollider;
 
     int damage = 40;
@@ -14,8 +27,6 @@ public class PlayerMeleeAttacking : MonoBehaviour
     AnimationClip normalClip, comboClip;
     float animationTimer = 0;
     Animator anim;
-
-    List<EnemyHealth> hitEnemies;
 
     bool attacking, combo;
 
@@ -65,7 +76,17 @@ public class PlayerMeleeAttacking : MonoBehaviour
         normalClip = GetAnimationTime("NormalAttack01_SwordShield");
         comboClip = GetAnimationTime("NormalAttack02_SwordShield");
 
-        hitEnemies = new List<EnemyHealth>();
+        if (isPlayer)
+        {
+            hitEnemies = new List<EnemyHealth>();
+        }
+        else
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            playerHealth = player.GetComponent<PlayerHealth>();
+            playerDashing = player.GetComponent<DashingFeature>();
+            playerBlocking = player.GetComponentInChildren<BlockingFeature>();
+        }
     }
 
     public AnimationClip GetAnimationTime(string name)
@@ -84,24 +105,37 @@ public class PlayerMeleeAttacking : MonoBehaviour
             animationTimer += Time.deltaTime;
             if (combo && animationTimer >= (animationDuration * 0.4f))
             {
-                foreach (EnemyHealth tempEnemy in hitEnemies)
-                    tempEnemy.AlreadyHit = false;
                 combo = false;
                 weaponAudio.Play();
+
+                if (isPlayer)
+                {
+                    foreach (EnemyHealth tempEnemy in hitEnemies)
+                        tempEnemy.AlreadyHit = false;
+                }
+                else
+                {
+                    playerHealth.AlreadyHit = false;
+                }
 
                 Debug.Log("Collider hits reset");
             }
             if (animationTimer >= animationDuration)
             {
                 animationTimer = 0;
-                attacking = false;
-
                 anim.speed = 1.0f;
-
+                attacking = false;
                 weaponcollider.enabled = false;
 
-                foreach (EnemyHealth tempEnemy in hitEnemies)
-                    tempEnemy.AlreadyHit = false;
+                if (isPlayer)
+                {
+                    foreach (EnemyHealth tempEnemy in hitEnemies)
+                        tempEnemy.AlreadyHit = false;
+                }
+                else
+                {
+                    playerHealth.AlreadyHit = false;
+                }
 
                 Debug.Log("Attack Disabled");
             }
@@ -110,10 +144,20 @@ public class PlayerMeleeAttacking : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
-        if (enemyHealth != null)
+        if (isPlayer)
         {
-            HitEnemy(enemyHealth, enemyHealth.transform.position);
+            EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                HitEnemy(enemyHealth, enemyHealth.transform.position);
+            }
+        }
+        else
+        {
+            if (other.tag == "Player")
+            {
+                HitPlayer();
+            }
         }
     }
 
@@ -124,7 +168,28 @@ public class PlayerMeleeAttacking : MonoBehaviour
             enemyHealth.TakeDamage(damage, hitPoint);
             hitEnemies.Add(enemyHealth);
             enemyHealth.AlreadyHit = true;
+            Debug.Log("Enemy hit");
         }
-        Debug.Log("Enemy hit");
+    }
+
+    private void HitPlayer()
+    {
+        if (!playerHealth.AlreadyHit)
+        {
+            playerHealth.AlreadyHit = true;
+
+            if (playerDashing.isActiveAndEnabled && playerDashing.Dashing)
+                return;
+
+            if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+                return;
+
+            if (playerHealth.currentHealth > 0)
+            {
+                playerHealth.TakeDamage(damage);
+                GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
+                Debug.Log("Player hit");
+            }
+        }
     }
 }

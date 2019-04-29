@@ -8,7 +8,7 @@ public class ProjectileBehaviour : MonoBehaviour
     GameObject effectPrefab;
     GameObject effectIntance;
 
-    MonoBehaviour user;
+    RangedAttackFeature user;
 
     [SerializeField]
     AudioClip explosionAudio;
@@ -21,37 +21,30 @@ public class ProjectileBehaviour : MonoBehaviour
 
     Vector3 startPos;
 
-    // If user is enemy
+    // Only if user is enemy
     PlayerHealth playerHealth;
     DashingFeature playerDashing;
     BlockingFeature playerBlocking;
 
-    public void Initialize(EnemyRangedAttacking user, float speed, float range, int damage)
+    public void Initialize(RangedAttackFeature user, float speed, float range, int damage)
     {
         this.user = user;
 
         Vector3 originPosition = user.ShootOrigin.position;
         Quaternion originRotation = user.ShootOrigin.rotation;
 
-        Initialize(originPosition, originRotation, speed, range, damage);
+        InitializeEffect(originPosition, originRotation, speed, range, damage);
 
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
-        playerDashing = player.GetComponent<DashingFeature>();
-        playerBlocking = player.GetComponentInChildren<BlockingFeature>();
+        if (!user.IsPlayer)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            playerHealth = player.GetComponent<PlayerHealth>();
+            playerDashing = player.GetComponent<DashingFeature>();
+            playerBlocking = player.GetComponentInChildren<BlockingFeature>();
+        }
     }
 
-    public void Initialize(PlayerRangedAttacking player, float speed, float range, int damage)
-    {
-        user = player;
-
-        Vector3 originPosition = player.ShootOrigin.position;
-        Quaternion originRotation = player.ShootOrigin.rotation;
-
-        Initialize(originPosition, originRotation, speed, range, damage);
-    }
-
-    private void Initialize(Vector3 originPosition, Quaternion originRotation, float speed, float range, int damage)
+    private void InitializeEffect(Vector3 originPosition, Quaternion originRotation, float speed, float range, int damage)
     {
         transform.SetPositionAndRotation(new Vector3(originPosition.x, originPosition.y + 1, originPosition.z), originRotation);
         transform.position += transform.forward;
@@ -65,7 +58,7 @@ public class ProjectileBehaviour : MonoBehaviour
         effectIntance = Instantiate(effectPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
     }
 
-    void Update()
+    private void Update()
     {
         transform.position += transform.forward.normalized * movementSpeed * Time.deltaTime;
         transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
@@ -78,7 +71,7 @@ public class ProjectileBehaviour : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag == "Environment")
         {
@@ -86,7 +79,7 @@ public class ProjectileBehaviour : MonoBehaviour
             return;
         }
 
-        if (user is PlayerRangedAttacking)
+        if (user.IsPlayer)
         {
             if (collision.collider.tag == "Enemy")
             {
@@ -98,7 +91,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 //Debug.Log("Enemy hit");
             }
         }
-        else if (user is EnemyRangedAttacking)
+        else
         {
             if (collision.collider.tag == "Player")
             {
@@ -121,7 +114,7 @@ public class ProjectileBehaviour : MonoBehaviour
         }
     }
 
-    void Sizzle()
+    private void Sizzle()
     {
         effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Sizzle(sizzleAudio);
 
@@ -129,7 +122,7 @@ public class ProjectileBehaviour : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void Explode(Collision collision)
+    private void Explode(Collision collision)
     {
         effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Explode(collision, explosionAudio);
 

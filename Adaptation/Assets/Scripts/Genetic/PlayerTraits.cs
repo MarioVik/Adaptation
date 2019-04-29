@@ -41,15 +41,15 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 'd':
                 if (Melee)
-                    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackDamage(5);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackDamage(5);
                 if (Ranged)
-                    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackDamage(5);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackDamage(5);
                 break;
             case 's':
                 if (Melee)
-                    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackSpeed(0.2f);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackSpeed(0.2f);
                 if (Ranged)
-                    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackSpeed(10f);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackSpeed(10f);
                 break;
             case 'o':
             //if (melee)
@@ -59,9 +59,9 @@ public class PlayerTraits : MonoBehaviour
             //break;
             case 'r':
                 if (Melee)
-                    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRange(0.2f);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackRange(0.2f);
                 if (Ranged)
-                    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRange(1f);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackRange(1f);
                 break;
             case 'm':
                 GetComponentInParent<PlayerControlManager>().IncreaseMovementSpeed(1.5f);

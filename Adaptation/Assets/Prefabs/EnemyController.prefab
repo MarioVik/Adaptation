@@ -70,8 +70,8 @@ MonoBehaviour:
   canMove: 0
   moveAmount: 0
   moveDirection: {x: 0, y: 0, z: 0}
-  meleeAttacking: {fileID: 6415002722224442686}
-  rangedAttacking: {fileID: 387577712262647932}
+  meleeAttacking: {fileID: 8672751372468455041}
+  rangedAttacking: {fileID: 8998885933963737106}
   blocking: {fileID: 3740758683100328238}
   rigid: {fileID: 0}
 --- !u!114 &6731381539057205646
@@ -86,8 +86,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e08bd1d4969093409acdcb90ee2276c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meleeAttacking: {fileID: 6415002722224442686}
-  rangedAttacking: {fileID: 387577712262647932}
+  meleeAttacking: {fileID: 8672751372468455041}
+  rangedAttacking: {fileID: 8998885933963737106}
   blocking: {fileID: 3740758683100328238}
 --- !u!195 &4488853099409273497
 NavMeshAgent:
@@ -127,7 +127,6 @@ GameObject:
   - component: {fileID: 114107903465912920}
   - component: {fileID: 9187460136877920544}
   - component: {fileID: 3094670902388871208}
-  - component: {fileID: 9102282930922546314}
   - component: {fileID: 4394633779200846915}
   m_Layer: 11
   m_Name: Character
@@ -394,20 +393,6 @@ MonoBehaviour:
   meleeObject: {fileID: 4933245001564209812}
   rangedObject: {fileID: 4523233905093845874}
   blockObject: {fileID: 5340979041483773908}
---- !u!114 &9102282930922546314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1482526539980724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e15099f5ee559584089d5851df572def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeBetweenAttacks: 0.5
-  attackDamage: 10
 --- !u!114 &4394633779200846915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5535,7 +5520,7 @@ GameObject:
   - component: {fileID: 3975093850490470383}
   - component: {fileID: 6338322603063312656}
   - component: {fileID: 1390674709}
-  - component: {fileID: 387577712262647932}
+  - component: {fileID: 8998885933963737106}
   m_Layer: 11
   m_Name: RangedWeapon
   m_TagString: RangedWeapon
@@ -5698,7 +5683,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &387577712262647932
+--- !u!114 &8998885933963737106
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5707,9 +5692,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4523233905093845874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b2bbc85785405146a4e92d97d0a62e3, type: 3}
+  m_Script: {fileID: 11500000, guid: 82b93689990cf174aa713baf3dc6bbcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
   projectilePrefab: {fileID: 9123719742604949998, guid: 4bae05321835c1a4dbc9938853732528,
     type: 3}
   shootOrigin: {fileID: 4412919469045156}
@@ -5961,9 +5947,9 @@ GameObject:
   - component: {fileID: 7862789972747875180}
   - component: {fileID: 3630794212907247779}
   - component: {fileID: 904422807208660398}
-  - component: {fileID: 6415002722224442686}
   - component: {fileID: 9027430951163542501}
   - component: {fileID: 8035435853377647443}
+  - component: {fileID: 8672751372468455041}
   m_Layer: 11
   m_Name: MeleeWeapon
   m_TagString: MeleeWeapon
@@ -6030,18 +6016,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6415002722224442686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4933245001564209812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0170d969be79ef4483b0b716ac7b539, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!136 &9027430951163542501
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6152,6 +6126,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8672751372468455041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4933245001564209812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77272cebcb676045abda2d9efa3469e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlayer: 0
 --- !u!1 &4978908168879848268
 GameObject:
   m_ObjectHideFlags: 0

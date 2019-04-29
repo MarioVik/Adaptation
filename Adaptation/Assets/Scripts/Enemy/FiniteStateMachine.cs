@@ -10,9 +10,9 @@ public class FiniteStateMachine : MonoBehaviour
     EnemyState currentState;
 
     [SerializeField]
-    EnemyMeleeAttacking meleeAttacking;
+    MeleeAttackFeature meleeAttacking;
     [SerializeField]
-    EnemyRangedAttacking rangedAttacking;
+    RangedAttackFeature rangedAttacking;
     [SerializeField]
     BlockingFeature blocking;
 
@@ -41,7 +41,14 @@ public class FiniteStateMachine : MonoBehaviour
     bool MidleRangeIncrement { get { return InRangedDistance && !FarRangeIncrement && DistanceToPlayer > rangedAttacking.Range / 3; } }
     bool CloseRangeIncrement { get { return InRangedDistance && !FarRangeIncrement && !MidleRangeIncrement; } }
 
-    bool stopped;
+    public void IncreaseMovementSpeed(float increase)
+    {
+        if (navAgent == null)
+            navAgent = GetComponent<NavMeshAgent>();
+
+        navAgent.acceleration += increase;
+        navAgent.speed += increase;
+    }
 
     void Start()
     {
@@ -105,7 +112,7 @@ public class FiniteStateMachine : MonoBehaviour
     void UpdateIdle()
     {
         navAgent.SetDestination(transform.position);
-        navAgent.isStopped = true;
+        navAgent.enabled = false;
 
         controlManager.VerticalInput = navAgent.velocity.z;
         controlManager.HorizontalInput = navAgent.velocity.x;
@@ -130,11 +137,11 @@ public class FiniteStateMachine : MonoBehaviour
         if (dashing.isActiveAndEnabled && dashing.Ready)
         {
             controlManager.FeatureInput = true;
-            navAgent.isStopped = true;
+            //navAgent.enabled = false;
         }
         else
         {
-            navAgent.isStopped = false;
+            //navAgent.enabled = true;
         }
 
         if (hasMelee && InMeleeDistance)
@@ -157,11 +164,11 @@ public class FiniteStateMachine : MonoBehaviour
         if (dashing.isActiveAndEnabled && dashing.Ready)
         {
             controlManager.FeatureInput = true;
-            navAgent.isStopped = true;
+            //navAgent.enabled = false;
         }
         else
         {
-            navAgent.isStopped = false;
+            //navAgent.enabled = true;
         }
 
         if (!CloseRangeIncrement)

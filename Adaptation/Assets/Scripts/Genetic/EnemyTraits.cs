@@ -56,15 +56,15 @@ public class EnemyTraits : MonoBehaviour
                 break;
             case 'd':
                 if (Melee)
-                    GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackDamage(5);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackDamage(5);
                 if (Ranged)
-                    GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackDamage(5);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackDamage(5);
                 break;
             case 's':
                 if (Melee)
-                    GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackSpeed(0.1f);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackSpeed(0.1f);
                 if (Ranged)
-                    GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackSpeed(10f);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackSpeed(10f);
                 break;
             //case 'o':
             //    if (melee)
@@ -74,12 +74,13 @@ public class EnemyTraits : MonoBehaviour
             //break;
             case 'r':
                 if (Melee)
-                    GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackRange(0.1f);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackRange(0.1f);
                 if (Ranged)
-                    GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRange(1f);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackRange(1f);
                 break;
             case 'm':
                 GetComponentInParent<EnemyControlManager>().IncreaseMovementSpeed(1.5f);
+                GetComponentInParent<FiniteStateMachine>().IncreaseMovementSpeed(1.5f);
                 break;
             default:
                 throw new System.Exception("Enemy has unrecognized attribute");

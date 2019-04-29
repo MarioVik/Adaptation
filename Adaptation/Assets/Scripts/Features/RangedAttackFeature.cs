@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRangedAttacking : MonoBehaviour
+public class RangedAttackFeature : MonoBehaviour
 {
+    public bool IsPlayer { get { return isPlayer; } }
+
+    [SerializeField]
+    bool isPlayer;
+
     [SerializeField]
     GameObject projectilePrefab;
     [SerializeField]
@@ -11,8 +16,8 @@ public class PlayerRangedAttacking : MonoBehaviour
 
     public Transform ShootOrigin { get { return shootOrigin; } }
 
+    public float Range { get; private set; } = 8f;
     int damage = 40;
-    float range = 8f;
     float projectileSpeed = 10f;
     float attackSpeed = 1.0f;
 
@@ -26,66 +31,11 @@ public class PlayerRangedAttacking : MonoBehaviour
 
     bool attacking, combo;
 
-    public void IncreaseAttackDamage(int increase)
-    {
-        damage += increase;
-    }
+    public void IncreaseAttackDamage(int increase) => damage += increase;
 
-    public void IncreaseAttackSpeed(float increase)
-    {
-        projectileSpeed += increase;
-        attackSpeed += (increase / 10);
-    }
+    public void IncreaseAttackSpeed(float increase) => projectileSpeed += increase;
 
-    public void IncreaseAttackRange(float increase)
-    {
-        range += increase;
-    }
-
-    private void Awake()
-    {
-        shootableMask = LayerMask.GetMask("Shootable");
-        weaponAudio = GetComponent<AudioSource>();
-
-        anim = GetComponentInParent<Animator>();
-        normalClip = GetAnimationTime("NormalAttack01_SwordShield");
-        comboClip = GetAnimationTime("NormalAttack02_SwordShield");
-    }
-
-    public AnimationClip GetAnimationTime(string name)
-    {
-        AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
-        foreach (AnimationClip clip in clips)
-            if (clip.name == name)
-                return clip;
-        throw new System.ArgumentNullException("No matching animation clip found for attack");
-    }
-
-    void Update()
-    {
-        if (attacking)
-        {
-            animationTimer += Time.deltaTime;
-            if (combo && animationTimer >= animationDuration / 2)
-            {
-                Shoot();
-                combo = false;
-            }
-            if (animationTimer >= animationDuration)
-            {
-                animationTimer = 0;
-                attacking = false;
-                anim.speed = 1.0f;
-            }
-        }
-    }
-
-    void Shoot()
-    {
-        GameObject projectile = Instantiate(projectilePrefab);
-        projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, range, damage);
-        weaponAudio.Play();
-    }
+    public void IncreaseAttackRange(float increase) => Range += increase;
 
     public void Activate(bool combo = false)
     {
@@ -104,5 +54,50 @@ public class PlayerRangedAttacking : MonoBehaviour
         animationDuration /= attackSpeed;
         // Cutting the duration time to 60% of the full clip length since clip includes some time margin
         animationDuration *= 0.6f;
+    }
+
+    private void Awake()
+    {
+        shootableMask = LayerMask.GetMask("Shootable");
+        weaponAudio = GetComponent<AudioSource>();
+
+        anim = GetComponentInParent<Animator>();
+        normalClip = GetAnimationTime("NormalAttack01_SwordShield");
+        comboClip = GetAnimationTime("NormalAttack02_SwordShield");
+    }
+
+    private AnimationClip GetAnimationTime(string name)
+    {
+        AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
+        foreach (AnimationClip clip in clips)
+            if (clip.name == name)
+                return clip;
+        throw new System.ArgumentNullException("No matching animation clip found for attack");
+    }
+
+    private void Update()
+    {
+        if (attacking)
+        {
+            animationTimer += Time.deltaTime;
+            if (combo && animationTimer >= animationDuration / 2)
+            {
+                Shoot();
+                combo = false;
+            }
+            if (animationTimer >= animationDuration)
+            {
+                animationTimer = 0;
+                attacking = false;
+                anim.speed = 1.0f;
+            }
+        }
+    }
+
+    private void Shoot()
+    {
+        GameObject projectile = Instantiate(projectilePrefab);
+        projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, Range, damage);
+        weaponAudio.Play();
     }
 }
