@@ -53,9 +53,19 @@ public class EnemyControlManager : MonoBehaviour
     public Rigidbody rigid;     //for caching Rigidbody component
     CameraManager camManager;   //for caching CameraManager script
 
-    public void IncreaseMovementSpeed(float increase)
+    public void IncreaseMovementSpeed(float increase) => moveSpeed += increase;
+
+    public void GetHit()
     {
-        moveSpeed += increase;
+        if (hasMelee && meleeAttacking.Attacking)
+        {
+            meleeAttacking.Disable();
+        }
+        else if (hasRanged && rangedAttacking.Attacking)
+        {
+            rangedAttacking.Disable();
+        }
+        anim.SetTrigger("hit");
     }
 
     void Start() // Initiallizing camera, animator, rigidboy

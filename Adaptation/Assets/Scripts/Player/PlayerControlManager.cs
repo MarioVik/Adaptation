@@ -51,6 +51,19 @@ public class PlayerControlManager : MonoBehaviour
 
     public void IncreaseMovementSpeed(float increase) => moveSpeed += increase;
 
+    public void GetHit()
+    {
+        if (hasMelee && meleeAttacking.Attacking)
+        {
+            meleeAttacking.Disable();
+        }
+        else if (hasRanged && rangedAttacking.Attacking)
+        {
+            rangedAttacking.Disable();
+        }
+        anim.SetTrigger("hit");
+    }
+
     void Start() // Initiallizing camera, animator, rigidboy
     {
         camManager = CameraManager.singleton;

@@ -76,9 +76,14 @@ public class EnemyTraits : MonoBehaviour
             //break;
             case 'r':
                 if (Melee)
+                {
                     GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackRange(0.1f);
+                    GetComponentInChildren<MeleeRangeTracker>().IncreaseRange(0.1f);
+                }
                 if (Ranged)
+                {
                     GetComponentInChildren<RangedAttackFeature>().IncreaseAttackRange(1f);
+                }
                 break;
             case 'm':
                 GetComponentInParent<EnemyControlManager>().IncreaseMovementSpeed(1.5f);

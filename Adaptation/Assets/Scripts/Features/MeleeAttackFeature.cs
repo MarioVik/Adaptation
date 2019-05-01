@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MeleeAttackFeature : MonoBehaviour
 {
+    public bool Attacking { get; private set; }
+
     [SerializeField]
     bool isPlayer;
 
@@ -28,7 +30,7 @@ public class MeleeAttackFeature : MonoBehaviour
     float animationTimer = 0;
     Animator anim;
 
-    bool attacking, combo;
+    bool combo;
 
     public void IncreaseAttackDamage(int increase) => damage += increase;
 
@@ -45,7 +47,7 @@ public class MeleeAttackFeature : MonoBehaviour
     public void Activate(bool combo = false)
     {
         this.combo = combo;
-        attacking = true;
+        Attacking = true;
 
         weaponcollider.enabled = true;
 
@@ -61,14 +63,16 @@ public class MeleeAttackFeature : MonoBehaviour
         // Cutting the duration time to 60% of the full clip length since clip includes some time margin
         animationDuration *= 0.6f;
 
-        Debug.Log("Attack Enabled");
+        anim.SetBool("attacking", Attacking);
+
+        //Debug.Log("Attack Enabled");
     }
 
-    public void Cancel()
+    public void Disable()
     {
         animationTimer = 0;
         anim.speed = 1.0f;
-        attacking = false;
+        Attacking = false;
         combo = false;
         weaponcollider.enabled = false;
 
@@ -81,6 +85,8 @@ public class MeleeAttackFeature : MonoBehaviour
         {
             playerHealth.AlreadyHit = false;
         }
+
+        anim.SetBool("attacking", Attacking);
     }
 
     private void Awake()
@@ -119,7 +125,7 @@ public class MeleeAttackFeature : MonoBehaviour
 
     void Update()
     {
-        if (attacking)
+        if (Attacking)
         {
             animationTimer += Time.deltaTime;
             if (combo && animationTimer >= (animationDuration * 0.4f))
@@ -137,26 +143,13 @@ public class MeleeAttackFeature : MonoBehaviour
                     playerHealth.AlreadyHit = false;
                 }
 
-                Debug.Log("Collider hits reset");
+                //Debug.Log("Collider hits reset");
             }
             if (animationTimer >= animationDuration)
             {
-                animationTimer = 0;
-                anim.speed = 1.0f;
-                attacking = false;
-                weaponcollider.enabled = false;
+                Disable();
 
-                if (isPlayer)
-                {
-                    foreach (EnemyHealth tempEnemy in hitEnemies)
-                        tempEnemy.AlreadyHit = false;
-                }
-                else
-                {
-                    playerHealth.AlreadyHit = false;
-                }
-
-                Debug.Log("Attack Disabled");
+                //Debug.Log("Attack Disabled");
             }
         }
     }
@@ -187,6 +180,7 @@ public class MeleeAttackFeature : MonoBehaviour
             enemyHealth.TakeDamage(damage, hitPoint);
             hitEnemies.Add(enemyHealth);
             enemyHealth.AlreadyHit = true;
+            enemyHealth.GetComponentInParent<EnemyControlManager>().GetHit();
             Debug.Log("Enemy hit");
         }
     }
@@ -207,6 +201,7 @@ public class MeleeAttackFeature : MonoBehaviour
             {
                 playerHealth.TakeDamage(damage);
                 GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
+                playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
                 Debug.Log("Player hit");
             }
         }

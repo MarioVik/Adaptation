@@ -9,6 +9,11 @@ public class MeleeRangeDetection : MonoBehaviour
 
     MeleeRangeTracker trackerInParent;
 
+    public void IncreaseRange(float increase)
+    {
+        GetComponent<CapsuleCollider>().height += increase;
+    }
+
     private void Start()
     {
         trackerInParent = GetComponentInParent<MeleeRangeTracker>();

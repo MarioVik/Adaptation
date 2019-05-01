@@ -14,4 +14,11 @@ public class MeleeRangeTracker : MonoBehaviour
     public void DecrementNormal() => collidersInNormalRange--;
     public void IncrementCombo() => collidersInComboRange++;
     public void DecrementCombo() => collidersInComboRange--;
+
+    public void IncreaseRange(float increase)
+    {
+        MeleeRangeDetection[] children = GetComponentsInChildren<MeleeRangeDetection>();
+        foreach (MeleeRangeDetection child in children)
+            child.IncreaseRange(increase);
+    }
 }

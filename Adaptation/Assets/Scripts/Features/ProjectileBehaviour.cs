@@ -108,6 +108,7 @@ public class ProjectileBehaviour : MonoBehaviour
             {
                 EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
                 enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
+                enemyHealth.GetComponentInParent<EnemyControlManager>().GetHit();
 
                 outerBehaviour.Clear();
                 Explode(collision);
@@ -138,6 +139,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 {
                     playerHealth.TakeDamage(damage);
                     user.GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
+                    playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
                 }
 
                 Debug.Log("Player hit");

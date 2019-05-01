@@ -54,7 +54,6 @@ public class EnemyHealth : MonoBehaviour
             return;
 
         enemyAudio.Play();
-        anim.SetTrigger("hit");
 
         currentHealth -= amount;
 

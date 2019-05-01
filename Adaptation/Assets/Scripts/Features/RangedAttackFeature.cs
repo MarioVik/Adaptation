@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RangedAttackFeature : MonoBehaviour
 {
+    public bool Attacking { get; private set; }
+
     public bool IsPlayer { get { return isPlayer; } }
 
     [SerializeField]
@@ -29,7 +31,7 @@ public class RangedAttackFeature : MonoBehaviour
     float animationTimer = 0;
     Animator anim;
 
-    bool attacking, combo;
+    bool combo;
 
     public void IncreaseAttackDamage(int increase) => damage += increase;
 
@@ -40,7 +42,7 @@ public class RangedAttackFeature : MonoBehaviour
     public void Activate(bool combo = false)
     {
         this.combo = combo;
-        attacking = true;
+        Attacking = true;
 
         float delay = 0.2f / attackSpeed;
         Invoke("Shoot", delay);
@@ -54,14 +56,18 @@ public class RangedAttackFeature : MonoBehaviour
         animationDuration /= attackSpeed;
         // Cutting the duration time to 60% of the full clip length since clip includes some time margin
         animationDuration *= 0.6f;
+
+        anim.SetBool("attacking", Attacking);
     }
 
-    public void Cancel()
+    public void Disable()
     {
         animationTimer = 0;
-        attacking = false;
+        Attacking = false;
         combo = false;
         anim.speed = 1.0f;
+
+        anim.SetBool("attacking", Attacking);
     }
 
     private void Awake()
@@ -85,7 +91,7 @@ public class RangedAttackFeature : MonoBehaviour
 
     private void Update()
     {
-        if (attacking)
+        if (Attacking)
         {
             animationTimer += Time.deltaTime;
             if (combo && animationTimer >= animationDuration / 2)
@@ -95,9 +101,7 @@ public class RangedAttackFeature : MonoBehaviour
             }
             if (animationTimer >= animationDuration)
             {
-                animationTimer = 0;
-                attacking = false;
-                anim.speed = 1.0f;
+                Disable();
             }
         }
     }
