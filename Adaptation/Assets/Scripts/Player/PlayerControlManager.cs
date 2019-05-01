@@ -201,6 +201,7 @@ public class PlayerControlManager : MonoBehaviour
                 dashVertical = verticalInput;
                 dashHorizontal = horizontalInput;
 
+                canMove = false;
                 dashing.Activate();
                 anim.SetBool("dashing", true);
             }
@@ -215,6 +216,7 @@ public class PlayerControlManager : MonoBehaviour
 
         if (dashing.DashStop)
         {
+            canMove = true;
             anim.SetBool("dashing", false);
         }
     }
@@ -226,7 +228,7 @@ public class PlayerControlManager : MonoBehaviour
 
         float pDelta = d;
 
-        if (canMove)
+        if (canMove || dashing.Dashing)
         {
             rigid.velocity = moveDirection;  //This controls the character movement.                  
         }

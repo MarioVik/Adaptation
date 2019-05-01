@@ -64,6 +64,25 @@ public class MeleeAttackFeature : MonoBehaviour
         Debug.Log("Attack Enabled");
     }
 
+    public void Cancel()
+    {
+        animationTimer = 0;
+        anim.speed = 1.0f;
+        attacking = false;
+        combo = false;
+        weaponcollider.enabled = false;
+
+        if (isPlayer)
+        {
+            foreach (EnemyHealth tempEnemy in hitEnemies)
+                tempEnemy.AlreadyHit = false;
+        }
+        else
+        {
+            playerHealth.AlreadyHit = false;
+        }
+    }
+
     private void Awake()
     {
         weaponAudio = GetComponent<AudioSource>();

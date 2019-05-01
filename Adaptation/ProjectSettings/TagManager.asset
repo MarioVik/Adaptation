@@ -10,6 +10,9 @@ TagManager:
   - Effect
   - Environment
   - OuterProjectile
+  - LeftHand
+  - EnemyController
+  - PlayerController
   layers:
   - Default
   - TransparentFX

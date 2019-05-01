@@ -19,9 +19,9 @@ public class MeleeRangeDetection : MonoBehaviour
         if (other.tag == "Player")
         {
             if (combo)
-                trackerInParent.CollidersInComboRange++;
+                trackerInParent.IncrementCombo();
             else
-                trackerInParent.CollidersInNormalRange++;
+                trackerInParent.IncrementNormal(); ;
         }
     }
 
@@ -30,9 +30,9 @@ public class MeleeRangeDetection : MonoBehaviour
         if (other.tag == "Player")
         {
             if (combo)
-                trackerInParent.CollidersInComboRange--;
+                trackerInParent.DecrementCombo();
             else
-                trackerInParent.CollidersInNormalRange--;
+                trackerInParent.DecrementNormal();
         }
     }
 }

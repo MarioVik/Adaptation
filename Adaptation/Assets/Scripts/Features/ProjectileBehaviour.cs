@@ -18,10 +18,13 @@ public class ProjectileBehaviour : MonoBehaviour
     AudioClip sizzleAudio;
 
     float rotationSpeed = 100;
-    float movementSpeed, range;
+    float speed, range;
     int damage;
 
     Vector3 startPos;
+
+    //Only if user is player
+    OuterProjectileBehaviour outerBehaviour;
 
     // Only if user is enemy
     PlayerHealth playerHealth;
@@ -31,11 +34,13 @@ public class ProjectileBehaviour : MonoBehaviour
     public void Initialize(RangedAttackFeature user, float speed, float range, int damage)
     {
         this.user = user;
+        this.speed = speed;
+        this.range = range;
+        this.damage = damage;
 
         Vector3 originPosition = user.ShootOrigin.position;
         Quaternion originRotation = user.ShootOrigin.rotation;
-
-        InitializeEffect(originPosition, originRotation, speed, range, damage);
+        InitializeEffect(originPosition, originRotation);
 
         if (!user.IsPlayer)
         {
@@ -43,17 +48,19 @@ public class ProjectileBehaviour : MonoBehaviour
             playerHealth = player.GetComponent<PlayerHealth>();
             playerDashing = player.GetComponent<DashingFeature>();
             playerBlocking = player.GetComponentInChildren<BlockingFeature>();
+
+            GetComponentInChildren<OuterProjectileBehaviour>().gameObject.SetActive(false);
+        }
+        else
+        {
+            outerBehaviour = GetComponentInChildren<OuterProjectileBehaviour>();
         }
     }
 
-    private void InitializeEffect(Vector3 originPosition, Quaternion originRotation, float speed, float range, int damage)
+    private void InitializeEffect(Vector3 originPosition, Quaternion originRotation)
     {
         transform.SetPositionAndRotation(new Vector3(originPosition.x, originPosition.y + 1, originPosition.z), originRotation);
         transform.position += transform.forward;
-
-        movementSpeed = speed;
-        this.range = range;
-        this.damage = damage;
 
         startPos = transform.position;
 
@@ -62,13 +69,15 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void Update()
     {
-        transform.position += transform.forward.normalized * movementSpeed * Time.deltaTime;
+        transform.position += transform.forward.normalized * speed * Time.deltaTime;
         transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
 
         effectIntance.transform.SetPositionAndRotation(new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
 
         if (Vector3.Distance(startPos, transform.position) >= range)
         {
+            if (ByPlayer)
+                outerBehaviour.Clear();
             Sizzle();
         }
     }
@@ -77,15 +86,20 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         if (collision.collider.tag == "Environment")
         {
+            if (ByPlayer)
+                outerBehaviour.Clear();
             Sizzle();
             return;
         }
 
         if (ByPlayer)
         {
+            ProjectileBehaviour otherBehaviour = collision.collider.GetComponent<ProjectileBehaviour>();
+
             if (collision.collider.tag == "Projectile" &&
-                !collision.collider.GetComponent<ProjectileBehaviour>().ByPlayer)
+                !otherBehaviour.ByPlayer)
             {
+                outerBehaviour.Clear();
                 Explode(collision);
                 return;
             }
@@ -95,6 +109,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
                 enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
 
+                outerBehaviour.Clear();
                 Explode(collision);
 
                 //Debug.Log("Enemy hit");

@@ -143,7 +143,7 @@ public class GenerationManager : MonoBehaviour
             }
             newIndividual.Append('|');
 
-            newIndividual.Append("RB");
+            newIndividual.Append("MB");
             //for (int j = 0; j < features; j++)
             //{
             //    newIndividual.Append(RandomFeature);

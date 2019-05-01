@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class MeleeRangeTracker : MonoBehaviour
 {
-    public bool NormalRange { get { return CollidersInNormalRange > 0; } }
-    public bool ComboRange { get { return CollidersInComboRange > 0; } }
+    public bool NormalRange { get { return collidersInNormalRange > 0; } }
+    public bool ComboRange { get { return collidersInComboRange > 0; } }
 
-    public int CollidersInNormalRange { get; set; }
-    public int CollidersInComboRange { get; set; }
+    int collidersInNormalRange = 0;
+    int collidersInComboRange = 0;
 
-    private void Awake()
-    {
-        CollidersInNormalRange = 0;
-        CollidersInComboRange = 0;
-    }
+    public void IncrementNormal() => collidersInNormalRange++;
+    public void DecrementNormal() => collidersInNormalRange--;
+    public void IncrementCombo() => collidersInComboRange++;
+    public void DecrementCombo() => collidersInComboRange--;
 }

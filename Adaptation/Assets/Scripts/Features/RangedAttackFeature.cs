@@ -56,6 +56,14 @@ public class RangedAttackFeature : MonoBehaviour
         animationDuration *= 0.6f;
     }
 
+    public void Cancel()
+    {
+        animationTimer = 0;
+        attacking = false;
+        combo = false;
+        anim.speed = 1.0f;
+    }
+
     private void Awake()
     {
         shootableMask = LayerMask.GetMask("Shootable");

@@ -29,7 +29,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Awake()
     {
-        targeting = GameObject.FindGameObjectWithTag("GameController").GetComponent<TargetingHandler>();
+        targeting = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<TargetingHandler>();
 
         anim = GetComponent<Animator>();
         enemyAudio = GetComponent<AudioSource>();

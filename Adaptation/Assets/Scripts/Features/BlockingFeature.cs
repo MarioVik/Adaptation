@@ -20,7 +20,7 @@ public class BlockingFeature : MonoBehaviour
     //
 
     float coolDownTimer;
-    float coolDown = 5f;
+    float coolDown = 3f;
 
     float activeTimer = 0;
     float activeDuration = 5f;
