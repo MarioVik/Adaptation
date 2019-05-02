@@ -55,9 +55,10 @@ public class RangedAttackFeature : MonoBehaviour
         // Scaling to current speed
         animationDuration /= attackSpeed;
         // Cutting the duration time to 60% of the full clip length since clip includes some time margin
-        animationDuration *= 0.6f;
+        //animationDuration *= 0.6f;
 
         anim.SetBool("attacking", Attacking);
+        anim.SetBool("combo", combo);
     }
 
     public void Disable()
@@ -68,6 +69,7 @@ public class RangedAttackFeature : MonoBehaviour
         anim.speed = 1.0f;
 
         anim.SetBool("attacking", Attacking);
+        anim.SetBool("combo", combo);
     }
 
     private void Awake()
@@ -94,7 +96,7 @@ public class RangedAttackFeature : MonoBehaviour
         if (Attacking)
         {
             animationTimer += Time.deltaTime;
-            if (combo && animationTimer >= animationDuration / 2)
+            if (combo && animationTimer >= (animationDuration * 0.45f))
             {
                 Shoot();
                 combo = false;

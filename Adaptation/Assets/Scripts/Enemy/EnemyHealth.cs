@@ -3,9 +3,8 @@ using UnityEngine.AI;
 
 public class EnemyHealth : MonoBehaviour
 {
+    public bool IsDead { get; private set; }
     public bool AlreadyHit { get; set; }
-    public bool Dashing { private get; set; }
-    public bool Blocking { private get; set; }
 
     TargetingHandler targeting;
 
@@ -18,7 +17,6 @@ public class EnemyHealth : MonoBehaviour
     AudioSource enemyAudio;
     ParticleSystem hitParticles;
     CapsuleCollider capsuleCollider;
-    public bool IsDead { get; set; }
     bool isSinking;
 
     public void IncreaseHealth(int increase)
@@ -50,7 +48,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int amount, Vector3 hitPoint)
     {
-        if (IsDead || Dashing || Blocking)
+        if (IsDead)
             return;
 
         enemyAudio.Play();
@@ -74,7 +72,6 @@ public class EnemyHealth : MonoBehaviour
 
         capsuleCollider.isTrigger = true;
 
-        anim.SetTrigger("die");
         enemyAudio.clip = deathClip;
         enemyAudio.Play();
 

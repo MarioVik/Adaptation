@@ -74,9 +74,5 @@ public class BlockingFeature : MonoBehaviour
         {
             cooldownSlider.value = coolDownTimer;
         }
-        else
-        {
-            enemyHealth.Blocking = Blocking;
-        }
     }
 }

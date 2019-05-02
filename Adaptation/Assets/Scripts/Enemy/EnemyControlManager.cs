@@ -51,7 +51,6 @@ public class EnemyControlManager : MonoBehaviour
     Animator anim;      //for caching Animator component
     [HideInInspector]
     public Rigidbody rigid;     //for caching Rigidbody component
-    CameraManager camManager;   //for caching CameraManager script
 
     public void IncreaseMovementSpeed(float increase) => moveSpeed += increase;
 
@@ -65,7 +64,11 @@ public class EnemyControlManager : MonoBehaviour
         {
             rangedAttacking.Disable();
         }
-        anim.SetTrigger("hit");
+
+        if (Dead)
+            anim.SetTrigger("die");
+        else
+            anim.SetTrigger("hit");
     }
 
     void Start() // Initiallizing camera, animator, rigidboy
@@ -151,19 +154,22 @@ public class EnemyControlManager : MonoBehaviour
 
     void UpdateAttack()
     {
-        if ((NormalAttackInput || ComboAttackInput) && canMove) // I clicked for attack when I can move around.
+        if ((hasMelee && !meleeAttacking.Attacking) || hasRanged && !rangedAttacking.Attacking)
         {
-            if (!hasRanged && !hasMelee) throw new System.Exception("No attacks are available");
-            if (hasRanged && hasMelee) throw new System.Exception("Error: both attacks are available");
+            if ((NormalAttackInput || ComboAttackInput) && canMove) // I clicked for attack when I can move around.
+            {
+                if (!hasRanged && !hasMelee) throw new System.Exception("No attacks are available");
+                if (hasRanged && hasMelee) throw new System.Exception("Error: both attacks are available");
 
-            if (hasMelee && !hasRanged) meleeAttacking.Activate(ComboAttackInput);
-            if (hasRanged && !hasMelee) rangedAttacking.Activate(ComboAttackInput);
+                if (hasMelee && !hasRanged) meleeAttacking.Activate(ComboAttackInput);
+                if (hasRanged && !hasMelee) rangedAttacking.Activate(ComboAttackInput);
 
-            string targetAnim = attacks[ComboAttackInput ? 1 : 0];
-            anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.0 second.                 
+                string targetAnim = attacks[ComboAttackInput ? 1 : 0];
+                anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.0 second.
 
-            NormalAttackInput = false;
-            ComboAttackInput = false;
+                NormalAttackInput = false;
+                ComboAttackInput = false;
+            }
         }
     }
 
@@ -174,7 +180,6 @@ public class EnemyControlManager : MonoBehaviour
             if (FeatureInput && canMove)
             {
                 blocking.Activate();
-                canMove = false;
                 anim.SetBool("blocking", true);
             }
         }
@@ -185,14 +190,12 @@ public class EnemyControlManager : MonoBehaviour
 
             if (!FeatureInput)
             {
-                canMove = true;
                 blocking.Deactivate();
             }
         }
 
         if (blocking.BlockStop)
         {
-            canMove = true;
             anim.SetBool("blocking", false);
         }
     }
@@ -209,7 +212,6 @@ public class EnemyControlManager : MonoBehaviour
                 dashVertical = VerticalInput;
                 dashHorizontal = HorizontalInput;
 
-                canMove = false;
                 dashing.Activate();
                 anim.SetBool("dashing", true);
             }
@@ -225,7 +227,6 @@ public class EnemyControlManager : MonoBehaviour
 
         if (dashing.DashStop)
         {
-            canMove = true;
             targetSpeed = moveSpeed;
             anim.SetBool("dashing", false);
         }

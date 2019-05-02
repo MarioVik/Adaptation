@@ -5,6 +5,8 @@ using UnityEngine;
 public class MeleeRangeDetection : MonoBehaviour
 {
     [SerializeField]
+    bool IsPlayer;
+    [SerializeField]
     bool combo;
 
     MeleeRangeTracker trackerInParent;
@@ -21,7 +23,7 @@ public class MeleeRangeDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if ((IsPlayer && other.tag == "Enemy") || (!IsPlayer && other.tag == "Player"))
         {
             if (combo)
                 trackerInParent.IncrementCombo();
@@ -32,7 +34,7 @@ public class MeleeRangeDetection : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if ((IsPlayer && other.tag == "Enemy") || (!IsPlayer && other.tag == "Player"))
         {
             if (combo)
                 trackerInParent.DecrementCombo();

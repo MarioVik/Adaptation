@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4488853099409273497}
   - component: {fileID: 8025321324826217478}
   - component: {fileID: 6731381539057205646}
-  - component: {fileID: 7189790893491124847}
   m_Layer: 11
   m_Name: EnemyController
   m_TagString: EnemyController
@@ -112,20 +111,6 @@ MonoBehaviour:
   meleeAttacking: {fileID: 8672751372468455041}
   rangedAttacking: {fileID: 8998885933963737106}
   blocking: {fileID: 3740758683100328238}
---- !u!136 &7189790893491124847
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1467028744492758}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.8, z: 0}
 --- !u!1 &1482526539980724
 GameObject:
   m_ObjectHideFlags: 0
@@ -15628,11 +15613,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AttackArea
       objectReference: {fileID: 0}
-    - target: {fileID: 8102284070730283477, guid: 4947b503cb72bb145b62689e78b84301,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 337579648173105202, guid: 4947b503cb72bb145b62689e78b84301,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15687,11 +15667,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 927713646708841674, guid: 4947b503cb72bb145b62689e78b84301,
-        type: 3}
-      propertyPath: m_Height
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4947b503cb72bb145b62689e78b84301, type: 3}

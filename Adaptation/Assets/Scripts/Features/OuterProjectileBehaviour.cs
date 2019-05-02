@@ -32,9 +32,9 @@ public class OuterProjectileBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "EnemyController")
+        if (other.tag == "Enemy")
         {
-            FiniteStateMachine fsm = other.GetComponent<FiniteStateMachine>();
+            FiniteStateMachine fsm = other.GetComponentInParent<FiniteStateMachine>();
 
             if (!InContact(fsm))
             {
@@ -46,9 +46,9 @@ public class OuterProjectileBehaviour : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "EnemyController")
+        if (other.tag == "Enemy")
         {
-            FiniteStateMachine fsm = other.GetComponent<FiniteStateMachine>();
+            FiniteStateMachine fsm = other.GetComponentInParent<FiniteStateMachine>();
 
             for (int i = 0; i < enemiesInContact.Count; i++)
             {

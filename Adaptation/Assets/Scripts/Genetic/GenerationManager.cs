@@ -64,7 +64,7 @@ public class GenerationManager : MonoBehaviour
 
     void Update()
     {
-        if (playerHealth.currentHealth <= 0)
+        if (playerHealth.IsDead)
             return;
 
         if (!gameStarted)

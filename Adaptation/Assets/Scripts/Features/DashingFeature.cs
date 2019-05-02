@@ -104,10 +104,6 @@ public class DashingFeature : MonoBehaviour
         {
             cooldownSlider.value = coolDownTimer;
         }
-        else
-        {
-            enemyHealth.Dashing = Dashing;
-        }
     }
 
     void ChangeAllMaterials(Material newMat)

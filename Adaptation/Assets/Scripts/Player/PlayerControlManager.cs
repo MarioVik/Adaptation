@@ -61,7 +61,11 @@ public class PlayerControlManager : MonoBehaviour
         {
             rangedAttacking.Disable();
         }
-        anim.SetTrigger("hit");
+
+        if (Dead)
+            anim.SetTrigger("die");
+        else
+            anim.SetTrigger("hit");
     }
 
     void Start() // Initiallizing camera, animator, rigidboy
@@ -159,19 +163,22 @@ public class PlayerControlManager : MonoBehaviour
 
     void UpdateAttack()
     {
-        if ((normalAttackInput || comboAttackInput) && canMove) // I clicked for attack when I can move around.
+        if ((hasMelee && !meleeAttacking.Attacking) || (hasRanged && !rangedAttacking.Attacking))
         {
-            if (!hasRanged && !hasMelee) throw new System.Exception("No attacks are available");
-            if (hasRanged && hasMelee) throw new System.Exception("Error: both attacks are available");
+            if ((normalAttackInput || comboAttackInput) && canMove) // I clicked for attack when I can move around.
+            {
+                if (!hasRanged && !hasMelee) throw new System.Exception("No attacks are available");
+                if (hasRanged && hasMelee) throw new System.Exception("Error: both attacks are available");
 
-            if (hasMelee && !hasRanged) meleeAttacking.Activate(comboAttackInput);
-            if (hasRanged && !hasMelee) rangedAttacking.Activate(comboAttackInput);
+                if (hasMelee && !hasRanged) meleeAttacking.Activate(comboAttackInput);
+                if (hasRanged && !hasMelee) rangedAttacking.Activate(comboAttackInput);
 
-            string targetAnim = attacks[comboAttackInput ? 1 : 0];
-            anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.0 second.                 
+                string targetAnim = attacks[comboAttackInput ? 1 : 0];
+                anim.CrossFade(targetAnim, 0.0f); //play the target animation in 0.0 second.
 
-            normalAttackInput = false;
-            comboAttackInput = false;
+                normalAttackInput = false;
+                comboAttackInput = false;
+            }
         }
     }
 
@@ -214,7 +221,6 @@ public class PlayerControlManager : MonoBehaviour
                 dashVertical = verticalInput;
                 dashHorizontal = horizontalInput;
 
-                canMove = false;
                 dashing.Activate();
                 anim.SetBool("dashing", true);
             }
@@ -229,7 +235,6 @@ public class PlayerControlManager : MonoBehaviour
 
         if (dashing.DashStop)
         {
-            canMove = true;
             anim.SetBool("dashing", false);
         }
     }

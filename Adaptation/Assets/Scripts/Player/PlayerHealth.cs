@@ -5,15 +5,17 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
+    public bool IsDead { get; private set; }
     public bool AlreadyHit { get; set; }
 
-    public int startingHealth = 80;
-    public int currentHealth;
     public Slider healthSlider;
     public Image damageImage;
     public AudioClip deathClip;
     public float flashSpeed = 5f;
     public Color flashColour = new Color(1f, 0f, 0f, 0.1f);
+
+    int startingHealth = 80;
+    int currentHealth;
 
     [SerializeField]
     BlockingFeature playerBlocking;
@@ -21,7 +23,6 @@ public class PlayerHealth : MonoBehaviour
     Animator anim;
     AudioSource playerAudio;
     PlayerControlManager controlManager;
-    bool isDead;
     bool damaged;
 
     public void IncreaseHealth(int increase)
@@ -66,7 +67,7 @@ public class PlayerHealth : MonoBehaviour
             currentHealth -= amount;
             healthSlider.value = currentHealth;
             playerAudio.Play();
-            if (currentHealth <= 0 && !isDead)
+            if (currentHealth <= 0 && !IsDead)
             {
                 Death();
             }
@@ -75,9 +76,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Death()
     {
-        isDead = true;
-
-        anim.SetTrigger("die");
+        IsDead = true;
 
         playerAudio.clip = deathClip;
         playerAudio.Play();

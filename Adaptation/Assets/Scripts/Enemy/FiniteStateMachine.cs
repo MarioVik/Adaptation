@@ -23,7 +23,9 @@ public class FiniteStateMachine : MonoBehaviour
 
     Transform player;
     PlayerHealth playerHealth;
-    bool playerMelee;
+    bool playerHasMelee;
+    MeleeAttackFeature playerMeleeAttacking;
+    MeleeRangeTracker playerMeleeRangeTracker;
 
     NavMeshAgent navAgent;
     MeleeRangeTracker meleeRangeTracker;
@@ -43,17 +45,12 @@ public class FiniteStateMachine : MonoBehaviour
 
     int incomingCollisions = 0;
 
-    public void IncrementColllisions()
-    {
-        incomingCollisions++;
-        //Debug.Log(incomingCollisions);
-    }
+    float blockTimer = 0;
+    float blockTimeMargin = 0.5f;
 
-    public void DecrementCollisions()
-    {
-        incomingCollisions--;
-        //Debug.Log(incomingCollisions);
-    }
+    public void IncrementColllisions() => incomingCollisions++;
+
+    public void DecrementCollisions() => incomingCollisions--;
 
     public void IncreaseMovementSpeed(float increase)
     {
@@ -73,7 +70,12 @@ public class FiniteStateMachine : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerHealth = player.GetComponent<PlayerHealth>();
-        playerMelee = player.GetComponent<PlayerTraits>().Melee;
+        playerHasMelee = player.GetComponent<PlayerTraits>().Melee;
+        if (playerHasMelee)
+        {
+            playerMeleeAttacking = player.GetComponentInChildren<MeleeAttackFeature>();
+            playerMeleeRangeTracker = player.GetComponentInChildren<MeleeRangeTracker>();
+        }
 
         navAgent = GetComponent<NavMeshAgent>();
         meleeRangeTracker = GetComponentInChildren<MeleeRangeTracker>();
@@ -181,9 +183,8 @@ public class FiniteStateMachine : MonoBehaviour
             else if (hasRanged && InRangedDistance)
                 currentState = EnemyState.RangedAttack;
 
-            if (incomingCollisions > 0)
-                if ((hasDash && dashing.Ready) || (hasBlock && blocking.Ready))
-                    currentState = EnemyState.Avoid;
+            if (AvoidableAttackIncoming())
+                currentState = EnemyState.Avoid;
         }
         else
         {
@@ -196,10 +197,6 @@ public class FiniteStateMachine : MonoBehaviour
                     currentState = EnemyState.MeleeAttack;
                 else if (hasRanged && InRangedDistance)
                     currentState = EnemyState.RangedAttack;
-
-                if (incomingCollisions > 0)
-                    if ((hasDash && dashing.Ready) || (hasBlock && blocking.Ready))
-                        currentState = EnemyState.Avoid;
             }
 
             if (hasMelee)
@@ -209,6 +206,11 @@ public class FiniteStateMachine : MonoBehaviour
                     UpdateDirection();
                     controlManager.FeatureInput = true;
                 }
+                else
+                {
+                    if (AvoidableAttackIncoming())
+                        currentState = EnemyState.Avoid;
+                }
             }
             else if (hasRanged)
             {
@@ -216,6 +218,11 @@ public class FiniteStateMachine : MonoBehaviour
                 {
                     UpdateDirection();
                     controlManager.FeatureInput = true;
+                }
+                else
+                {
+                    if (AvoidableAttackIncoming())
+                        currentState = EnemyState.Avoid;
                 }
             }
         }
@@ -232,7 +239,7 @@ public class FiniteStateMachine : MonoBehaviour
             if (!CloseRangeIncrement)
                 currentState = EnemyState.RangedAttack;
 
-            if (incomingCollisions > 0 && blocking.Ready)
+            if (AvoidableAttackIncoming())
                 currentState = EnemyState.Avoid;
         }
         else
@@ -257,81 +264,113 @@ public class FiniteStateMachine : MonoBehaviour
 
     void UpdateMeleeAttack()
     {
-        if (controlManager.canMove)
+        if (!controlManager.canMove)
+            return;
+
+        UpdateInput();
+
+        if (AvoidableAttackIncoming())
         {
-            UpdateInput();
-
-            if (incomingCollisions > 0)
-                if ((hasDash && dashing.Ready) || (hasBlock && blocking.Ready))
-                {
-                    currentState = EnemyState.Avoid;
-                    return;
-                }
-
-            if (meleeRangeTracker.ComboRange)
-            {
-                controlManager.NormalAttackInput = false;
-                controlManager.ComboAttackInput = true;
-            }
-            else if (meleeRangeTracker.NormalRange)
-            {
-                controlManager.NormalAttackInput = true;
-                controlManager.ComboAttackInput = false;
-            }
-
-            if (!InMeleeDistance)
-                currentState = EnemyState.Approach;
+            currentState = EnemyState.Avoid;
+            return;
         }
 
+        if (meleeRangeTracker.ComboRange)
+        {
+            controlManager.NormalAttackInput = false;
+            controlManager.ComboAttackInput = true;
+        }
+        else if (meleeRangeTracker.NormalRange)
+        {
+            controlManager.NormalAttackInput = true;
+            controlManager.ComboAttackInput = false;
+        }
+
+        if (!InMeleeDistance)
+            currentState = EnemyState.Approach;
     }
 
     void UpdateRangedAttack()
     {
-        if (controlManager.canMove)
+        if (!controlManager.canMove)
+            return;
+
+        UpdateInput();
+
+        if (AvoidableAttackIncoming())
         {
-            UpdateInput();
+            currentState = EnemyState.Avoid;
+            return;
+        }
 
-            if (incomingCollisions > 0)
-                if ((hasDash && dashing.Ready) || (hasBlock && blocking.Ready))
-                {
-                    currentState = EnemyState.Avoid;
-                    return;
-                }
-
-            if (!InRangedDistance)
+        if (!InRangedDistance)
+        {
+            currentState = EnemyState.Approach;
+        }
+        else if (FarRangeIncrement)
+        {
+            controlManager.NormalAttackInput = false;
+            controlManager.ComboAttackInput = true;
+        }
+        else if (MidleRangeIncrement)
+        {
+            controlManager.NormalAttackInput = true;
+            controlManager.ComboAttackInput = false;
+        }
+        else if (CloseRangeIncrement)
+        {
+            if (playerHasMelee)
             {
-                currentState = EnemyState.Approach;
+                currentState = EnemyState.Withdraw;
             }
-            else if (FarRangeIncrement)
-            {
-                controlManager.NormalAttackInput = false;
-                controlManager.ComboAttackInput = true;
-            }
-            else if (MidleRangeIncrement)
+            else
             {
                 controlManager.NormalAttackInput = true;
                 controlManager.ComboAttackInput = false;
             }
-            else if (CloseRangeIncrement)
+        }
+        else
+        {
+            throw new System.Exception("Error: Unknown distance to player");
+        }
+    }
+
+    bool MeleeAttackIncoming()
+    {
+        if (playerMeleeAttacking.Attacking)
+        {
+            if (playerMeleeRangeTracker.NormalRange || playerMeleeRangeTracker.ComboRange)
             {
-                if (playerMelee)
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool AvoidableAttackIncoming()
+    {
+        if ((hasDash && dashing.Ready) || (hasBlock && blocking.Ready))
+        {
+            if (playerHasMelee)
+            {
+                if (MeleeAttackIncoming())
                 {
-                    currentState = EnemyState.Withdraw;
-                }
-                else
-                {
-                    controlManager.NormalAttackInput = true;
-                    controlManager.ComboAttackInput = false;
+                    Debug.Log("Attack Incoming");
+                    return true;
                 }
             }
             else
             {
-                throw new System.Exception("Error: Unknown distance to player");
+                if (incomingCollisions > 0)
+                {
+                    return true;
+                }
             }
         }
+        return false;
     }
 
-    private void UpdateAvoid()
+    void UpdateAvoid()
     {
         UpdateInput();
 
@@ -342,13 +381,28 @@ public class FiniteStateMachine : MonoBehaviour
                 controlManager.FeatureInput = true;
             }
 
-            if (incomingCollisions <= 0 || blocking.BlockStop)
+            if (playerHasMelee)
+            {
+                if (!MeleeAttackIncoming())
+                    blockTimer += Time.deltaTime;
+                else
+                    blockTimer = 0;
+            }
+            else
+            {
+                if (incomingCollisions <= 0)
+                    blockTimer += Time.deltaTime;
+                else
+                    blockTimer = 0;
+            }
+
+            if ((blockTimer >= blockTimeMargin) || blocking.BlockStop)
             {
                 controlManager.FeatureInput = false;
                 currentState = EnemyState.Approach;
             }
         }
-        if (hasDash)
+        else if (hasDash)
         {
             UpdateDirection();
             controlManager.FeatureInput = true;

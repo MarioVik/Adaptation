@@ -5,6 +5,7 @@ using UnityEngine;
 public class MeleeAttackFeature : MonoBehaviour
 {
     public bool Attacking { get; private set; }
+    public bool Combo { get; private set; }
 
     [SerializeField]
     bool isPlayer;
@@ -22,15 +23,13 @@ public class MeleeAttackFeature : MonoBehaviour
     Collider weaponcollider;
 
     int damage = 40;
-    float speed = 1.0f;
+    float speed, baseSpeed;
 
     AudioSource weaponAudio;
     float animationDuration;
     AnimationClip normalClip, comboClip;
     float animationTimer = 0;
     Animator anim;
-
-    bool combo;
 
     public void IncreaseAttackDamage(int increase) => damage += increase;
 
@@ -46,7 +45,7 @@ public class MeleeAttackFeature : MonoBehaviour
 
     public void Activate(bool combo = false)
     {
-        this.combo = combo;
+        this.Combo = combo;
         Attacking = true;
 
         weaponcollider.enabled = true;
@@ -61,19 +60,19 @@ public class MeleeAttackFeature : MonoBehaviour
         // Scaling to current speed
         animationDuration /= speed;
         // Cutting the duration time to 60% of the full clip length since clip includes some time margin
-        animationDuration *= 0.6f;
+        //animationDuration *= 0.6f;
 
         anim.SetBool("attacking", Attacking);
-
+        anim.SetBool("combo", combo);
         //Debug.Log("Attack Enabled");
     }
 
     public void Disable()
     {
         animationTimer = 0;
-        anim.speed = 1.0f;
+        anim.speed = baseSpeed;
         Attacking = false;
-        combo = false;
+        Combo = false;
         weaponcollider.enabled = false;
 
         if (isPlayer)
@@ -87,6 +86,7 @@ public class MeleeAttackFeature : MonoBehaviour
         }
 
         anim.SetBool("attacking", Attacking);
+        anim.SetBool("combo", Combo);
     }
 
     private void Awake()
@@ -97,6 +97,8 @@ public class MeleeAttackFeature : MonoBehaviour
         weaponcollider.enabled = false;
 
         anim = GetComponentInParent<Animator>();
+        baseSpeed = anim.speed;
+        speed = baseSpeed;
 
         normalClip = GetAnimationTime("NormalAttack01_SwordShield");
         comboClip = GetAnimationTime("NormalAttack02_SwordShield");
@@ -128,9 +130,9 @@ public class MeleeAttackFeature : MonoBehaviour
         if (Attacking)
         {
             animationTimer += Time.deltaTime;
-            if (combo && animationTimer >= (animationDuration * 0.4f))
+            if (Combo && animationTimer >= (animationDuration * 0.3f))
             {
-                combo = false;
+                Combo = false;
                 weaponAudio.Play();
 
                 if (isPlayer)
@@ -175,35 +177,41 @@ public class MeleeAttackFeature : MonoBehaviour
 
     private void HitEnemy(EnemyHealth enemyHealth, Vector3 hitPoint)
     {
-        if (!enemyHealth.AlreadyHit)
+        if (!enemyHealth.AlreadyHit && !enemyHealth.IsDead)
         {
-            enemyHealth.TakeDamage(damage, hitPoint);
-            hitEnemies.Add(enemyHealth);
+            DashingFeature enemyDashing = enemyHealth.GetComponent<DashingFeature>();
+            if (enemyDashing != null && enemyDashing.isActiveAndEnabled && enemyDashing.Dashing)
+                return;
+
             enemyHealth.AlreadyHit = true;
             enemyHealth.GetComponentInParent<EnemyControlManager>().GetHit();
-            Debug.Log("Enemy hit");
+
+            BlockingFeature enemyBlocking = enemyHealth.GetComponentInChildren<BlockingFeature>();
+            if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
+                return;
+
+            enemyHealth.TakeDamage(damage, hitPoint);
+            hitEnemies.Add(enemyHealth);
+            //Debug.Log("Enemy hit");
         }
     }
 
     private void HitPlayer()
     {
-        if (!playerHealth.AlreadyHit)
+        if (!playerHealth.AlreadyHit && !playerHealth.IsDead)
         {
-            playerHealth.AlreadyHit = true;
-
-            if (playerDashing.isActiveAndEnabled && playerDashing.Dashing)
+            if (playerDashing != null && playerDashing.isActiveAndEnabled && playerDashing.Dashing)
                 return;
+
+            playerHealth.AlreadyHit = true;
+            playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
 
             if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
                 return;
 
-            if (playerHealth.currentHealth > 0)
-            {
-                playerHealth.TakeDamage(damage);
-                GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
-                playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
-                Debug.Log("Player hit");
-            }
+            playerHealth.TakeDamage(damage);
+            GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
+            //Debug.Log("Player hit");
         }
     }
 }

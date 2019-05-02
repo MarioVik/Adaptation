@@ -14,7 +14,7 @@ public class EnemyManager : MonoBehaviour
 
     void Spawn()
     {
-        if (playerHealth.currentHealth <= 0f)
+        if (playerHealth.IsDead)
             return;
 
         int spawnPointIndex = Random.Range(0, spawnPoints.Length);

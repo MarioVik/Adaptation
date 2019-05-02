@@ -16,7 +16,7 @@ public class GameOverManager : MonoBehaviour
 
     void Update()
     {
-        if (playerHealth.currentHealth <= 0)
+        if (playerHealth.IsDead)
         {
             anim.SetTrigger("GameOver");
         }

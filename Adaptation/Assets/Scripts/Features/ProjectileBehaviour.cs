@@ -94,24 +94,30 @@ public class ProjectileBehaviour : MonoBehaviour
 
         if (ByPlayer)
         {
-            ProjectileBehaviour otherBehaviour = collision.collider.GetComponent<ProjectileBehaviour>();
-
             if (collision.collider.tag == "Projectile" &&
-                !otherBehaviour.ByPlayer)
+                !collision.collider.GetComponent<ProjectileBehaviour>().ByPlayer)
             {
                 outerBehaviour.Clear();
                 Explode(collision);
                 return;
             }
 
-            if (collision.collider.tag == "Enemy")
+            if (collision.collider.tag == "Enemy" && !collision.collider.GetComponent<EnemyHealth>().IsDead)
             {
+                outerBehaviour.Clear();
+                Explode(collision);
+
+                BlockingFeature enemyBlocking = collision.collider.GetComponentInChildren<BlockingFeature>();
+                if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
+                    return;
+
+                DashingFeature enemyDashing = collision.collider.GetComponent<DashingFeature>();
+                if (enemyDashing != null && enemyDashing.isActiveAndEnabled && enemyDashing.Dashing)
+                    return;
+
                 EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
                 enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
                 enemyHealth.GetComponentInParent<EnemyControlManager>().GetHit();
-
-                outerBehaviour.Clear();
-                Explode(collision);
 
                 //Debug.Log("Enemy hit");
             }
@@ -125,24 +131,21 @@ public class ProjectileBehaviour : MonoBehaviour
                 return;
             }
 
-            if (collision.collider.tag == "Player")
+            if (collision.collider.tag == "Player" && !playerHealth.IsDead)
             {
                 Explode(collision);
 
-                if (playerDashing.isActiveAndEnabled && playerDashing.Dashing)
+                if (playerDashing != null && playerDashing.isActiveAndEnabled && playerDashing.Dashing)
                     return;
 
                 if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
                     return;
 
-                if (playerHealth.currentHealth > 0)
-                {
-                    playerHealth.TakeDamage(damage);
-                    user.GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
-                    playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
-                }
+                playerHealth.TakeDamage(damage);
+                user.GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
+                playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
 
-                Debug.Log("Player hit");
+                //Debug.Log("Player hit");
             }
         }
     }
