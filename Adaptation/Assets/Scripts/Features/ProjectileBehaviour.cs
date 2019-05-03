@@ -102,22 +102,23 @@ public class ProjectileBehaviour : MonoBehaviour
                 return;
             }
 
-            if (collision.collider.tag == "Enemy" && !collision.collider.GetComponent<EnemyHealth>().IsDead)
+            EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
+            if (collision.collider.tag == "Enemy" && !enemyHealth.IsDead)
             {
                 outerBehaviour.Clear();
                 Explode(collision);
-
-                BlockingFeature enemyBlocking = collision.collider.GetComponentInChildren<BlockingFeature>();
-                if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
-                    return;
 
                 DashingFeature enemyDashing = collision.collider.GetComponent<DashingFeature>();
                 if (enemyDashing != null && enemyDashing.isActiveAndEnabled && enemyDashing.Dashing)
                     return;
 
-                EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
-                enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
                 enemyHealth.GetComponentInParent<EnemyControlManager>().GetHit();
+
+                BlockingFeature enemyBlocking = collision.collider.GetComponentInChildren<BlockingFeature>();
+                if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
+                    return;
+
+                enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
 
                 //Debug.Log("Enemy hit");
             }
@@ -138,12 +139,13 @@ public class ProjectileBehaviour : MonoBehaviour
                 if (playerDashing != null && playerDashing.isActiveAndEnabled && playerDashing.Dashing)
                     return;
 
+                playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
+
                 if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
                     return;
 
                 playerHealth.TakeDamage(damage);
                 user.GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
-                playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
 
                 //Debug.Log("Player hit");
             }

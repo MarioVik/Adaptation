@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8138017182068215329}
   - component: {fileID: 8400990448862106711}
   - component: {fileID: 3609764177698840527}
-  - component: {fileID: 7015220130241879719}
+  - component: {fileID: 8070987585793539296}
   m_Layer: 11
   m_Name: ComboAttackAreaRight
   m_TagString: Untagged
@@ -93,7 +93,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7015220130241879719
+--- !u!114 &8070987585793539296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,9 +102,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 492649627215957006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 980878d062fa02f49bc6db00fb6c45b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6af3721a59476d949bc32e3e5457540d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsPlayer: 0
   combo: 1
 --- !u!1 &751368666301558773
 GameObject:
@@ -118,7 +119,7 @@ GameObject:
   - component: {fileID: 6385288329301328265}
   - component: {fileID: 4277022867929236316}
   - component: {fileID: 4099330543150653947}
-  - component: {fileID: 134474978588321947}
+  - component: {fileID: 5689864633478206377}
   m_Layer: 11
   m_Name: ComboAttackAreaLeft
   m_TagString: Untagged
@@ -199,7 +200,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &134474978588321947
+--- !u!114 &5689864633478206377
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -208,9 +209,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 751368666301558773}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 980878d062fa02f49bc6db00fb6c45b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6af3721a59476d949bc32e3e5457540d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsPlayer: 0
   combo: 1
 --- !u!1 &4551433130389538300
 GameObject:
@@ -224,7 +226,7 @@ GameObject:
   - component: {fileID: 8048578048191804599}
   - component: {fileID: 6145852735593660298}
   - component: {fileID: 927713646708841674}
-  - component: {fileID: 3634031887156949}
+  - component: {fileID: 2966847198795004848}
   m_Layer: 11
   m_Name: NormalAttackArea
   m_TagString: Untagged
@@ -305,7 +307,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3634031887156949
+--- !u!114 &2966847198795004848
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -314,9 +316,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4551433130389538300}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 980878d062fa02f49bc6db00fb6c45b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6af3721a59476d949bc32e3e5457540d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsPlayer: 0
   combo: 0
 --- !u!1 &8102284070730283477
 GameObject:
@@ -327,7 +330,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 337579648173105202}
-  - component: {fileID: 1337013440008543483}
+  - component: {fileID: 5258635629355661811}
   m_Layer: 11
   m_Name: AttackArea
   m_TagString: Untagged
@@ -352,7 +355,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1337013440008543483
+--- !u!114 &5258635629355661811
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -361,6 +364,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8102284070730283477}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c70a6c6bdc003c44b937744284213e61, type: 3}
+  m_Script: {fileID: 11500000, guid: 95a60df9f99fab64ea6e5fee3b888241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

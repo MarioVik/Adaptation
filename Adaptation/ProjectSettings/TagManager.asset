@@ -13,6 +13,9 @@ TagManager:
   - LeftHand
   - EnemyController
   - PlayerController
+  - RangedWeapon
+  - MeleeWeapon
+  - Canvas
   layers:
   - Default
   - TransparentFX

@@ -67,6 +67,8 @@ public class EnemyHealth : MonoBehaviour
 
     void Death()
     {
+        anim.SetBool("dead", true);
+
         IsDead = true;
         targeting.UpdateEnemies(calledByEnemy: true);
 

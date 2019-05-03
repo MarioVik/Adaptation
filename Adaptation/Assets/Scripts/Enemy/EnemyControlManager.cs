@@ -12,6 +12,7 @@ public class EnemyControlManager : MonoBehaviour
     public bool NormalAttackInput { get; set; }
     public bool ComboAttackInput { get; set; }
     public bool FeatureInput { get; set; }
+    public Vector3 DashDirection { get; set; }
 
     public bool MovementInput { get { return VerticalInput != 0 || HorizontalInput != 0; } }
     public bool Dead { get; set; }
@@ -26,7 +27,6 @@ public class EnemyControlManager : MonoBehaviour
 
     public float moveAmount;    //shows the amount of movement from 0 to 1.
     public Vector3 moveDirection;     //stores the moving vector value of main character.
-    float dashVertical, dashHorizontal;
 
     Vector3 verticalMovement = Vector3.zero;
     Vector3 horizontalMovement = Vector3.zero;
@@ -52,6 +52,8 @@ public class EnemyControlManager : MonoBehaviour
     [HideInInspector]
     public Rigidbody rigid;     //for caching Rigidbody component
 
+    AudioSource blockAudio;
+
     public void IncreaseMovementSpeed(float increase) => moveSpeed += increase;
 
     public void GetHit()
@@ -65,10 +67,11 @@ public class EnemyControlManager : MonoBehaviour
             rangedAttacking.Disable();
         }
 
-        if (Dead)
-            anim.SetTrigger("die");
-        else
-            anim.SetTrigger("hit");
+        if (hasBlock)
+            if (blocking.Blocking)
+                blockAudio.Play();
+
+        anim.SetTrigger("hit");
     }
 
     void Start() // Initiallizing camera, animator, rigidboy
@@ -84,6 +87,8 @@ public class EnemyControlManager : MonoBehaviour
         hasBlock = blocking.gameObject.activeSelf;
         dashing = GetComponentInChildren<DashingFeature>();
         hasDash = dashing.isActiveAndEnabled;
+
+        blockAudio = GetComponent<AudioSource>();
     }
 
     void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -140,16 +145,22 @@ public class EnemyControlManager : MonoBehaviour
 
         //This is for limiting values from 0 to 1.
         float m;
+        Vector3 movementDirection;
 
         if (!dashing.Dashing)
+        {
             m = Mathf.Abs(HorizontalInput) + Mathf.Abs(VerticalInput);
+            moveDirection = verticalMovement + horizontalMovement;
+        }
         else
-            m = Mathf.Abs(dashHorizontal) + Mathf.Abs(dashVertical);
-
+        {
+            m = Mathf.Abs(DashDirection.z) + Mathf.Abs(DashDirection.x);
+            moveDirection = DashDirection;
+        }
         moveAmount = Mathf.Clamp01(m);
 
         //multiplying target speed and move amount.
-        moveDirection = ((verticalMovement + horizontalMovement).normalized) * (targetSpeed * moveAmount);
+        moveDirection = (moveDirection.normalized) * (targetSpeed * moveAmount);
     }
 
     void UpdateAttack()
@@ -206,12 +217,6 @@ public class EnemyControlManager : MonoBehaviour
         {
             if (FeatureInput && canMove)
             {
-                if (!MovementInput)
-                    VerticalInput = 1;
-
-                dashVertical = VerticalInput;
-                dashHorizontal = HorizontalInput;
-
                 dashing.Activate();
                 anim.SetBool("dashing", true);
             }
@@ -220,8 +225,6 @@ public class EnemyControlManager : MonoBehaviour
         if (dashing.Dashing)
         {
             targetSpeed = dashing.DashSpeed;
-            verticalMovement = dashVertical * transform.forward;
-            horizontalMovement = dashHorizontal * transform.right;
         }
 
 

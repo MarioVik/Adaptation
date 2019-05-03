@@ -11,12 +11,12 @@ public class PlayerTraits : MonoBehaviour
     [SerializeField] GameObject rangedObject;
     [SerializeField] GameObject blockObject;
 
-    [SerializeField]
-    Image featureImage;
-    [SerializeField]
-    Sprite blockImage;
-    [SerializeField]
-    Sprite dashImage;
+    //[SerializeField]
+    //Image featureImage;
+    //[SerializeField]
+    //Sprite blockImage;
+    //[SerializeField]
+    //Sprite dashImage;
 
     public bool Ranged { get; private set; }
     public bool Melee { get; private set; }
@@ -51,7 +51,7 @@ public class PlayerTraits : MonoBehaviour
                 if (Ranged)
                     GetComponentInChildren<RangedAttackFeature>().IncreaseAttackSpeed(10f);
                 break;
-            case 'o':
+            //case 'o':
             //if (melee)
             //    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRate(0.1f);
             //if (ranged)
@@ -90,11 +90,11 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 'B':
                 blockObject.SetActive(true);
-                featureImage.sprite = blockImage;
+                //featureImage.sprite = blockImage;
                 break;
             case 'D':
                 GetComponent<DashingFeature>().enabled = true;
-                featureImage.sprite = dashImage;
+                //featureImage.sprite = dashImage;
                 break;
             default:
                 throw new System.Exception("Player has unrecognized feature");

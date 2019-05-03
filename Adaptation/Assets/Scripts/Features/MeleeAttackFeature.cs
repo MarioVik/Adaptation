@@ -5,7 +5,6 @@ using UnityEngine;
 public class MeleeAttackFeature : MonoBehaviour
 {
     public bool Attacking { get; private set; }
-    public bool Combo { get; private set; }
 
     [SerializeField]
     bool isPlayer;
@@ -24,8 +23,10 @@ public class MeleeAttackFeature : MonoBehaviour
 
     int damage = 40;
     float speed, baseSpeed;
+    bool combo;
 
     AudioSource weaponAudio;
+
     float animationDuration;
     AnimationClip normalClip, comboClip;
     float animationTimer = 0;
@@ -45,7 +46,7 @@ public class MeleeAttackFeature : MonoBehaviour
 
     public void Activate(bool combo = false)
     {
-        this.Combo = combo;
+        this.combo = combo;
         Attacking = true;
 
         weaponcollider.enabled = true;
@@ -72,13 +73,14 @@ public class MeleeAttackFeature : MonoBehaviour
         animationTimer = 0;
         anim.speed = baseSpeed;
         Attacking = false;
-        Combo = false;
+        combo = false;
         weaponcollider.enabled = false;
 
         if (isPlayer)
         {
             foreach (EnemyHealth tempEnemy in hitEnemies)
                 tempEnemy.AlreadyHit = false;
+            hitEnemies.Clear();
         }
         else
         {
@@ -86,7 +88,7 @@ public class MeleeAttackFeature : MonoBehaviour
         }
 
         anim.SetBool("attacking", Attacking);
-        anim.SetBool("combo", Combo);
+        anim.SetBool("combo", combo);
     }
 
     private void Awake()
@@ -130,9 +132,9 @@ public class MeleeAttackFeature : MonoBehaviour
         if (Attacking)
         {
             animationTimer += Time.deltaTime;
-            if (Combo && animationTimer >= (animationDuration * 0.3f))
+            if (combo && animationTimer >= (animationDuration * 0.3f))
             {
-                Combo = false;
+                combo = false;
                 weaponAudio.Play();
 
                 if (isPlayer)
@@ -192,7 +194,7 @@ public class MeleeAttackFeature : MonoBehaviour
 
             enemyHealth.TakeDamage(damage, hitPoint);
             hitEnemies.Add(enemyHealth);
-            //Debug.Log("Enemy hit");
+            Debug.Log("Enemy hit");
         }
     }
 

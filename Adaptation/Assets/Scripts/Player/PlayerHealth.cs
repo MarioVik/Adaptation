@@ -76,6 +76,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Death()
     {
+        anim.SetBool("dead", true);
+
         IsDead = true;
 
         playerAudio.clip = deathClip;

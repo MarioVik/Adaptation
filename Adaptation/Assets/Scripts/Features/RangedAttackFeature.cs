@@ -22,6 +22,7 @@ public class RangedAttackFeature : MonoBehaviour
     int damage = 40;
     float projectileSpeed = 10f;
     float attackSpeed = 1.0f;
+    bool combo;
 
     int shootableMask;
 
@@ -30,8 +31,6 @@ public class RangedAttackFeature : MonoBehaviour
     AnimationClip normalClip, comboClip;
     float animationTimer = 0;
     Animator anim;
-
-    bool combo;
 
     public void IncreaseAttackDamage(int increase) => damage += increase;
 

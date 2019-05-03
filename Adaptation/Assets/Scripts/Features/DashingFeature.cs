@@ -6,17 +6,24 @@ using UnityEngine.UI;
 
 public class DashingFeature : MonoBehaviour
 {
+    [SerializeField]
+    Transform characterTransform;
+
     [Header("Only if user is player")]
     [SerializeField]
     bool isPlayer;
+
     [SerializeField]
+    Slider sliderPreafab;
     Slider cooldownSlider;
+    Image fillArea;
+    float uiOffset = 0.5f;
 
     public bool Ready { get { return coolDownTimer >= coolDown && !Dashing; } }
     public bool DashStop { get; private set; }
     public bool Dashing { get; private set; }
     public float DashSpeed { get; } = 30f;
-    public float Range { get { return dashDistance; } }
+    public float Range { get; } = 10f;
 
     [Header("For all users")]
     [SerializeField]
@@ -24,16 +31,10 @@ public class DashingFeature : MonoBehaviour
     [SerializeField]
     Material dashMaterial;
     Material[] normalMaterials;
-    //Material[] currentMaterials;
     Renderer[] renderers;
-
-    // Only if user is enemy
-    EnemyHealth enemyHealth;
-    //
 
     float coolDown = 5f;
     float coolDownTimer;
-    float dashDistance = 10f;
 
     Vector3 posBefore;
     Vector3 direction;
@@ -41,18 +42,26 @@ public class DashingFeature : MonoBehaviour
     Collider collider;
     bool crashed;
 
+    float DistanceTraversed { get { return Vector3.Distance(characterTransform.position, posBefore); } }
+
     public void Activate()
     {
         coolDownTimer = 0;
-        posBefore = transform.position;
+        posBefore = characterTransform.position;
         Dashing = true;
 
         collider.isTrigger = true;
 
         ChangeAllMaterials(dashMaterial);
-        Instantiate(effectPrefab, transform.position, transform.rotation, transform);
+        //Instantiate(effectPrefab, transform.position, transform.rotation, transform);
+        Instantiate(effectPrefab, characterTransform.position, characterTransform.rotation, characterTransform);
 
-        //Debug.Log("Dashing");
+        if (isPlayer)
+        {
+            fillArea.color = Color.yellow;
+            cooldownSlider.maxValue = Range;
+            cooldownSlider.value = 0f;
+        }
     }
 
     private void Awake()
@@ -61,20 +70,20 @@ public class DashingFeature : MonoBehaviour
 
         if (isPlayer)
         {
+            cooldownSlider = Instantiate(sliderPreafab, GetSliderPosition(), characterTransform.rotation);
+            cooldownSlider.transform.parent = GameObject.FindGameObjectWithTag("Canvas").transform;
             cooldownSlider.maxValue = coolDown;
             cooldownSlider.value = coolDown;
-        }
-        else
-        {
-            enemyHealth = GetComponent<EnemyHealth>();
+            fillArea = cooldownSlider.GetComponentsInChildren<Image>()[1];
         }
 
         collider = GetComponent<Collider>();
+    }
 
-        //Renderer[] children = GetComponentsInChildren<Renderer>();
-        //playerMaterials = new Material[children.Length];
-        //for (int i = 0; i < children.Length; i++)
-        //    playerMaterials[i] = new Material(children[i].material);
+    Vector3 GetSliderPosition()
+    {
+        Vector3 worldPoint = new Vector3(characterTransform.position.x, characterTransform.position.y - uiOffset, characterTransform.position.z);
+        return Camera.main.WorldToScreenPoint(worldPoint);
     }
 
     void Update()
@@ -86,8 +95,7 @@ public class DashingFeature : MonoBehaviour
 
         if (Dashing)
         {
-            if (Vector3.Distance(transform.position, posBefore) >= dashDistance
-                || crashed)
+            if (DistanceTraversed >= Range || crashed)
             {
                 Dashing = false;
                 DashStop = true;
@@ -96,13 +104,29 @@ public class DashingFeature : MonoBehaviour
                 collider.isTrigger = false;
 
                 ChangeBackMaterials();
+
+                if (isPlayer)
+                {
+                    fillArea.color = Color.white;
+                    cooldownSlider.maxValue = coolDown;
+                    cooldownSlider.value = coolDown;
+                }
                 //Debug.Log("Stopped dashing");
             }
+
+            if (isPlayer)
+            {
+                cooldownSlider.value = DistanceTraversed;
+            }
+        }
+        else if (isPlayer)
+        {
+            cooldownSlider.value = coolDownTimer;
         }
 
         if (isPlayer)
         {
-            cooldownSlider.value = coolDownTimer;
+            cooldownSlider.transform.position = GetSliderPosition();
         }
     }
 

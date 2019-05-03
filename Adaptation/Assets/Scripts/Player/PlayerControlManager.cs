@@ -49,6 +49,8 @@ public class PlayerControlManager : MonoBehaviour
     public Rigidbody rigid;     //for caching Rigidbody component
     CameraManager camManager;   //for caching CameraManager script
 
+    AudioSource blockAudio;
+
     public void IncreaseMovementSpeed(float increase) => moveSpeed += increase;
 
     public void GetHit()
@@ -62,10 +64,11 @@ public class PlayerControlManager : MonoBehaviour
             rangedAttacking.Disable();
         }
 
-        if (Dead)
-            anim.SetTrigger("die");
-        else
-            anim.SetTrigger("hit");
+        if (hasBlock)
+            if (blocking.Blocking)
+                blockAudio.Play();
+
+        anim.SetTrigger("hit");
     }
 
     void Start() // Initiallizing camera, animator, rigidboy
@@ -82,6 +85,8 @@ public class PlayerControlManager : MonoBehaviour
         hasBlock = blocking.gameObject.activeSelf;
         dashing = GetComponentInChildren<DashingFeature>();
         hasDash = dashing.isActiveAndEnabled;
+
+        blockAudio = GetComponent<AudioSource>();
     }
 
     void SetupAnimator()//Setting up Animator component in the hierarchy.

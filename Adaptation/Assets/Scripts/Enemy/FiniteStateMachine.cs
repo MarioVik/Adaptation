@@ -36,6 +36,8 @@ public class FiniteStateMachine : MonoBehaviour
     bool hasDash;
 
     Vector3 DirectionToPlayer { get { return (player.position - transform.position).normalized; } }
+    Vector3 DirectionFromPlayer { get { return (transform.position - player.position).normalized; } }
+
     float DistanceToPlayer { get { return Vector3.Distance(transform.position, player.position); } }
     bool InMeleeDistance { get { return meleeRangeTracker.NormalRange || meleeRangeTracker.ComboRange; } }
     bool InRangedDistance { get { return rangedAttacking.Range > DistanceToPlayer; } }
@@ -88,22 +90,22 @@ public class FiniteStateMachine : MonoBehaviour
         currentState = EnemyState.Approach;
     }
 
-    Vector3 GetCurrentDirection()
-    {
-        NavMeshHit hit;
-        navAgent.SamplePathPosition(0, 1, out hit);
+    //Vector3 GetCurrentDirection()
+    //{
+    //    NavMeshHit hit;
+    //    navAgent.SamplePathPosition(0, 1, out hit);
 
-        Vector3 direction = hit.position - transform.position;
+    //    Vector3 direction = hit.position - transform.position;
 
-        return direction.normalized;
-    }
+    //    return direction.normalized;
+    //}
 
-    void UpdateDirection()
-    {
-        Vector3 direction = GetCurrentDirection();
-        controlManager.VerticalInput = direction.z;
-        controlManager.HorizontalInput = direction.x;
-    }
+    //void UpdateDirection()
+    //{
+    //    Vector3 direction = GetCurrentDirection();
+    //    controlManager.VerticalInput = direction.z;
+    //    controlManager.HorizontalInput = direction.x;
+    //}
 
     void UpdateInput()
     {
@@ -171,6 +173,22 @@ public class FiniteStateMachine : MonoBehaviour
             currentState = EnemyState.Approach;
     }
 
+    void UpdateDirectionTowards()
+    {
+        Vector3 direction = DirectionToPlayer;
+        controlManager.VerticalInput = direction.z;
+        controlManager.HorizontalInput = direction.x;
+        controlManager.DashDirection = direction;
+    }
+
+    void UpdateDirectionAway()
+    {
+        Vector3 direction = DirectionFromPlayer;
+        controlManager.VerticalInput = direction.z;
+        controlManager.HorizontalInput = direction.x;
+        controlManager.DashDirection = direction;
+    }
+
     void UpdateApproach()
     {
         if (!hasDash)
@@ -201,29 +219,31 @@ public class FiniteStateMachine : MonoBehaviour
 
             if (hasMelee)
             {
-                if (dashing.Ready && (DistanceToPlayer > dashing.Range / 4))
-                {
-                    UpdateDirection();
-                    controlManager.FeatureInput = true;
-                }
-                else
-                {
-                    if (AvoidableAttackIncoming())
-                        currentState = EnemyState.Avoid;
-                }
+                //if (dashing.Ready && (DistanceToPlayer > dashing.Range / 3))
+                //{
+                //    //UpdateDirection();
+                //    UpdateDirectionTowards();
+                //    controlManager.FeatureInput = true;
+                //}
+                //else
+                //{
+                if (AvoidableAttackIncoming())
+                    currentState = EnemyState.Avoid;
+                //}
             }
             else if (hasRanged)
             {
-                if (dashing.Ready && (DistanceToPlayer >= dashing.Range + rangedAttacking.Range))
-                {
-                    UpdateDirection();
-                    controlManager.FeatureInput = true;
-                }
-                else
-                {
-                    if (AvoidableAttackIncoming())
-                        currentState = EnemyState.Avoid;
-                }
+                //if (dashing.Ready && (DistanceToPlayer >= dashing.Range + rangedAttacking.Range))
+                //{
+                //    //UpdateDirection();
+                //    UpdateDirectionTowards();
+                //    controlManager.FeatureInput = true;
+                //}
+                //else
+                //{
+                if (AvoidableAttackIncoming())
+                    currentState = EnemyState.Avoid;
+                //}
             }
         }
     }
@@ -254,11 +274,15 @@ public class FiniteStateMachine : MonoBehaviour
                     currentState = EnemyState.RangedAttack;
             }
 
-            if (dashing.Ready)
-            {
-                UpdateDirection();
-                controlManager.FeatureInput = true;
-            }
+            if (AvoidableAttackIncoming())
+                currentState = EnemyState.Avoid;
+
+            //if (dashing.Ready)
+            //{
+            //    //UpdateDirection();
+            //    UpdateDirectionAway();
+            //    controlManager.FeatureInput = true;
+            //}
         }
     }
 
@@ -404,7 +428,14 @@ public class FiniteStateMachine : MonoBehaviour
         }
         else if (hasDash)
         {
-            UpdateDirection();
+            if (dashing.Dashing)
+            {
+                controlManager.FeatureInput = false;
+                currentState = EnemyState.Approach;
+                return;
+            }
+
+            UpdateDirectionAway();
             controlManager.FeatureInput = true;
         }
     }
