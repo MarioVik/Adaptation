@@ -11,13 +11,6 @@ public class PlayerTraits : MonoBehaviour
     [SerializeField] GameObject rangedObject;
     [SerializeField] GameObject blockObject;
 
-    //[SerializeField]
-    //Image featureImage;
-    //[SerializeField]
-    //Sprite blockImage;
-    //[SerializeField]
-    //Sprite dashImage;
-
     public bool Ranged { get; private set; }
     public bool Melee { get; private set; }
 
@@ -90,29 +83,27 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 'B':
                 blockObject.SetActive(true);
-                //featureImage.sprite = blockImage;
                 break;
             case 'D':
                 GetComponent<DashingFeature>().enabled = true;
-                //featureImage.sprite = dashImage;
                 break;
             default:
                 throw new System.Exception("Player has unrecognized feature");
         }
     }
 
-    void GetChildObject(Transform parent, string _tag, ref GameObject targetChild)
+    void GetChildObject(Transform parent, string tag, ref GameObject targetChild)
     {
         for (int i = 0; i < parent.childCount; i++)
         {
             Transform child = parent.GetChild(i);
-            if (child.tag == _tag)
+            if (child.tag == tag)
             {
                 targetChild = child.gameObject;
             }
             if (child.childCount > 0)
             {
-                GetChildObject(child, _tag, ref targetChild);
+                GetChildObject(child, tag, ref targetChild);
             }
         }
     }

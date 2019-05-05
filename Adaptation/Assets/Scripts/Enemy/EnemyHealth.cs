@@ -1,8 +1,13 @@
-﻿using UnityEngine;
+﻿using DM;
+using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
+    [SerializeField]
+    Transform characterTransform;
+
     public bool IsDead { get; private set; }
     public bool AlreadyHit { get; set; }
 
@@ -19,10 +24,19 @@ public class EnemyHealth : MonoBehaviour
     CapsuleCollider capsuleCollider;
     bool isSinking;
 
+    [SerializeField]
+    Slider sliderPreafab;
+    Slider healthSlider;
+    Image fillArea;
+    float uiOffset = 0.05f/*-1.6f*/;
+    float uiScale = 0.005f;
+
     public void IncreaseHealth(int increase)
     {
         startingHealth += increase;
         currentHealth = startingHealth;
+        healthSlider.maxValue = currentHealth;
+        healthSlider.value = currentHealth;
     }
 
     void Awake()
@@ -36,6 +50,20 @@ public class EnemyHealth : MonoBehaviour
 
         currentHealth = startingHealth;
         AlreadyHit = false;
+
+        healthSlider = Instantiate(sliderPreafab, GetSliderPosition(), characterTransform.rotation);
+        healthSlider.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform);
+        healthSlider.maxValue = currentHealth;
+        healthSlider.value = currentHealth;
+        //healthSlider.GetComponentsInChildren<Image>()[0].color = new Color(0, 0, 0, 1.0f);
+        healthSlider.GetComponentsInChildren<Image>()[1].color = Color.red;
+        healthSlider.transform.localScale *= uiScale;
+    }
+
+    Vector3 GetSliderPosition()
+    {
+        Vector3 worldPoint = new Vector3(characterTransform.position.x, characterTransform.position.y - uiOffset, characterTransform.position.z);
+        return Camera.main.WorldToScreenPoint(worldPoint);
     }
 
     void Update()
@@ -44,6 +72,20 @@ public class EnemyHealth : MonoBehaviour
         {
             transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);
         }
+
+        UpdateUI();
+    }
+
+    void UpdateUI()
+    {
+        Transform cameraTransform = CameraManager.singleton.camTrans;
+        Plane plane = new Plane(cameraTransform.forward, cameraTransform.position);
+
+        healthSlider.transform.rotation = Quaternion.LookRotation(plane.normal, Vector3.up);
+        healthSlider.transform.position = new Vector3(characterTransform.position.x, characterTransform.position.y - uiOffset, characterTransform.position.z);
+
+        Vector3 dirToCamera = (cameraTransform.position - characterTransform.position).normalized;
+        healthSlider.transform.position += dirToCamera * 4;
     }
 
     public void TakeDamage(int amount, Vector3 hitPoint)
@@ -54,6 +96,8 @@ public class EnemyHealth : MonoBehaviour
         enemyAudio.Play();
 
         currentHealth -= amount;
+
+        healthSlider.value = currentHealth;
 
         hitParticles.transform.position = hitPoint;
         hitParticles.Play();

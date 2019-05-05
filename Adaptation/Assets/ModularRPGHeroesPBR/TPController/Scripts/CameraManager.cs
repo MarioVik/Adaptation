@@ -33,6 +33,8 @@ namespace DM
             target = t;
             camTrans = Camera.main.transform;
             pivot = camTrans.parent;
+
+            GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>().worldCamera = Camera.main;
         }
 
         public void FixedTick(float d)   //Getting camera inputs and updates camera's stats.
@@ -46,7 +48,7 @@ namespace DM
             float targetSpeed = mouseSpeed;
 
 
-            if(c_h != 0 || c_v != 0)
+            if (c_h != 0 || c_v != 0)
             {
                 h = c_h;
                 v = c_v;
@@ -66,7 +68,7 @@ namespace DM
 
         void HandleRotations(float d, float v, float h, float targetSpeed)  //defines the rotation of camera.
         {
-            if(turnSmoothing > 0)
+            if (turnSmoothing > 0)
             {
                 smoothX = Mathf.SmoothDamp(smoothX, h, ref smoothXVelocity, turnSmoothing);
                 smoothY = Mathf.SmoothDamp(smoothY, v, ref smoothYVelocity, turnSmoothing);
@@ -75,7 +77,7 @@ namespace DM
             {
                 smoothX = h;
                 smoothY = v;
-            }            
+            }
 
             lookAngle += smoothX * targetSpeed;
             transform.rotation = Quaternion.Euler(0, lookAngle, 0);

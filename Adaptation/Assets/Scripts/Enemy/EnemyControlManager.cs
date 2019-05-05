@@ -32,7 +32,7 @@ public class EnemyControlManager : MonoBehaviour
     Vector3 horizontalMovement = Vector3.zero;
 
     float moveSpeed = 9f;  //speed of running
-    float rotateSpeed = 30f;   //speed of character's turning around    
+    float rotateSpeed = 60f;   //speed of character's turning around    
 
     [Header("FeatureBehaviours")]
     [SerializeField]
