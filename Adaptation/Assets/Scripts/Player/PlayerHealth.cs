@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     public float flashSpeed = 5f;
     public Color flashColour = new Color(1f, 0f, 0f, 0.1f);
 
-    int startingHealth = 80;
+    int startingHealth = 200;
     int currentHealth;
 
     [SerializeField]

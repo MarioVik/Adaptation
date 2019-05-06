@@ -34,7 +34,7 @@ public class RangedAttackFeature : MonoBehaviour
 
     public void IncreaseAttackDamage(int increase) => damage += increase;
 
-    public void IncreaseAttackSpeed(float increase) => projectileSpeed += increase;
+    public void IncreaseAttackSpeed(float increase) => attackSpeed += increase;
 
     public void IncreaseAttackRange(float increase) => Range += increase;
 

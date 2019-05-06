@@ -93,6 +93,19 @@ static public class GenLogManager
         individualDetailsLog.AppendLine("");
     }
 
+    static public void LogIndividual(int individualNumber, float totalDamage, float totalAlmostDamage, float AverageDistance, float timeAlive, float fitnessScore)
+    {
+        individualDetailsLog.AppendLine("");
+        individualDetailsLog.AppendLine("Individual number: " + individualNumber);
+        individualDetailsLog.AppendLine("Damage done to player: " + totalDamage);
+        individualDetailsLog.AppendLine("Almost-damage done to player: " + totalAlmostDamage);
+        individualDetailsLog.AppendLine("Average distance to player: " + AverageDistance);
+        individualDetailsLog.AppendLine("Time spent alive: " + timeAlive);
+        individualDetailsLog.AppendLine("Fitness score: " + fitnessScore);
+        individualDetailsLog.AppendLine("");
+    }
+
+
     static public void SaveLog(LogType logType)
     {
         string path = "";

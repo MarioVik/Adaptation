@@ -58,6 +58,8 @@ public class EnemyHealth : MonoBehaviour
         //healthSlider.GetComponentsInChildren<Image>()[0].color = new Color(0, 0, 0, 1.0f);
         healthSlider.GetComponentsInChildren<Image>()[1].color = Color.red;
         healthSlider.transform.localScale *= uiScale;
+
+        targeting.AddEnemy(this);
     }
 
     Vector3 GetSliderPosition()
@@ -132,7 +134,6 @@ public class EnemyHealth : MonoBehaviour
     public void StartSinking()
     {
         isSinking = true;
-        IndividualsTextManager.killedIndividuals += 1;
 
         Rigidbody rigid = GetComponentInParent<Rigidbody>();
         rigid.isKinematic = true;

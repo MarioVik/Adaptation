@@ -9,8 +9,11 @@ using UnityEngine;
 
 public class GenerationManager : MonoBehaviour
 {
+    static public bool PlayerReady { get; set; } = true;
+
     public GameObject enemyPrefab;
-    public PlayerHealth playerHealth;
+    PlayerHealth playerHealth;
+    PlayerSpawnManager playerSpawn;
 
     [SerializeField]
     Transform[] spawnPoints;
@@ -19,17 +22,24 @@ public class GenerationManager : MonoBehaviour
     public static int InstantiatedIndividuals { get; private set; }
     public static int DeadIndividuals { get; private set; }
     public static int CurrentGeneration { get; private set; }
-    public static int TotalGenerations { get; private set; }
+    public static int TotalGenerations { get; private set; } = 10;
 
-    readonly int generationSize = 1;
+    static float spawnFrequency = 8f;
+    static float spawnTimer = 0;
+
+    readonly int generationSize = 8;
+    readonly int concurrentIndividuals = 3;
     readonly int attributes = 8;
     readonly int features = 2;
 
     System.Random rand = new System.Random();
-    char[] possibleAttributes = new char[] { 'h', 'd', /*'s', */'r', 'm' };
-    char[] possbleFeatures = new char[] { 'M', 'R', 'B', 'D' };
+    char[] possibleAttributes = new char[] { 'h', 'd',/* 's',*/ 'r', 'm' };
+    char[] possibleAttackFeatures = new char[] { 'M', 'R' };
+    char[] possbleUtilityFeatures = new char[] { 'B', 'D' };
+
     char RandomAttribute { get { return possibleAttributes[rand.Next(0, possibleAttributes.Length)]; } }
-    char RandomFeature { get { return possbleFeatures[rand.Next(0, possbleFeatures.Length)]; } }
+    char RandomAttackFeature { get { return possibleAttackFeatures[rand.Next(0, possibleAttackFeatures.Length)]; } }
+    char RandomUtilityFeature { get { return possbleUtilityFeatures[rand.Next(0, possbleUtilityFeatures.Length)]; } }
 
     int mutationChance = 8;
 
@@ -53,40 +63,67 @@ public class GenerationManager : MonoBehaviour
 
         if (DeadIndividuals >= InstantiatedIndividuals)
             GenLogManager.SaveLog(LogType.Individual);
+
+        spawnTimer = 0;
+
     }
 
     void Start()
     {
+        playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
+        playerSpawn = GameObject.FindGameObjectWithTag("PlayerSpawn").GetComponent<PlayerSpawnManager>();
+
         CurrentGeneration = 0;
-        TotalGenerations = 10;
         GenLogManager.Initialize();
     }
 
     void Update()
     {
-        if (playerHealth.IsDead)
+        if (playerHealth.IsDead || !PlayerReady)
             return;
 
         if (!gameStarted)
         {
-            //RandomizeGeneration();
-            //individuals = GenFilesManager.LoadGeneration();
             individuals = StringsToIndividuals(RandomizeGeneration());
 
             ResetVariables();
-            Spawn(generationSize);
             gameStarted = true;
+
+            PlayerReady = false;
+            playerSpawn.NewWave();
+            return;
+
+            Spawn(generationSize);
         }
-        else if (DeadIndividuals >= InstantiatedIndividuals
+        else if (InstantiatedIndividuals >= generationSize
+            && DeadIndividuals >= generationSize
             && CurrentGeneration < TotalGenerations)
         {
-
-            //CreateNextGeneration();
-            //individuals = GenFilesManager.LoadGeneration();
             individuals = StringsToIndividuals(CreateNextGeneration());
-
             ResetVariables();
+
+            PlayerReady = false;
+            playerSpawn.NewWave();
+            return;
+
             Spawn(generationSize);
+        }
+
+
+        spawnTimer += Time.deltaTime;
+
+        if (InstantiatedIndividuals - DeadIndividuals <= 0)
+            spawnTimer = spawnFrequency;
+
+        if (spawnTimer >= spawnFrequency)
+        {
+            if ((InstantiatedIndividuals - DeadIndividuals < concurrentIndividuals)
+                && (InstantiatedIndividuals < generationSize)
+                && (CurrentGeneration < TotalGenerations))
+            {
+                spawnTimer = 0;
+                Spawn();
+            }
         }
     }
 
@@ -143,11 +180,8 @@ public class GenerationManager : MonoBehaviour
             }
             newIndividual.Append('|');
 
-            newIndividual.Append("RD");
-            //for (int j = 0; j < features; j++)
-            //{
-            //    newIndividual.Append(RandomFeature);
-            //}
+            newIndividual.Append(RandomAttackFeature);
+            newIndividual.Append(RandomUtilityFeature);
 
             newGeneration.Add(newIndividual.ToString());
         }

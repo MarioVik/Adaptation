@@ -28,7 +28,7 @@ public class PlayerControlManager : MonoBehaviour
     Vector3 horizontalMovement = Vector3.zero;
 
     float moveSpeed = 9f;  //speed of running
-    float rotateSpeed = 30f;   //speed of character's turning around    
+    float rotateSpeed = 35f;   //speed of character's turning around    
 
     [Header("FeatureBehaviours")]
     [SerializeField]
@@ -256,8 +256,8 @@ public class PlayerControlManager : MonoBehaviour
             rigid.velocity = moveDirection;  //This controls the character movement.                  
         }
 
-        //This can control character's rotation
-        if (canMove)
+        //This can control character's rotation 
+        //if (canMove)
         {
             Vector3 targetDir;
             if (targeting.ActiveTarget)

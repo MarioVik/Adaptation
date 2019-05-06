@@ -14,6 +14,6 @@ public class GenGUIManager : MonoBehaviour
 
     void Update()
     {
-        text.text = "Generation: " + GenerationManager.CurrentGeneration + " / " + GenerationManager.TotalGenerations;
+        text.text = "Wave: " + GenerationManager.CurrentGeneration + " / " + GenerationManager.TotalGenerations;
     }
 }

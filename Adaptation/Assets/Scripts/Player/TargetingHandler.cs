@@ -15,6 +15,44 @@ public class TargetingHandler : MonoBehaviour
 
     float rotationSpeed = 50;
 
+    public void UpdateEnemies(bool calledByEnemy = false)
+    {
+        enemies = new List<EnemyHealth>();
+        GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemyObj in enemyObjects)
+        {
+            if (!enemyObj.GetComponent<EnemyHealth>().IsDead)
+            {
+                enemies.Add(enemyObj.GetComponent<EnemyHealth>());
+            }
+        }
+
+        // Only retarget if there are enemies left AND 
+        // the function was called by dying enemy WHILE targeting was active
+        // OR function was called by input activation
+        if (enemies.Count > 0 &&
+            ((calledByEnemy && ActiveTarget) || !calledByEnemy))
+        {
+            TargetClosest();
+        }
+        else
+        {
+            Untarget();
+        }
+    }
+
+    public void AddEnemy(EnemyHealth newEnemy)
+    {
+        if (enemies == null || enemies.Count == 0)
+        {
+            UpdateEnemies(true);
+        }
+        else
+        {
+            enemies.Add(newEnemy);
+        }
+    }
+
     private void Update()
     {
         if (Input.GetButtonDown("Target"))
@@ -57,32 +95,6 @@ public class TargetingHandler : MonoBehaviour
 
         targetPointer.transform.position = new Vector3(position.x, position.y, position.z);
         targetPointer.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
-    }
-
-    public void UpdateEnemies(bool calledByEnemy = false)
-    {
-        enemies = new List<EnemyHealth>();
-        GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemyObj in enemyObjects)
-        {
-            if (!enemyObj.GetComponent<EnemyHealth>().IsDead)
-            {
-                enemies.Add(enemyObj.GetComponent<EnemyHealth>());
-            }
-        }
-
-        // Only retarget if there are enemies left AND 
-        // the function was called by dying enemy WHILE targeting was active
-        // OR function was called by input activation
-        if (enemies.Count > 0 &&
-            ((calledByEnemy && ActiveTarget) || !calledByEnemy))
-        {
-            TargetClosest();
-        }
-        else
-        {
-            Untarget();
-        }
     }
 
     private void Untarget()
