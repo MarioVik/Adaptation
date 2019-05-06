@@ -147,4 +147,10 @@ public class DashingFeature : MonoBehaviour
         if (other.tag == "Environment" && Dashing)
             crashed = true;
     }
+
+    private void OnDestroy()
+    {
+        if (cooldownSlider != null)
+            Destroy(cooldownSlider.gameObject);
+    }
 }

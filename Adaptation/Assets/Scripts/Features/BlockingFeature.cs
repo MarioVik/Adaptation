@@ -97,4 +97,10 @@ public class BlockingFeature : MonoBehaviour
         Vector3 dirToCamera = (cameraTransform.position - characterTransform.position).normalized;
         cooldownSlider.transform.position += dirToCamera * 4;
     }
+
+    private void OnDestroy()
+    {
+        if (cooldownSlider != null)
+            Destroy(cooldownSlider.gameObject);
+    }
 }

@@ -73,7 +73,8 @@ public class EnemyHealth : MonoBehaviour
             transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);
         }
 
-        UpdateUI();
+        if (!IsDead)
+            UpdateUI();
     }
 
     void UpdateUI()
@@ -117,6 +118,8 @@ public class EnemyHealth : MonoBehaviour
         targeting.UpdateEnemies(calledByEnemy: true);
 
         capsuleCollider.isTrigger = true;
+
+        Destroy(healthSlider.gameObject);
 
         enemyAudio.clip = deathClip;
         enemyAudio.Play();

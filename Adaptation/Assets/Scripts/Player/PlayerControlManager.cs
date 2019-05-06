@@ -131,7 +131,7 @@ public class PlayerControlManager : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");    //for getting horizontal input.
         normalAttackInput = Input.GetButton("NormalAttack"); //for getting normal attack input.
         comboAttackInput = Input.GetButton("ComboAttack");    //for getting combo attack input.
-        featureInput = Input.GetButton("FeatureInput");
+        featureInput = Input.GetButton("Feature");
     }
 
     void UpdateStates() //updates character's various actions.

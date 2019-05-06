@@ -150,7 +150,7 @@ public class FiniteStateMachine : MonoBehaviour
                 UpdateWithraw();
                 break;
             case EnemyState.MeleeAttack:
-                UpdateMeleeAttack();
+                UpdateMeleeAttack();    
                 break;
             case EnemyState.RangedAttack:
                 UpdateRangedAttack();
@@ -159,6 +159,11 @@ public class FiniteStateMachine : MonoBehaviour
                 UpdateAvoid();
                 break;
             case EnemyState.Dead:
+                if (hasBlock)
+                    Destroy(blocking);
+                else if (hasDash)
+                    Destroy(dashing);
+
                 navAgent.enabled = false;
                 controlManager.Dead = true;
                 return;
