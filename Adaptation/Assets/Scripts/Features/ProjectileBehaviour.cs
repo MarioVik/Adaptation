@@ -27,6 +27,7 @@ public class ProjectileBehaviour : MonoBehaviour
     OuterProjectileBehaviour outerBehaviour;
 
     // Only if user is enemy
+    bool inflictedDamage, outerHit;
     PlayerHealth playerHealth;
     DashingFeature playerDashing;
     BlockingFeature playerBlocking;
@@ -133,10 +134,8 @@ public class ProjectileBehaviour : MonoBehaviour
             if (collision.collider.tag == "Enemy")
             {
                 Sizzle();
-                return;
             }
-
-            if (collision.collider.tag == "Player" && !playerHealth.IsDead)
+            else if (collision.collider.tag == "Player" && !playerHealth.IsDead)
             {
                 Explode(collision);
 
@@ -150,14 +149,36 @@ public class ProjectileBehaviour : MonoBehaviour
 
                 playerHealth.TakeDamage(damage);
                 user.GetComponentInParent<FitnessTracker>().DamagedPlayer(damage);
+                inflictedDamage = true;
 
                 //Debug.Log("Player hit");
+            }
+            else if (collision.collider.tag == "OuterCharacter")
+            {
+                outerHit = true;
             }
         }
     }
 
     private void Sizzle()
     {
+        if (!ByPlayer)
+        {
+            if (!inflictedDamage && outerHit)
+            {
+                // If the player is not blocking AND not dashing, register the "almost" damage
+
+                if (playerDashing != null && playerDashing.isActiveAndEnabled && playerDashing.Dashing)
+                { }
+                else if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+                { }
+                else
+                {
+                    user.GetComponentInParent<FitnessTracker>().AlmostDamagedPlayer(damage);
+                }
+            }
+        }
+
         effectIntance.GetComponentInChildren<RFX4_PhysicsMotion>().Sizzle(sizzleAudio);
 
         Destroy(effectIntance.gameObject, 1.0f);

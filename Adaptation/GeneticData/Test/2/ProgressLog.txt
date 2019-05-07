@@ -1,0 +1,66 @@
+
+------- Generation: 1 -------
+
+Individuals (sorted by fitness value): 
+	Score: 50,9194			 Traits: hdmhrrdr|MB
+	Score: 50,74044			 Traits: hmdmdhmh|RD
+	Score: 45,90587			 Traits: hmhmmdmh|MD
+	Score: 1,339682			 Traits: hdhddhrh|MB
+	Score: 1,014319			 Traits: hhrmddrh|MB
+	Score: 0,7311994			 Traits: dhdmrmhm|RD
+	Score: 0,5846371			 Traits: mmrrhmhr|MD
+	Score: 0,4515919			 Traits: dmrddmmm|MD
+	Score: 0,1903954			 Traits: rdmrmrmr|MD
+
+Best individuals (parents for next gen): 
+	Traits: hdmhrrdr|MB
+	Traits: hmdmdhmh|RD
+	Traits: hmhmmdmh|MD
+	Traits: hdhddhrh|MB
+
+Individual before mutation: hmdmdhmh
+
+Individual after mutation: hmdhdhmh
+
+New generation: 
+	Traits: hdmhrrdr|MB
+	Traits: hmdmdhmh|RD
+	Traits: hmhmmdmh|MD
+	Traits: hdhddhrh|MB
+	Traits: hmdhdhmh|MB
+	Traits: hdmhrrdr|RD
+	Traits: hdhddhrh|MD
+	Traits: hmhmmdmh|MB
+	Traits: rmhdddrr|RD
+
+
+------- Generation: 2 -------
+
+Individuals (sorted by fitness value): 
+	Score: 51,9996			 Traits: hdmhrrdr|RD
+	Score: 47,35648			 Traits: hmhmmdmh|MB
+	Score: 2,18835			 Traits: rmhdddrr|RD
+	Score: 1,27223			 Traits: hmdhdhmh|MB
+	Score: 1,110479			 Traits: hdmhrrdr|MB
+	Score: 0,8988409			 Traits: hmhmmdmh|MD
+	Score: 0,8846936			 Traits: hdhddhrh|MB
+	Score: 0,6874455			 Traits: hmdmdhmh|RD
+	Score: 0,2645024			 Traits: hdhddhrh|MD
+
+Best individuals (parents for next gen): 
+	Traits: hdmhrrdr|RD
+	Traits: hmhmmdmh|MB
+	Traits: rmhdddrr|RD
+	Traits: hmdhdhmh|MB
+
+New generation: 
+	Traits: hdmhrrdr|RD
+	Traits: hmhmmdmh|MB
+	Traits: rmhdddrr|RD
+	Traits: hmdhdhmh|MB
+	Traits: hmhmmdmh|RD
+	Traits: hdmhrrdr|MB
+	Traits: rmdhdhmh|RD
+	Traits: hmhdddrr|MB
+	Traits: mrmrhmdr|MB
+

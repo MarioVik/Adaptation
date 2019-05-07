@@ -1,0 +1,88 @@
+
+------- Generation: 1 -------
+
+Individuals (sorted by fitness value): 
+	Score: 122,3631			 Traits: hhmmdhrdrmdh|MB
+	Score: 29,46426			 Traits: mmdmmrmdrmmr|MB
+	Score: 4,709679			 Traits: rrhmrdrddrdd|RD
+	Score: 3,914606			 Traits: hhdhrrdrrdrh|RB
+	Score: 3,042345			 Traits: dddrmrmmdhhh|RB
+	Score: 2,214076			 Traits: hrddhmrddhrr|RD
+	Score: 1,735539			 Traits: drrmdhrrhmrm|RD
+	Score: 1,520682			 Traits: drrmdmrhrmhm|MD
+	Score: 0,6776649			 Traits: dhdrdrdhhmrm|MD
+
+Best individuals (parents for next gen): 
+	Traits: hhmmdhrdrmdh|MB
+	Traits: mmdmmrmdrmmr|MB
+	Traits: rrhmrdrddrdd|RD
+	Traits: hhdhrrdrrdrh|RB
+
+New generation: 
+	Traits: hhmmdhrdrmdh|MB
+	Traits: mmdmmrmdrmmr|MB
+	Traits: rrhmrdrddrdd|RD
+	Traits: hhdhrrdrrdrh|RB
+	Traits: hhmmdhrdrmdr|MB
+	Traits: mmdmmrmdrmmh|MB
+	Traits: rrhmrdrddrrh|RD
+	Traits: hhdhrrdrrddd|RB
+	Traits: dmhhrmhdrmmd|RB
+
+
+------- Generation: 2 -------
+
+Individuals (sorted by fitness value): 
+	Score: 55,71776			 Traits: hhdhrrdrrdrh|RB
+	Score: 2,123455			 Traits: hhdhrrdrrddd|RB
+	Score: 1,714809			 Traits: dmhhrmhdrmmd|RB
+	Score: 0,9708844			 Traits: rrhmrdrddrrh|RD
+	Score: 0,957297			 Traits: rrhmrdrddrdd|RD
+	Score: 0,7598967			 Traits: hhmmdhrdrmdh|MB
+	Score: 0,7363423			 Traits: mmdmmrmdrmmh|MB
+	Score: 0,6504095			 Traits: hhmmdhrdrmdr|MB
+	Score: 0,3352552			 Traits: mmdmmrmdrmmr|MB
+
+Best individuals (parents for next gen): 
+	Traits: hhdhrrdrrdrh|RB
+	Traits: hhdhrrdrrddd|RB
+	Traits: dmhhrmhdrmmd|RB
+	Traits: rrhmrdrddrrh|RD
+
+Individual before mutation: hhdhrrdrrdrh
+
+Individual after mutation: hhdhrrdrrddh
+
+Child is indentical to parent, REDO:		hhdhrrdrrddd|RB
+
+Individual before mutation: hhdhrrdrrdrh
+
+Individual after mutation: hhdhrrdmrdrh
+
+Child is indentical to parent, REDO:		hhdhrrdrrddd|RB
+
+Child is indentical to parent, REDO:		hhdhrrdrrddd|RB
+
+Child is indentical to parent, REDO:		hhdhrrdrrddd|RB
+
+Child is indentical to parent, REDO:		hhdhrrdrrddd|RB
+
+Child is indentical to parent, REDO:		hhdhrrdrrddd|RB
+
+Child is indentical to parent, REDO:		hhdhrrdrrddd|RB
+
+Child is indentical to parent, REDO:		hhdhrrdrrddd|RB
+
+Child is indentical to parent, REDO:		hhdhrrdrrddd|RB
+
+New generation: 
+	Traits: hhdhrrdrrdrh|RB
+	Traits: hhdhrrdrrddd|RB
+	Traits: dmhhrmhdrmmd|RB
+	Traits: rrhmrdrddrrh|RD
+	Traits: hhdhrrdrrdrd|RB
+	Traits: hhdhrrdrrddh|RB
+	Traits: dmhhrdrddrrh|RD
+	Traits: rrhmrmhdrmmd|RB
+	Traits: hhhmmrmhrhdr|MB
+

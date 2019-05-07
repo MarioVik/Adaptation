@@ -1,0 +1,72 @@
+
+Individual number: 0
+Damage done to player: 0	Modifier1	Result: 0
+Almost-damage done to player: 0	Modifier0,2	Result: 0
+Average distance to player: 7,470212	Modifier0,5	Result: 3,735106
+Time spent alive: 11,15824	Modifier0,1	Result: 1,115824
+Fitness score: 1,115824
+
+
+Individual number: 1
+Damage done to player: 0	Modifier1	Result: 0
+Almost-damage done to player: 0	Modifier0,2	Result: 0
+Average distance to player: 9,345893	Modifier0,5	Result: 4,672946
+Time spent alive: 6,63134	Modifier0,1	Result: 0,663134
+Fitness score: 0,663134
+
+
+Individual number: 2
+Damage done to player: 0	Modifier1	Result: 0
+Almost-damage done to player: 0	Modifier0,2	Result: 0
+Average distance to player: 6,059068	Modifier0,5	Result: 3,029534
+Time spent alive: 4,921849	Modifier0,1	Result: 0,4921849
+Fitness score: 0,4921849
+
+
+Individual number: 3
+Damage done to player: 50	Modifier1	Result: 50
+Almost-damage done to player: 0	Modifier0,2	Result: 0
+Average distance to player: 9,087561	Modifier0,5	Result: 4,54378
+Time spent alive: 8,351136	Modifier0,1	Result: 0,8351136
+Fitness score: 50,83511
+
+
+Individual number: 4
+Damage done to player: 0	Modifier1	Result: 0
+Almost-damage done to player: 0	Modifier0,2	Result: 0
+Average distance to player: 8,458741	Modifier0,5	Result: 4,229371
+Time spent alive: 6,538109	Modifier0,1	Result: 0,6538109
+Fitness score: 0,6538109
+
+
+Individual number: 5
+Damage done to player: 0	Modifier1	Result: 0
+Almost-damage done to player: 0	Modifier0,2	Result: 0
+Average distance to player: 10,28799	Modifier0,5	Result: 5,143994
+Time spent alive: 6,78351	Modifier0,1	Result: 0,678351
+Fitness score: 0,678351
+
+
+Individual number: 6
+Damage done to player: 0	Modifier1	Result: 0
+Almost-damage done to player: 0	Modifier0,2	Result: 0
+Average distance to player: 11,85988	Modifier0,5	Result: 5,929938
+Time spent alive: 9,396982	Modifier0,1	Result: 0,9396982
+Fitness score: 0,9396982
+
+
+Individual number: 7
+Damage done to player: 50	Modifier1	Result: 50
+Almost-damage done to player: 0	Modifier0,2	Result: 0
+Average distance to player: 11,28735	Modifier0,5	Result: 5,643677
+Time spent alive: 9,29388	Modifier0,1	Result: 0,929388
+Fitness score: 50,92939
+
+
+Individual number: 8
+Damage done to player: 0	Modifier1	Result: 0
+Almost-damage done to player: 0	Modifier0,2	Result: 0
+Average distance to player: 9,265092	Modifier0,5	Result: 4,632546
+Time spent alive: 5,91452	Modifier0,1	Result: 0,5914521
+Fitness score: 0,5914521
+

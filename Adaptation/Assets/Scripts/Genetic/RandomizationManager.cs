@@ -7,7 +7,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-public class GenerationManager : MonoBehaviour
+public class RandomizationManager : MonoBehaviour
 {
     static public bool GameOver { get; private set; } = false;
     static public bool PlayerReady { get; set; } = true;
@@ -40,8 +40,6 @@ public class GenerationManager : MonoBehaviour
     char RandomAttribute { get { return possibleAttributes[rand.Next(0, possibleAttributes.Length)]; } }
     char RandomAttackFeature { get { return possibleAttackFeatures[rand.Next(0, possibleAttackFeatures.Length)]; } }
     char RandomUtilityFeature { get { return possbleUtilityFeatures[rand.Next(0, possbleUtilityFeatures.Length)]; } }
-
-    int mutationChance = 8;
 
     bool gameStarted = false;
 
@@ -86,7 +84,7 @@ public class GenerationManager : MonoBehaviour
 
         if (!gameStarted)
         {
-            individuals = StringsToIndividuals(CreateFirstGeneration());
+            individuals = StringsToIndividuals(RandomizeGeneration());
 
             ResetVariables();
             gameStarted = true;
@@ -94,8 +92,6 @@ public class GenerationManager : MonoBehaviour
             PlayerReady = false;
             playerSpawn.NewWave();
             return;
-
-            Spawn(GenerationSize);
         }
         else if (InstantiatedIndividuals >= GenerationSize
             && DeadIndividuals >= GenerationSize
@@ -107,8 +103,6 @@ public class GenerationManager : MonoBehaviour
             PlayerReady = false;
             playerSpawn.NewWave();
             return;
-
-            Spawn(GenerationSize);
         }
 
 
@@ -194,35 +188,14 @@ public class GenerationManager : MonoBehaviour
         return true;
     }
 
-    List<string> CreateFirstGeneration()
+    List<string> RandomizeGeneration()
     {
-        string[] permutations = { "MB", "MD", "RB", "RD" };
-
-        List<string> features = new List<string>();
-        for (int i = 0; i < (GenerationSize - 1) / permutations.Length; i++)
-        {
-            features.Add(permutations[0]);
-            features.Add(permutations[1]);
-            features.Add(permutations[2]);
-            features.Add(permutations[3]);
-        }
-
         List<string> newGeneration = new List<string>();
-        for (int i = 0; i < (GenerationSize - 1); i++)
+        for (int i = 0; i < GenerationSize; i++)
         {
-            StringBuilder newIndividual = new StringBuilder();
-
-            newIndividual.Append(RandomizeAttributes());
-            newIndividual.Append('|');
-
-            int randomIndex = rand.Next(0, features.Count); // Add a random feature permutation and remove it from the selection
-            newIndividual.Append(features[randomIndex]);
-            features.RemoveAt(randomIndex);
-
+            string newIndividual = RandomizeIndividual();
             newGeneration.Add(newIndividual.ToString());
         }
-
-        newGeneration.Add(RandomizeIndividual());
 
         GenFilesManager.SaveGeneration(newGeneration);
         return newGeneration;
@@ -270,7 +243,6 @@ public class GenerationManager : MonoBehaviour
         GenLogManager.SaveLog(LogType.Individual);
 
         List<string> newGeneration = BreedNewGeneration();
-        GenFilesManager.SaveGeneration(newGeneration);
         return newGeneration;
     }
 
@@ -286,83 +258,7 @@ public class GenerationManager : MonoBehaviour
         GenLogManager.LogForGraphing(sortedList);
         GenLogManager.SaveLog(LogType.ForGraphing);
 
-        List<string> newGeneration = new List<string>();
-        List<string> newAttributes = new List<string>();
-        List<string> newFeatures = new List<string>();
-        for (int i = 0; i < sortedList.Count / 2; i++)
-        {
-            newGeneration.Add(sortedList[i].Traits);
-
-            string[] traits = sortedList[i].Traits.Split('|');
-            newAttributes.Add(traits[0]);
-            newFeatures.Add(traits[1]);
-        }
-        /*Logging*/
-        GenLogManager.LogParentsToBreed(newAttributes, newFeatures);
-
-        int numberOfParents = newAttributes.Count;
-        for (int indexParentA = 0; indexParentA < numberOfParents; indexParentA += 2)
-        {
-            int indexParentB = indexParentA + 1;
-
-            StringBuilder newChildA = new StringBuilder();
-            StringBuilder newChildB = new StringBuilder();
-            int crossoverPoint = rand.Next(1, attributes);
-
-            for (int indexParentTrait = 0; indexParentTrait < attributes; indexParentTrait++)
-            {
-                if (indexParentTrait < crossoverPoint)
-                {
-                    newChildA.Append(newAttributes[indexParentA][indexParentTrait]);
-                    newChildB.Append(newAttributes[indexParentB][indexParentTrait]);
-                }
-                else
-                {
-                    newChildA.Append(newAttributes[indexParentB][indexParentTrait]);
-                    newChildB.Append(newAttributes[indexParentA][indexParentTrait]);
-                }
-            }
-
-            ConsiderMutation(newChildA);
-            ConsiderMutation(newChildB);
-
-            newChildA.Append('|');
-            newChildB.Append('|');
-
-            // Copy over the parent's features  to whichever child inherited the bigger part of the parent's genotype
-            if (crossoverPoint > attributes / 2)
-            {
-                newChildA.Append(newFeatures[indexParentA]);
-                newChildB.Append(newFeatures[indexParentB]);
-            }
-            else
-            {
-                newChildA.Append(newFeatures[indexParentB]);
-                newChildB.Append(newFeatures[indexParentA]);
-            }
-
-            // If any of the children are identical to any of the parents; redo the crossover
-            if (newChildA.ToString() == newGeneration[indexParentA] ||
-                newChildA.ToString() == newGeneration[indexParentB])
-
-            {
-                GenLogManager.LogReBreed(newChildA.ToString());
-                indexParentA -= 2;
-                continue;
-            }
-            else if (newChildB.ToString() == newGeneration[indexParentA] ||
-                    newChildB.ToString() == newGeneration[indexParentB])
-            {
-                GenLogManager.LogReBreed(newChildB.ToString());
-                indexParentA -= 2;
-                continue;
-            }
-
-            newGeneration.Add(newChildA.ToString());
-            newGeneration.Add(newChildB.ToString());
-        }
-
-        newGeneration.Add(RandomizeIndividual());
+        List<string> newGeneration = RandomizeGeneration();
 
         /*Logging*/
         GenLogManager.LogNewGeneration(newGeneration);
@@ -373,27 +269,5 @@ public class GenerationManager : MonoBehaviour
         CurrentGeneration++;
 
         return newGeneration;
-    }
-
-    /// <summary>
-    /// Every child is sent here and considered for mutation, they have an x% chance
-    /// of getting a random trait replaced with a new random one
-    /// </summary>
-    /// <param name="child">A newly bred child for the next generation</param>
-    void ConsiderMutation(StringBuilder child)
-    {
-        if (rand.Next(0, 101) <= mutationChance)
-        {
-            /*Logging*/
-            GenLogManager.LogMutatatedIndividual(child.ToString(), afterMutation: false);
-
-            int placeToChange = rand.Next(0, child.Length);
-            char newTrait;
-            do { newTrait = RandomAttribute; } while (newTrait == child[placeToChange]);
-            child[placeToChange] = newTrait;
-
-            /*Logging*/
-            GenLogManager.LogMutatatedIndividual(child.ToString(), afterMutation: true);
-        }
     }
 }

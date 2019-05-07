@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class SpawnPointDetection : MonoBehaviour
 {
+    static readonly float distanceFromPlayer = 15;
+
+    [SerializeField]
+    Vector3 direction;
+
     public bool Available { get; private set; }
     bool onGround;
 
     private void Awake()
     {
         Available = true;
-    }
 
-    //private void Update()
-    //{
-    //    Debug.Log(gameObject.name + " Available: " + Available);
-    //}
+        transform.position += direction.normalized * distanceFromPlayer;
+    }
 
     private void OnTriggerStay(Collider other)
     {

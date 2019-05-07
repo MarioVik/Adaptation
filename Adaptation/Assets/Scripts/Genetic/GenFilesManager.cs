@@ -10,8 +10,8 @@ static public class GenFilesManager
     static public string DirectoryPath { get { return @"GeneticData\"; } }
     static public string PlayerFilename { get { return "PlayerTraits.txt"; } }
     static public string PlayerFilepath { get { return DirectoryPath + PlayerFilename; } }
-    static public string EnemyFilename { get { return "Generation_" + GenerationManager.CurrentGeneration + ".txt"; } }
-    static public string EnemyFilepath { get { return DirectoryPath + EnemyFilename; } }
+    static public string GenerationFilename { get { return "Generation_" + GenerationManager.CurrentGeneration + ".txt"; } }
+    static public string GenerationFilepath { get { return DirectoryPath + GenerationFilename; } }
 
     static public void SavePlayer(string playerTraits)
     {
@@ -23,7 +23,7 @@ static public class GenFilesManager
 
     static public void SaveGeneration(List<string> genToSave)
     {
-        StreamWriter writer = new StreamWriter(EnemyFilepath, false);
+        StreamWriter writer = new StreamWriter(GenerationFilepath, false);
         foreach (string tempString in genToSave)
         {
             writer.WriteLine(tempString);
@@ -43,7 +43,7 @@ static public class GenFilesManager
 
     static public List<Individual> LoadGeneration()
     {
-        StreamReader reader = new StreamReader(EnemyFilepath);
+        StreamReader reader = new StreamReader(GenerationFilepath);
         List<Individual> individuals = new List<Individual>();
 
         while (!reader.EndOfStream)

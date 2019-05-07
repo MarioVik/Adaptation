@@ -6,12 +6,12 @@ public class Individual
 {
     public float FitnessScore { get; set; }
     public string Traits { get; private set; }
-    //int generation;
+    //int number;
 
-    public Individual(string traits/*, int generation*/)
+    public Individual(/*int number,*/ string traits)
     {
+        //this.number = number;
         Traits = traits;
-        //this.generation = generation;
         FitnessScore = 0;
     }
 }

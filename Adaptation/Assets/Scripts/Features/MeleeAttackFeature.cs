@@ -14,6 +14,7 @@ public class MeleeAttackFeature : MonoBehaviour
     //
 
     // Only if user is enemy
+    bool inflictedDamage, outerHit;
     PlayerHealth playerHealth;
     DashingFeature playerDashing;
     BlockingFeature playerBlocking;
@@ -21,7 +22,7 @@ public class MeleeAttackFeature : MonoBehaviour
 
     Collider weaponcollider;
 
-    int damage = 40;
+    int damage = 60;
     float speed, baseSpeed;
     bool combo;
 
@@ -84,6 +85,13 @@ public class MeleeAttackFeature : MonoBehaviour
         }
         else
         {
+            if (!inflictedDamage && outerHit)
+            {
+                GetComponentInParent<FitnessTracker>().AlmostDamagedPlayer(damage);
+            }
+
+            inflictedDamage = false;
+            outerHit = false;
             playerHealth.AlreadyHit = false;
         }
 
@@ -174,6 +182,15 @@ public class MeleeAttackFeature : MonoBehaviour
             {
                 HitPlayer();
             }
+            else if (other.tag == "OuterCharacter")
+            {
+                if (playerDashing != null && playerDashing.isActiveAndEnabled && playerDashing.Dashing)
+                    return;
+                if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+                    return;
+
+                outerHit = true;
+            }
         }
     }
 
@@ -213,6 +230,7 @@ public class MeleeAttackFeature : MonoBehaviour
 
             playerHealth.TakeDamage(damage);
             GetComponentInParent<FitnessTracker>().DamagedPlayer(damage);
+            inflictedDamage = true;
             //Debug.Log("Player hit");
         }
     }

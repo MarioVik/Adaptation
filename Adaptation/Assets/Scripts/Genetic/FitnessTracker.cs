@@ -59,8 +59,15 @@ public class FitnessTracker : MonoBehaviour
 
         fitnessScore += (timeAlive * timeModifier);
 
-        GenLogManager.LogIndividual(individualNumber, totalDamage, totalAlmostDamage, AverageDistance, timeAlive, fitnessScore);
         GenerationManager.SetFitnessScore(individualNumber, fitnessScore);
+
+        //*Logging*//
+        GenLogManager.LogIndividual(individualNumber,
+            new float[] { totalDamage, damageModifier },
+            new float[] { totalAlmostDamage, almostDamageModifier },
+            new float[] { AverageDistance, distanceModifier },
+            new float[] { timeAlive, timeModifier },
+            fitnessScore);
     }
 
     void Start()

@@ -145,7 +145,6 @@ public class EnemyControlManager : MonoBehaviour
 
         //This is for limiting values from 0 to 1.
         float m;
-        Vector3 movementDirection;
 
         if (!dashing.Dashing)
         {
