@@ -66,7 +66,7 @@ public class FitnessTracker : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-
+        individualNumber = GetComponent<EnemyTraits>().IndividualNumber;
     }
 
     void Update()

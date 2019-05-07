@@ -20,7 +20,7 @@ public class BlockingFeature : MonoBehaviour
     public bool BlockStop { get; private set; }
     public bool Blocking { get; private set; }
 
-    float coolDown = 3f;
+    float coolDown = 1.5f;
     float coolDownTimer;
 
     float activeTimer = 0;

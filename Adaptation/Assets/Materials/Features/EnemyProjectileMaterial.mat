@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Trail
+  m_Name: EnemyProjectileMaterial
   m_Shader: {fileID: 4800000, guid: 18cc8fe7d50c89741b56c1ae6a5baa66, type: 3}
   m_ShaderKeywords: BlendMul Clip_OFF FrameBlend_OFF SoftParticles_OFF VertLight_OFF
     _BLENDMODE_BLEND _FADING_ON
@@ -95,7 +95,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _Distortion: 500
     - _DstBlend: 0
-    - _DstMode: 10
+    - _DstMode: 1
     - _FresnelDistort: 1500
     - _FresnelFadeFactor: 3
     - _FresnelInvert: 1
@@ -142,4 +142,4 @@ Material:
     - _HeightUVScrollDistort: {r: 8, g: 12, b: 0, a: 0}
     - _MainColor: {r: 1, g: 1, b: 1, a: 1}
     - _Tiling: {r: 800, g: 800, b: 8, a: 8}
-    - _TintColor: {r: 0.6470587, g: 1.0864109, b: 4, a: 1}
+    - _TintColor: {r: 3.9999995, g: 0.9762519, b: 0.6492144, a: 1}

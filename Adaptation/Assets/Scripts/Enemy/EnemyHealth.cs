@@ -126,7 +126,7 @@ public class EnemyHealth : MonoBehaviour
         enemyAudio.clip = deathClip;
         enemyAudio.Play();
 
-        GetComponent<EnemyTraits>().CalculateFitnessScore();
+        GetComponent<FitnessTracker>().CalculateFitnessScore();
 
         Invoke("StartSinking", 5.0f);
     }

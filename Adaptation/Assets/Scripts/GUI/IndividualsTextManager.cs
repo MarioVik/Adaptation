@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class IndividualsTextManager : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class IndividualsTextManager : MonoBehaviour
 
     void Update()
     {
-        text.text = "Enemies killed: " + GenerationManager.DeadIndividuals + "/" + GenerationManager.InstantiatedIndividuals;
+        text.text = "Enemies killed: " + GenerationManager.DeadIndividuals + "/" + GenerationManager.GenerationSize
+            + "\nCurrently spawned: " + (GenerationManager.InstantiatedIndividuals - GenerationManager.DeadIndividuals) + "/" + GenerationManager.ConcurrentIndividuals;
     }
 }

@@ -15,9 +15,7 @@ public class PlayerSpawnManager : MonoBehaviour
 
     MeshRenderer renderer;
 
-    Transform player;
     bool playerCentered;
-
     bool firstWave = true;
 
     public void NewWave()
@@ -34,9 +32,14 @@ public class PlayerSpawnManager : MonoBehaviour
     {
         renderer = GetComponent<MeshRenderer>();
 
-        player = GameObject.FindGameObjectWithTag("PlayerController").transform;
-        player.SetPositionAndRotation(new Vector3(transform.position.x, 0, transform.position.z), transform.rotation);
-        playerCentered = true;
+        renderer.material.color = invalidColor;
+
+        foreach (Text text in infoUI)
+        {
+            text.color = new Color(invalidColor.r, invalidColor.g, invalidColor.b, 255);
+        }
+
+        playerCentered = false;
     }
 
     void Update()
@@ -53,6 +56,9 @@ public class PlayerSpawnManager : MonoBehaviour
                     infoUI[0].enabled = false;
                 else
                     infoUI[1].enabled = false;
+
+                if (firstWave)
+                    firstWave = false;
             }
         }
     }

@@ -48,7 +48,7 @@ public class FiniteStateMachine : MonoBehaviour
     int incomingCollisions = 0;
 
     float blockTimer = 0;
-    float blockTimeMargin = 0.5f;
+    float blockTimeMargin = 1.0f;
 
     public void IncrementColllisions() => incomingCollisions++;
 

@@ -16,27 +16,10 @@ public class EnemyTraits : MonoBehaviour
     public bool Ranged { get; private set; }
     public bool Block { get; private set; }
     public bool Dash { get; private set; }
+    public int IndividualNumber { get { return individualNumber; } }
 
     string[] traits;
     int individualNumber;
-    float totalDamage = 0;
-    float timeAlive = 0;
-    float DistanceToPlayer { get { return Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position); } }
-    float fitnessScore = 0;
-
-    public void DamagedPlayer(int damage)
-    {
-        totalDamage += damage;
-    }
-
-    public void CalculateFitnessScore()
-    {
-        fitnessScore += totalDamage;
-        fitnessScore += (0.5f * timeAlive);
-        fitnessScore -= (1.5f * DistanceToPlayer);
-        GenLogManager.LogIndividual(individualNumber, totalDamage, timeAlive, DistanceToPlayer, fitnessScore);
-        GenerationManager.SetFitnessScore(individualNumber, fitnessScore);
-    }
 
     void Start()
     {
@@ -117,10 +100,5 @@ public class EnemyTraits : MonoBehaviour
             default:
                 throw new System.Exception("Enemy has unrecognized feature");
         }
-    }
-
-    void Update()
-    {
-        timeAlive += Time.deltaTime;
     }
 }

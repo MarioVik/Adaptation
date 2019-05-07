@@ -48,8 +48,6 @@ public class ProjectileBehaviour : MonoBehaviour
             playerHealth = player.GetComponent<PlayerHealth>();
             playerDashing = player.GetComponent<DashingFeature>();
             playerBlocking = player.GetComponentInChildren<BlockingFeature>();
-
-            GetComponentInChildren<OuterProjectileBehaviour>().gameObject.SetActive(false);
         }
         else
         {
@@ -94,13 +92,13 @@ public class ProjectileBehaviour : MonoBehaviour
 
         if (ByPlayer)
         {
-            if (collision.collider.tag == "Projectile" &&
-                !collision.collider.GetComponent<ProjectileBehaviour>().ByPlayer)
-            {
-                outerBehaviour.Clear();
-                Explode(collision);
-                return;
-            }
+            //if (collision.collider.tag == "Projectile" &&
+            //    !collision.collider.GetComponent<ProjectileBehaviour>().ByPlayer)
+            //{
+            //    outerBehaviour.Clear();
+            //    Explode(collision);
+            //    return;
+            //}
 
             EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
             if (collision.collider.tag == "Enemy" && !enemyHealth.IsDead)
@@ -125,10 +123,16 @@ public class ProjectileBehaviour : MonoBehaviour
         }
         else
         {
-            if (collision.collider.tag == "Projectile" &&
-                collision.collider.GetComponent<ProjectileBehaviour>().ByPlayer)
+            //if (collision.collider.tag == "Projectile" &&
+            //    collision.collider.GetComponent<ProjectileBehaviour>().ByPlayer)
+            //{
+            //    Explode(collision);
+            //    return;
+            //}
+
+            if (collision.collider.tag == "Enemy")
             {
-                Explode(collision);
+                Sizzle();
                 return;
             }
 
@@ -145,7 +149,7 @@ public class ProjectileBehaviour : MonoBehaviour
                     return;
 
                 playerHealth.TakeDamage(damage);
-                user.GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
+                user.GetComponentInParent<FitnessTracker>().DamagedPlayer(damage);
 
                 //Debug.Log("Player hit");
             }

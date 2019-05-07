@@ -31,7 +31,7 @@ public class DashingFeature : MonoBehaviour
     Material[] normalMaterials;
     Renderer[] renderers;
 
-    float coolDown = 5f;
+    float coolDown = 3f;
     float coolDownTimer;
 
     Vector3 posBefore;

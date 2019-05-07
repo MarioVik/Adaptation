@@ -212,7 +212,7 @@ public class MeleeAttackFeature : MonoBehaviour
                 return;
 
             playerHealth.TakeDamage(damage);
-            GetComponentInParent<EnemyTraits>().DamagedPlayer(damage);
+            GetComponentInParent<FitnessTracker>().DamagedPlayer(damage);
             //Debug.Log("Player hit");
         }
     }
