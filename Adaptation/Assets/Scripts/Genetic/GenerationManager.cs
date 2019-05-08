@@ -14,7 +14,7 @@ public class GenerationManager : MonoBehaviour
 
     public GameObject enemyPrefab;
     PlayerHealth playerHealth;
-    PlayerSpawnManager playerSpawn;
+    PlayerReadyManager readyManager;
 
     [SerializeField]
     SpawnPointDetection[] spawnPoints;
@@ -65,7 +65,7 @@ public class GenerationManager : MonoBehaviour
     void Start()
     {
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
-        playerSpawn = GameObject.FindGameObjectWithTag("PlayerSpawn").GetComponent<PlayerSpawnManager>();
+        readyManager = GameObject.FindGameObjectWithTag("ReadyArea").GetComponent<PlayerReadyManager>();
 
         CurrentGeneration = 1;
         GenLogManager.Initialize();
@@ -76,13 +76,45 @@ public class GenerationManager : MonoBehaviour
         GameOver = true;
     }
 
+    void ResetWave()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("EnemyController");
+        foreach (GameObject enemy in enemies)
+        {
+            Destroy(enemy.gameObject);
+        }
+
+        foreach (Individual ind in individuals)
+        {
+            ind.FitnessScore = 0;
+        }
+
+        //PlayerReady = false;
+        //readyManager.NewWave();
+
+        ResetVariables();
+
+        //GameObject.FindGameObjectWithTag("PlayerController").transform.SetPositionAndRotation(readyManager.transform.position, readyManager.transform.rotation);
+    }
+
     void Update()
     {
         if (CurrentGeneration > TotalGenerations)
             EndGame();
 
-        if (playerHealth.IsDead || !PlayerReady)
+        if (playerHealth.IsDead && PlayerReady)
+        {
+            ResetWave();
+        }
+        else if (playerHealth.IsDead && !PlayerReady)
+        {
+            readyManager.NewWave(dead: true);
             return;
+        }
+        else if (!PlayerReady)
+        {
+            return;
+        }
 
         if (!gameStarted)
         {
@@ -92,7 +124,7 @@ public class GenerationManager : MonoBehaviour
             gameStarted = true;
 
             PlayerReady = false;
-            playerSpawn.NewWave();
+            readyManager.NewWave();
             return;
 
             Spawn(GenerationSize);
@@ -105,7 +137,7 @@ public class GenerationManager : MonoBehaviour
             ResetVariables();
 
             PlayerReady = false;
-            playerSpawn.NewWave();
+            readyManager.NewWave();
             return;
 
             Spawn(GenerationSize);

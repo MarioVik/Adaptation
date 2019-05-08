@@ -27,9 +27,7 @@ namespace DM
         float smoothYVelocity;
         public float lookAngle;
         public float tiltAngle;
-
-        Transform spawnTransform;
-
+        
         public void Init(Transform t)   //Initiallize camera settings.
         {
             target = t;
@@ -95,8 +93,6 @@ namespace DM
         private void Awake()
         {
             singleton = this;
-
-            Init(spawnTransform = GameObject.FindGameObjectWithTag("PlayerSpawn").transform);
         }
 
     }

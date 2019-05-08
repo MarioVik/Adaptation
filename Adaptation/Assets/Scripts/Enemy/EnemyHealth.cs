@@ -118,6 +118,7 @@ public class EnemyHealth : MonoBehaviour
 
         IsDead = true;
         targeting.UpdateEnemies(calledByEnemy: true);
+        targeting = null;
 
         capsuleCollider.isTrigger = true;
 
@@ -139,5 +140,13 @@ public class EnemyHealth : MonoBehaviour
         rigid.isKinematic = true;
         rigid.constraints = RigidbodyConstraints.None;
         Destroy(rigid.gameObject, 2f);
+    }
+
+    private void OnDestroy()
+    {
+        if (targeting != null)
+            targeting.UpdateEnemies(calledByEnemy: true);
+        if (healthSlider != null)
+            Destroy(healthSlider.gameObject);
     }
 }

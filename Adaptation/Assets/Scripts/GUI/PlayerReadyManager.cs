@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerSpawnManager : MonoBehaviour
+public class PlayerReadyManager : MonoBehaviour
 {
     [SerializeField]
     Text[] infoUI;
@@ -18,14 +18,22 @@ public class PlayerSpawnManager : MonoBehaviour
     bool playerCentered;
     bool firstWave = true;
 
-    public void NewWave()
+    public void NewWave(bool dead = false)
     {
-        renderer.enabled = true;
-
-        if (firstWave)
-            infoUI[0].enabled = true;
+        if (dead)
+        {
+            infoUI[2].enabled = true;
+            playerCentered = true;
+        }
         else
-            infoUI[1].enabled = true;
+        {
+            renderer.enabled = true;
+
+            if (firstWave)
+                infoUI[0].enabled = true;
+            else
+                infoUI[1].enabled = true;
+        }
     }
 
     void Start()
@@ -34,9 +42,9 @@ public class PlayerSpawnManager : MonoBehaviour
 
         renderer.material.color = invalidColor;
 
-        foreach (Text text in infoUI)
+        for (int i = 0; i < infoUI.Length - 1; i++)
         {
-            text.color = new Color(invalidColor.r, invalidColor.g, invalidColor.b, 255);
+            infoUI[i].color = new Color(invalidColor.r, invalidColor.g, invalidColor.b, 255);
         }
 
         playerCentered = false;
@@ -52,10 +60,10 @@ public class PlayerSpawnManager : MonoBehaviour
 
                 renderer.enabled = false;
 
-                if (firstWave)
-                    infoUI[0].enabled = false;
-                else
-                    infoUI[1].enabled = false;
+                foreach (Text uiElement in infoUI)
+                {
+                    uiElement.enabled = false;
+                }
 
                 if (firstWave)
                     firstWave = false;
@@ -69,9 +77,9 @@ public class PlayerSpawnManager : MonoBehaviour
         {
             renderer.material.color = validColor;
 
-            foreach (Text text in infoUI)
+            for (int i = 0; i < infoUI.Length - 1; i++)
             {
-                text.color = new Color(validColor.r, validColor.g, validColor.b, 255);
+                infoUI[i].color = new Color(validColor.r, validColor.g, validColor.b, 255);
             }
 
             playerCentered = true;
@@ -84,9 +92,9 @@ public class PlayerSpawnManager : MonoBehaviour
         {
             renderer.material.color = invalidColor;
 
-            foreach (Text text in infoUI)
+            for (int i = 0; i < infoUI.Length - 1; i++)
             {
-                text.color = new Color(invalidColor.r, invalidColor.g, invalidColor.b, 255);
+                infoUI[i].color = new Color(invalidColor.r, invalidColor.g, invalidColor.b, 255);
             }
 
             playerCentered = false;

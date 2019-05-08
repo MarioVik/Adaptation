@@ -150,7 +150,7 @@ public class FiniteStateMachine : MonoBehaviour
                 UpdateWithraw();
                 break;
             case EnemyState.MeleeAttack:
-                UpdateMeleeAttack();    
+                UpdateMeleeAttack();
                 break;
             case EnemyState.RangedAttack:
                 UpdateRangedAttack();
@@ -165,7 +165,6 @@ public class FiniteStateMachine : MonoBehaviour
                     Destroy(dashing);
 
                 navAgent.enabled = false;
-                controlManager.Dead = true;
                 return;
         }
 
@@ -373,7 +372,6 @@ public class FiniteStateMachine : MonoBehaviour
             {
                 if (MeleeAttackIncoming())
                 {
-                    Debug.Log("Attack Incoming");
                     return true;
                 }
             }

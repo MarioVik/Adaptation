@@ -10,12 +10,17 @@ public class PlayerHealth : MonoBehaviour
 
     public Slider healthSlider;
     public Image damageImage;
-    public AudioClip deathClip;
+    [SerializeField]
+    AudioClip deathClip;
+    [SerializeField]
+    AudioClip hurtClip;
     public float flashSpeed = 5f;
     public Color flashColour = new Color(1f, 0f, 0f, 0.1f);
 
     int startingHealth = 300;
     int currentHealth;
+
+    Vector3 startPos;
 
     [SerializeField]
     BlockingFeature playerBlocking;
@@ -36,6 +41,11 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = startingHealth;
         healthSlider.maxValue = currentHealth;
         healthSlider.value = currentHealth;
+        IsDead = false;
+        anim.SetBool("dead", false);
+        playerAudio.clip = hurtClip;
+
+        transform.parent.SetPositionAndRotation(startPos, transform.rotation);
     }
 
     void Awake()
@@ -43,6 +53,8 @@ public class PlayerHealth : MonoBehaviour
         anim = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
         controlManager = GetComponentInParent<PlayerControlManager>();
+        startPos = transform.parent.position;
+
         ResetHealth();
     }
 
@@ -83,13 +95,6 @@ public class PlayerHealth : MonoBehaviour
         playerAudio.clip = deathClip;
         playerAudio.Play();
 
-        controlManager.Dead = true;
-
-        Invoke("RestartLevel", 3.0f);
-    }
-
-    public void RestartLevel()
-    {
-        SceneManager.LoadScene(1);
+        GenerationManager.PlayerReady = false;
     }
 }

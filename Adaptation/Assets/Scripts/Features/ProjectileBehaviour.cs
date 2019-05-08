@@ -68,6 +68,9 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (user == null)
+            Destroy(gameObject);
+
         transform.position += transform.forward.normalized * speed * Time.deltaTime;
         transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
 

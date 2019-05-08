@@ -15,7 +15,6 @@ public class EnemyControlManager : MonoBehaviour
     public Vector3 DashDirection { get; set; }
 
     public bool MovementInput { get { return VerticalInput != 0 || HorizontalInput != 0; } }
-    public bool Dead { get; set; }
 
     Transform playerTransform;
 
@@ -46,6 +45,8 @@ public class EnemyControlManager : MonoBehaviour
     bool hasMelee, hasRanged;
     bool hasBlock, hasDash;
     TargetingHandler targeting;
+
+    EnemyHealth health;
 
     float fixedDelta;        //stores Time.fixedDeltaTime
     Animator anim;      //for caching Animator component
@@ -89,6 +90,8 @@ public class EnemyControlManager : MonoBehaviour
         hasDash = dashing.isActiveAndEnabled;
 
         blockAudio = GetComponent<AudioSource>();
+
+        health = GetComponentInChildren<EnemyHealth>();
     }
 
     void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -119,7 +122,7 @@ public class EnemyControlManager : MonoBehaviour
 
     void Update()
     {
-        if (Dead)
+        if (health.IsDead)
             return;
 
         UpdateStates();   //Updating anything related to character's actions.         
@@ -238,7 +241,7 @@ public class EnemyControlManager : MonoBehaviour
 
     void FixedTick(float d)
     {
-        if (Dead)
+        if (health.IsDead)
             return;
 
         float pDelta = d;

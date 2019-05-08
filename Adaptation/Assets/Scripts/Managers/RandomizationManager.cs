@@ -14,7 +14,7 @@ public class RandomizationManager : MonoBehaviour
 
     public GameObject enemyPrefab;
     PlayerHealth playerHealth;
-    PlayerSpawnManager playerSpawn;
+    PlayerReadyManager playerSpawn;
 
     [SerializeField]
     SpawnPointDetection[] spawnPoints;
@@ -63,7 +63,7 @@ public class RandomizationManager : MonoBehaviour
     void Start()
     {
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
-        playerSpawn = GameObject.FindGameObjectWithTag("PlayerSpawn").GetComponent<PlayerSpawnManager>();
+        playerSpawn = GameObject.FindGameObjectWithTag("PlayerSpawn").GetComponent<PlayerReadyManager>();
 
         CurrentGeneration = 1;
         GenLogManager.Initialize();

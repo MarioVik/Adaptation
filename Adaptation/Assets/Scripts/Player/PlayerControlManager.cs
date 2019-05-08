@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerControlManager : MonoBehaviour
 {
-    public bool Dead { get; set; }
     public bool MovementInput { get { return verticalInput != 0 || horizontalInput != 0; } }
 
     [Header("Initialize")]
@@ -42,6 +41,8 @@ public class PlayerControlManager : MonoBehaviour
     bool hasMelee, hasRanged;
     bool hasBlock, hasDash;
     TargetingHandler targeting;
+
+    PlayerHealth health;
 
     float fixedDelta;        //stores Time.fixedDeltaTime
     Animator anim;      //for caching Animator component
@@ -87,6 +88,8 @@ public class PlayerControlManager : MonoBehaviour
         hasDash = dashing.isActiveAndEnabled;
 
         blockAudio = GetComponent<AudioSource>();
+
+        health = GetComponentInChildren<PlayerHealth>();
     }
 
     void SetupAnimator()//Setting up Animator component in the hierarchy.
@@ -118,7 +121,7 @@ public class PlayerControlManager : MonoBehaviour
 
     void Update()
     {
-        if (Dead)
+        if (health.IsDead)
             return;
 
         GetInput();     //getting control input from keyboard or joypad
@@ -246,7 +249,7 @@ public class PlayerControlManager : MonoBehaviour
 
     void FixedTick(float d)
     {
-        if (Dead)
+        if (health.IsDead)
             return;
 
         float pDelta = d;

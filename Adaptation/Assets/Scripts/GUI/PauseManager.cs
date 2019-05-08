@@ -5,7 +5,7 @@ using UnityEngine;
 public class PauseManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject[] canvasElements;
+    GameObject pauseUI;
 
     bool active;
 
@@ -31,19 +31,10 @@ public class PauseManager : MonoBehaviour
                 Time.timeScale = 1;
             }
         }
-
-
-        //else if (Input.GetButtonUp("GUI"))
-        //{
-        //    Toggle();
-        //}
     }
 
     void Toggle()
     {
-        foreach (GameObject element in canvasElements)
-        {
-            element.SetActive(active);
-        }
+        pauseUI.SetActive(active);
     }
 }

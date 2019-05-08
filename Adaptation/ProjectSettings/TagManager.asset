@@ -16,8 +16,8 @@ TagManager:
   - RangedWeapon
   - MeleeWeapon
   - Canvas
-  - PlayerSpawn
   - OuterCharacter
+  - ReadyArea
   layers:
   - Default
   - TransparentFX
