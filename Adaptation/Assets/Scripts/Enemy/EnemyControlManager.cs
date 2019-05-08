@@ -126,6 +126,15 @@ public class EnemyControlManager : MonoBehaviour
             return;
 
         UpdateStates();   //Updating anything related to character's actions.         
+
+        if (!canMove)
+        {
+            VerticalInput = 0f;    //for getting vertical input.
+            HorizontalInput = 0f;    //for getting horizontal input.
+            NormalAttackInput = false; //for getting normal attack input.
+            ComboAttackInput = false;    //for getting combo attack input.
+            FeatureInput = false;
+        }
     }
 
     void UpdateStates() //updates character's various actions.

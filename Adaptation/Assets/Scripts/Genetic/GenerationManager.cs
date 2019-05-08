@@ -33,7 +33,7 @@ public class GenerationManager : MonoBehaviour
     readonly int attributes = 12;
 
     System.Random rand = new System.Random();
-    char[] possibleAttributes = new char[] { 'h', 'd',/* 's',*/ 'r', 'm' };
+    char[] possibleAttributes = new char[] { 'h', 'd', 's', 'r', 'm' };
     char[] possibleAttackFeatures = new char[] { 'M', 'R' };
     char[] possbleUtilityFeatures = new char[] { 'B', 'D' };
 

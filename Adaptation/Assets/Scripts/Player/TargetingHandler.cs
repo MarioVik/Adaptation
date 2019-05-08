@@ -28,8 +28,7 @@ public class TargetingHandler : MonoBehaviour
         }
 
         // Only retarget if there are enemies left AND 
-        // the function was called by dying enemy WHILE targeting was active
-        // OR function was called by input activation
+        // if function was called by input activation       OR      the function was called by dying enemy WHILE targeting was active 
         if (enemies.Count > 0 &&
             ((calledByEnemy && ActiveTarget) || !calledByEnemy))
         {

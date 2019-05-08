@@ -124,17 +124,29 @@ public class PlayerControlManager : MonoBehaviour
         if (health.IsDead)
             return;
 
+
         GetInput();     //getting control input from keyboard or joypad
         UpdateStates();   //Updating anything related to character's actions.         
     }
 
     void GetInput() //getting various inputs from keyboard or joypad.
     {
-        verticalInput = Input.GetAxis("Vertical");    //for getting vertical input.
-        horizontalInput = Input.GetAxis("Horizontal");    //for getting horizontal input.
-        normalAttackInput = Input.GetButton("NormalAttack"); //for getting normal attack input.
-        comboAttackInput = Input.GetButton("ComboAttack");    //for getting combo attack input.
-        featureInput = Input.GetButton("Feature");
+        if (canMove)
+        {
+            verticalInput = Input.GetAxis("Vertical");    //for getting vertical input.
+            horizontalInput = Input.GetAxis("Horizontal");    //for getting horizontal input.
+            normalAttackInput = Input.GetButton("NormalAttack"); //for getting normal attack input.
+            comboAttackInput = Input.GetButton("ComboAttack");    //for getting combo attack input.
+            featureInput = Input.GetButton("Feature");
+        }
+        else
+        {
+            verticalInput = 0f;    //for getting vertical input.
+            horizontalInput = 0f;    //for getting horizontal input.
+            normalAttackInput = false; //for getting normal attack input.
+            comboAttackInput = false;    //for getting combo attack input.
+            featureInput = false;
+        }
     }
 
     void UpdateStates() //updates character's various actions.

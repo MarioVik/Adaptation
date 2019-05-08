@@ -49,7 +49,7 @@ public class EnemyTraits : MonoBehaviour
                 if (Melee)
                     GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackSpeed(0.1f);
                 if (Ranged)
-                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackSpeed(10f);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackSpeed(0.1f);
                 break;
             //case 'o':
             //    if (melee)

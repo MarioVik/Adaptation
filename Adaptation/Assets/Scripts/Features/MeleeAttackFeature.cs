@@ -61,6 +61,8 @@ public class MeleeAttackFeature : MonoBehaviour
 
         // Scaling to current speed
         animationDuration /= speed;
+
+
         // Cutting the duration time to 60% of the full clip length since clip includes some time margin
         //animationDuration *= 0.6f;
 
@@ -203,6 +205,7 @@ public class MeleeAttackFeature : MonoBehaviour
                 return;
 
             enemyHealth.AlreadyHit = true;
+            hitEnemies.Add(enemyHealth);
             enemyHealth.GetComponentInParent<EnemyControlManager>().GetHit();
 
             BlockingFeature enemyBlocking = enemyHealth.GetComponentInChildren<BlockingFeature>();
@@ -210,7 +213,6 @@ public class MeleeAttackFeature : MonoBehaviour
                 return;
 
             enemyHealth.TakeDamage(damage, hitPoint);
-            hitEnemies.Add(enemyHealth);
             Debug.Log("Enemy hit");
         }
     }

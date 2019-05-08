@@ -21,7 +21,7 @@ public class RangedAttackFeature : MonoBehaviour
     public float Range { get; private set; } = 8f;
     int damage = 40;
     float projectileSpeed = 10f;
-    float attackSpeed = 1.0f;
+    float attackSpeed, baseAttackSpeed = 1.0f;
     bool combo;
 
     int shootableMask;
@@ -43,9 +43,6 @@ public class RangedAttackFeature : MonoBehaviour
         this.combo = combo;
         Attacking = true;
 
-        float delay = 0.2f / attackSpeed;
-        Invoke("Shoot", delay);
-
         anim.speed = attackSpeed;
 
         if (combo) animationDuration = comboClip.length;
@@ -53,8 +50,9 @@ public class RangedAttackFeature : MonoBehaviour
 
         // Scaling to current speed
         animationDuration /= attackSpeed;
-        // Cutting the duration time to 60% of the full clip length since clip includes some time margin
-        //animationDuration *= 0.6f;
+
+        float delay = animationDuration * 0.3f;
+        Invoke("Shoot", delay);
 
         anim.SetBool("attacking", Attacking);
         anim.SetBool("combo", combo);
@@ -65,7 +63,7 @@ public class RangedAttackFeature : MonoBehaviour
         animationTimer = 0;
         Attacking = false;
         combo = false;
-        anim.speed = 1.0f;
+        anim.speed = baseAttackSpeed;
 
         anim.SetBool("attacking", Attacking);
         anim.SetBool("combo", combo);
@@ -77,6 +75,10 @@ public class RangedAttackFeature : MonoBehaviour
         weaponAudio = GetComponent<AudioSource>();
 
         anim = GetComponentInParent<Animator>();
+
+        baseAttackSpeed = anim.speed;
+        attackSpeed = baseAttackSpeed;
+
         normalClip = GetAnimationTime("NormalAttack01_SwordShield");
         comboClip = GetAnimationTime("NormalAttack02_SwordShield");
     }
@@ -97,8 +99,8 @@ public class RangedAttackFeature : MonoBehaviour
             animationTimer += Time.deltaTime;
             if (combo && animationTimer >= (animationDuration * 0.45f))
             {
-                Shoot();
                 combo = false;
+                Shoot();
             }
             if (animationTimer >= animationDuration)
             {
