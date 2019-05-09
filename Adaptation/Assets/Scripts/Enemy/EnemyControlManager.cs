@@ -11,7 +11,7 @@ public class EnemyControlManager : MonoBehaviour
     public float HorizontalInput { get; set; }
     public bool NormalAttackInput { get; set; }
     public bool ComboAttackInput { get; set; }
-    public bool FeatureInput { get; set; }
+    public bool FeatureInput { get; set; } = false;
     public Vector3 DashDirection { get; set; }
 
     public bool MovementInput { get { return VerticalInput != 0 || HorizontalInput != 0; } }
@@ -127,14 +127,6 @@ public class EnemyControlManager : MonoBehaviour
 
         UpdateStates();   //Updating anything related to character's actions.         
 
-        if (!canMove)
-        {
-            VerticalInput = 0f;    //for getting vertical input.
-            HorizontalInput = 0f;    //for getting horizontal input.
-            NormalAttackInput = false; //for getting normal attack input.
-            ComboAttackInput = false;    //for getting combo attack input.
-            FeatureInput = false;
-        }
     }
 
     void UpdateStates() //updates character's various actions.

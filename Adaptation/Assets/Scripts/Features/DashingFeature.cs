@@ -20,7 +20,7 @@ public class DashingFeature : MonoBehaviour
     public bool Ready { get { return coolDownTimer >= coolDown && !Dashing; } }
     public bool DashStop { get; private set; }
     public bool Dashing { get; private set; }
-    public float DashSpeed { get; } = 30f;
+    public float DashSpeed { get; } = 40f;
     public float Range { get; } = 10f;
 
     [Header("For all users")]
@@ -51,8 +51,7 @@ public class DashingFeature : MonoBehaviour
         collider.isTrigger = true;
 
         ChangeAllMaterials(dashMaterial);
-        //Instantiate(effectPrefab, transform.position, transform.rotation, transform);
-        Instantiate(effectPrefab, characterTransform.position, characterTransform.rotation, characterTransform);
+        Instantiate(effectPrefab, new Vector3(characterTransform.position.x, characterTransform.position.y + 1, characterTransform.position.z), characterTransform.rotation, characterTransform);
 
         fillArea.color = Color.yellow;
         cooldownSlider.maxValue = Range;

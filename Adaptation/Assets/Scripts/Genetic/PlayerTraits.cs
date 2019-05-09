@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class PlayerTraits : MonoBehaviour
 {
+    [SerializeField]
+    int tutorial;
+
     [SerializeField] GameObject meleeObject;
     [SerializeField] GameObject rangedObject;
     [SerializeField] GameObject blockObject;
@@ -16,13 +19,23 @@ public class PlayerTraits : MonoBehaviour
 
     void Start()
     {
-        string[] traits = GenFilesManager.LoadPlayer().Split('|');
+        string[] traits;
+
+        if (tutorial > 0)
+        {
+            traits = GenFilesManager.LoadTutorial(tutorial).Split('|');
+        }
+        else
+        {
+            traits = GenFilesManager.LoadPlayer().Split('|');
+        }
 
         foreach (char tempChar in traits[1])
             ApplyFeature(tempChar);
 
         foreach (char tempChar in traits[0])
             ApplyAttribute(tempChar);
+
     }
 
     void ApplyAttribute(char attrChar)
@@ -30,13 +43,13 @@ public class PlayerTraits : MonoBehaviour
         switch (attrChar)
         {
             case 'h':
-                GetComponent<PlayerHealth>().IncreaseHealth(10);
+                GetComponent<PlayerHealth>().IncreaseHealth();
                 break;
             case 'd':
                 if (Melee)
-                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackDamage(5);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackDamage();
                 if (Ranged)
-                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackDamage(5);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackDamage();
                 break;
             case 's':
                 if (Melee)
@@ -44,12 +57,6 @@ public class PlayerTraits : MonoBehaviour
                 if (Ranged)
                     GetComponentInChildren<RangedAttackFeature>().IncreaseAttackSpeed(0.1f);
                 break;
-            //case 'o':
-            //if (melee)
-            //    GetComponentInChildren<PlayerMeleeAttacking>().IncreaseAttackRate(0.1f);
-            //if (ranged)
-            //    GetComponentInChildren<PlayerRangedAttacking>().IncreaseAttackRate(0.1f);
-            //break;
             case 'r':
                 if (Melee)
                 {

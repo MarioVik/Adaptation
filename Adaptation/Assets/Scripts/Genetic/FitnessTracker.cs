@@ -5,15 +5,16 @@ using UnityEngine;
 public class FitnessTracker : MonoBehaviour
 {
     Transform player;
-    bool playerHasMelee, hasMelee;
 
+    bool playerHasMelee;
+    bool hasMelee;
 
     int individualNumber;
     float fitnessScore = 0;
-    float damageModifier = 1.0f;
-    float almostDamageModifier = 0.2f;
+    float damageModifier = 0.5f;
+    float almostDamageModifier = 0.1f;
     float distanceModifier = 0.5f;
-    float timeModifier = 0.1f;
+    float timeModifier = 0.5f;
 
     float totalDamage = 0;
     float totalAlmostDamage = 0;
@@ -29,43 +30,65 @@ public class FitnessTracker : MonoBehaviour
     float DistanceToPlayer { get { return Vector3.Distance(transform.position, player.position); } }
     float AverageDistance { get { return (float)(totalDistance / distRecordings); } }
 
-
-    public void DamagedPlayer(int damage)
+    public void DamagedPlayer(float damage)
     {
         totalDamage += damage;
     }
 
-    public void AlmostDamagedPlayer(int almostDamage)
+    public void AlmostDamagedPlayer(float almostDamage)
     {
         totalAlmostDamage += almostDamage;
     }
 
     public void CalculateFitnessScore()
     {
+        if (GenerationManager.Tutorial)
+        {
+            return;
+        }
+
         fitnessScore = 0;
 
         fitnessScore += (totalDamage * damageModifier);
 
         fitnessScore += (totalAlmostDamage * almostDamageModifier);
 
+        string weaponType;
+        float distanceBonus = AverageDistance;
+
+        if (distanceBonus < 2)
+            distanceBonus = 2;
+
+        if (distanceBonus > 8)
+            distanceBonus = 8;
+
         if (hasMelee && !playerHasMelee)
         {
-            fitnessScore -= (AverageDistance * distanceModifier);
+            distanceBonus = (8 - distanceBonus);
+            weaponType = "Melee";
         }
         else if (!hasMelee && playerHasMelee)
         {
-            fitnessScore += (AverageDistance * distanceModifier);
+            distanceBonus = (distanceBonus - 2);
+            weaponType = "Ranged";
         }
+        else
+        {
+            distanceBonus = 3;
+            weaponType = "Same as player";
+        }
+
+        fitnessScore += distanceBonus * distanceModifier;
 
         fitnessScore += (timeAlive * timeModifier);
 
         GenerationManager.SetFitnessScore(individualNumber, fitnessScore);
 
         //*Logging*//
-        GenLogManager.LogIndividual(individualNumber,
+        GenLogManager.LogIndividual(individualNumber, weaponType,
             new float[] { totalDamage, damageModifier },
             new float[] { totalAlmostDamage, almostDamageModifier },
-            new float[] { AverageDistance, distanceModifier },
+            new float[] { distanceBonus, distanceModifier },
             new float[] { timeAlive, timeModifier },
             fitnessScore);
     }
@@ -73,7 +96,11 @@ public class FitnessTracker : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        individualNumber = GetComponent<EnemyTraits>().IndividualNumber;
+        playerHasMelee = player.GetComponentInChildren<PlayerTraits>().Melee;
+
+        EnemyTraits traits = GetComponent<EnemyTraits>();
+        individualNumber = traits.IndividualNumber;
+        hasMelee = traits.Melee;
     }
 
     void Update()

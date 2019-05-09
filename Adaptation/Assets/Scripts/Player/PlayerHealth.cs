@@ -17,8 +17,8 @@ public class PlayerHealth : MonoBehaviour
     public float flashSpeed = 5f;
     public Color flashColour = new Color(1f, 0f, 0f, 0.1f);
 
-    int startingHealth = 300;
-    int currentHealth;
+    public float StartingHealth { get; private set; } = 1000;
+    float currentHealth;
 
     Vector3 startPos;
 
@@ -30,15 +30,15 @@ public class PlayerHealth : MonoBehaviour
     PlayerControlManager controlManager;
     bool damaged;
 
-    public void IncreaseHealth(int increase)
+    public void IncreaseHealth()
     {
-        startingHealth += increase;
-        currentHealth = startingHealth;
+        StartingHealth += (StartingHealth * 0.1f);
+        currentHealth = StartingHealth;
     }
 
     public void ResetHealth()
     {
-        currentHealth = startingHealth;
+        currentHealth = StartingHealth;
         healthSlider.maxValue = currentHealth;
         healthSlider.value = currentHealth;
         IsDead = false;
@@ -71,7 +71,7 @@ public class PlayerHealth : MonoBehaviour
         damaged = false;
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(float amount)
     {
         if (playerBlocking == null || !playerBlocking.Blocking)
         {

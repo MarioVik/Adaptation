@@ -131,22 +131,11 @@ public class PlayerControlManager : MonoBehaviour
 
     void GetInput() //getting various inputs from keyboard or joypad.
     {
-        if (canMove)
-        {
-            verticalInput = Input.GetAxis("Vertical");    //for getting vertical input.
-            horizontalInput = Input.GetAxis("Horizontal");    //for getting horizontal input.
-            normalAttackInput = Input.GetButton("NormalAttack"); //for getting normal attack input.
-            comboAttackInput = Input.GetButton("ComboAttack");    //for getting combo attack input.
-            featureInput = Input.GetButton("Feature");
-        }
-        else
-        {
-            verticalInput = 0f;    //for getting vertical input.
-            horizontalInput = 0f;    //for getting horizontal input.
-            normalAttackInput = false; //for getting normal attack input.
-            comboAttackInput = false;    //for getting combo attack input.
-            featureInput = false;
-        }
+        verticalInput = Input.GetAxis("Vertical");    //for getting vertical input.
+        horizontalInput = Input.GetAxis("Horizontal");    //for getting horizontal input.
+        normalAttackInput = Input.GetButton("NormalAttack"); //for getting normal attack input.
+        comboAttackInput = Input.GetButton("ComboAttack");    //for getting combo attack input.
+        featureInput = Input.GetButton("Feature");
     }
 
     void UpdateStates() //updates character's various actions.
@@ -170,10 +159,13 @@ public class PlayerControlManager : MonoBehaviour
         //This is for limiting values from 0 to 1.
         float m;
 
-        if (!dashing.Dashing)
-            m = Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput);
-        else
-            m = Mathf.Abs(dashHorizontal) + Mathf.Abs(dashVertical);
+        if (dashing.Dashing)
+        {
+            horizontalInput = dashHorizontal;
+            verticalInput = dashVertical;
+        }
+
+        m = Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput);
 
         moveAmount = Mathf.Clamp01(m);
 

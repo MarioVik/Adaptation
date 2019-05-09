@@ -24,7 +24,7 @@ public class CreationMenuHandler : MonoBehaviour
 
     int attributes, features;
 
-    int health, attackDamage, attackSpeed, attackRate, attackRange, movementSpeed;
+    int health, attackDamage, attackSpeed, attackRange, movementSpeed;
     bool melee, ranged, block, dash;
 
     private void Start()
@@ -35,7 +35,7 @@ public class CreationMenuHandler : MonoBehaviour
     public void CompletePlayer()
     {
         GenFilesManager.SavePlayer(GetPlayerTraits());
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(6);
     }
 
     private string GetPlayerTraits()
@@ -50,9 +50,6 @@ public class CreationMenuHandler : MonoBehaviour
 
         for (int i = 0; i < attackSpeed; i++)
             playertraits.Append('s');
-
-        for (int i = 0; i < attackRate; i++)
-            playertraits.Append('o');
 
         for (int i = 0; i < attackRange; i++)
             playertraits.Append('r');
@@ -82,10 +79,9 @@ public class CreationMenuHandler : MonoBehaviour
         attributeTexts[0].text = "Health: " + health;
         attributeTexts[1].text = "Attack Damage: " + attackDamage;
         attributeTexts[2].text = "Attack Speed: " + attackSpeed;
-        attributeTexts[3].text = "Attack Rate: " + attackRate;
-        attributeTexts[4].text = "Attack Range: " + attackRange;
-        attributeTexts[5].text = "Movement Speed: " + movementSpeed;
-        attributeTexts[6].text = "Atrribute Points Left: " + (totalAttributes - attributes);
+        attributeTexts[3].text = "Attack Range: " + attackRange;
+        attributeTexts[4].text = "Movement Speed: " + movementSpeed;
+        attributeTexts[5].text = "Atrribute Points Left: " + (totalAttributes - attributes);
 
         featureTexts[0].text = "Melee Attack: " + melee;
         featureTexts[1].text = "Ranged Attack: " + ranged;
@@ -165,26 +161,6 @@ public class CreationMenuHandler : MonoBehaviour
         {
             attributes--;
             attackSpeed--;
-        }
-        UpdateGUI();
-    }
-
-    public void IncreaseAttackRate()
-    {
-        if (attributes < totalAttributes)
-        {
-            attributes++;
-            attackRate++;
-        }
-        UpdateGUI();
-    }
-
-    public void DecreaseAttackRate()
-    {
-        if (attackRate > 0)
-        {
-            attributes--;
-            attackRate--;
         }
         UpdateGUI();
     }

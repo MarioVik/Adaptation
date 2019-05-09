@@ -88,10 +88,11 @@ static public class GenLogManager
         progressLog.AppendLine("");
     }
 
-    static public void LogIndividual(int individualNumber, float[] damage, float[] almostDamage, float[] distance, float[] time, float fitnessScore)
+    static public void LogIndividual(int individualNumber, string weaponType, float[] damage, float[] almostDamage, float[] distance, float[] time, float fitnessScore)
     {
         individualDetailsLog.AppendLine("");
         individualDetailsLog.AppendLine("Individual number: " + individualNumber);
+        individualDetailsLog.AppendLine("Weapon type: " + weaponType);
         individualDetailsLog.AppendLine("Damage done to player: " + damage[0] + "\t\tModifier: " + damage[1] + "\t\tResult: " + damage[0] * damage[1]);
         individualDetailsLog.AppendLine("Almost-damage done to player: " + almostDamage[0] + "\t\tModifier: " + almostDamage[1] + "\t\tResult: " + almostDamage[0] * almostDamage[1]);
         individualDetailsLog.AppendLine("Average distance to player: " + distance[0] + "\t\tModifier: " + distance[1] + "\t\tResult: " + distance[0] * distance[1]);

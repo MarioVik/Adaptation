@@ -19,12 +19,11 @@ public class RangedAttackFeature : MonoBehaviour
     public Transform ShootOrigin { get { return shootOrigin; } }
 
     public float Range { get; private set; } = 8f;
-    int damage = 40;
+    float baseDamage = 40;
+    float damage;
     float projectileSpeed = 10f;
     float attackSpeed, baseAttackSpeed = 1.0f;
     bool combo;
-
-    int shootableMask;
 
     AudioSource weaponAudio;
     float animationDuration;
@@ -32,7 +31,7 @@ public class RangedAttackFeature : MonoBehaviour
     float animationTimer = 0;
     Animator anim;
 
-    public void IncreaseAttackDamage(int increase) => damage += increase;
+    public void IncreaseAttackDamage() => damage += (baseDamage * 0.125f);
 
     public void IncreaseAttackSpeed(float increase) => attackSpeed += increase;
 
@@ -51,7 +50,7 @@ public class RangedAttackFeature : MonoBehaviour
         // Scaling to current speed
         animationDuration /= attackSpeed;
 
-        float delay = animationDuration * 0.3f;
+        float delay = animationDuration * 0.25f;
         Invoke("Shoot", delay);
 
         anim.SetBool("attacking", Attacking);
@@ -71,7 +70,8 @@ public class RangedAttackFeature : MonoBehaviour
 
     private void Awake()
     {
-        shootableMask = LayerMask.GetMask("Shootable");
+        damage = baseDamage;
+
         weaponAudio = GetComponent<AudioSource>();
 
         anim = GetComponentInParent<Animator>();

@@ -19,7 +19,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     float rotationSpeed = 100;
     float speed, range;
-    int damage;
+    float damage;
 
     Vector3 startPos;
 
@@ -32,7 +32,7 @@ public class ProjectileBehaviour : MonoBehaviour
     DashingFeature playerDashing;
     BlockingFeature playerBlocking;
 
-    public void Initialize(RangedAttackFeature user, float speed, float range, int damage)
+    public void Initialize(RangedAttackFeature user, float speed, float range, float damage)
     {
         this.user = user;
         this.speed = speed;

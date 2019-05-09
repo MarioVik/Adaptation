@@ -33,7 +33,7 @@ public class RandomizationManager : MonoBehaviour
     readonly int attributes = 12;
 
     System.Random rand = new System.Random();
-    char[] possibleAttributes = new char[] { 'h', 'd',/* 's',*/ 'r', 'm' };
+    char[] possibleAttributes = new char[] { 'h', 'd', 's', 'r', 'm' };
     char[] possibleAttackFeatures = new char[] { 'M', 'R' };
     char[] possbleUtilityFeatures = new char[] { 'B', 'D' };
 
@@ -97,7 +97,7 @@ public class RandomizationManager : MonoBehaviour
             && DeadIndividuals >= GenerationSize
             && CurrentGeneration <= TotalGenerations)
         {
-            individuals = StringsToIndividuals(CreateNextGeneration());
+            individuals = StringsToIndividuals(RandomizeNextGeneration());
             ResetVariables();
 
             PlayerReady = false;
@@ -234,24 +234,11 @@ public class RandomizationManager : MonoBehaviour
         return newFeatures.ToString();
     }
 
-    /// <summary>
-    /// Breeds a new generation and saves it as a .txt file 
-    /// </summary>
-    List<string> CreateNextGeneration()
+    List<string> RandomizeNextGeneration()
     {
         /*Logging details about last generation's individuals*/
         GenLogManager.SaveLog(LogType.Individual);
 
-        List<string> newGeneration = BreedNewGeneration();
-        return newGeneration;
-    }
-
-    /// <summary>
-    /// Looks at the top half of the fitness-scores from the last generation and uses
-    /// a single point crossover to create a new generation
-    /// </summary>
-    List<string> BreedNewGeneration()
-    {
         List<Individual> sortedList = individuals.OrderByDescending(i => i.FitnessScore).ToList();
         /*Logging*/
         GenLogManager.LogAfterSort(sortedList);

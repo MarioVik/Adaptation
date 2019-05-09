@@ -9,7 +9,13 @@ using UnityEngine;
 
 public class GenerationManager : MonoBehaviour
 {
-    static public bool GameOver { get; private set; } = false;
+    [SerializeField]
+    bool tutorial;
+    public static bool Tutorial;
+
+    [SerializeField]
+    bool randomMode;
+
     static public bool PlayerReady { get; set; } = true;
 
     public GameObject enemyPrefab;
@@ -18,6 +24,8 @@ public class GenerationManager : MonoBehaviour
 
     [SerializeField]
     SpawnPointDetection[] spawnPoints;
+    [SerializeField]
+    GameObject endText;
 
     static List<Individual> individuals;
     public static int InstantiatedIndividuals { get; private set; }
@@ -44,9 +52,16 @@ public class GenerationManager : MonoBehaviour
     int mutationChance = 8;
 
     bool gameStarted = false;
+    bool gameEnd = false;
 
     static public string FetchTraits(out int individualNumber)
     {
+        if (Tutorial)
+        {
+            individualNumber = 0;
+            return "hdrsm|MB";
+        }
+
         if (InstantiatedIndividuals >= individuals.Count)
             throw new Exception("exceeded generation amount");
 
@@ -64,16 +79,21 @@ public class GenerationManager : MonoBehaviour
 
     void Start()
     {
+        if (tutorial)
+        {
+            Tutorial = tutorial;
+            return;
+        }
+        else
+        {
+            Tutorial = tutorial;
+        }
+
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
         readyManager = GameObject.FindGameObjectWithTag("ReadyArea").GetComponent<PlayerReadyManager>();
 
         CurrentGeneration = 1;
         GenLogManager.Initialize();
-    }
-
-    void EndGame()
-    {
-        GameOver = true;
     }
 
     void ResetWave()
@@ -99,8 +119,25 @@ public class GenerationManager : MonoBehaviour
 
     void Update()
     {
+        if (tutorial)
+            return;
+
         if (CurrentGeneration > TotalGenerations)
-            EndGame();
+        {
+            GenLogManager.LogForGraphing(individuals);
+            GenLogManager.SaveLog(LogType.Individual);
+            endText.SetActive(true);
+            gameEnd = true;
+        }
+
+        if (gameEnd)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
+            return;
+        }
 
         if (playerHealth.IsDead && PlayerReady)
         {
@@ -118,7 +155,14 @@ public class GenerationManager : MonoBehaviour
 
         if (!gameStarted)
         {
-            individuals = StringsToIndividuals(CreateFirstGeneration());
+            if (randomMode)
+            {
+                individuals = StringsToIndividuals(RandomizeGeneration());
+            }
+            else
+            {
+                individuals = StringsToIndividuals(CreateFirstGeneration());
+            }
 
             ResetVariables();
             gameStarted = true;
@@ -126,21 +170,25 @@ public class GenerationManager : MonoBehaviour
             PlayerReady = false;
             readyManager.NewWave();
             return;
-
-            Spawn(GenerationSize);
         }
         else if (InstantiatedIndividuals >= GenerationSize
             && DeadIndividuals >= GenerationSize
             && CurrentGeneration <= TotalGenerations)
         {
-            individuals = StringsToIndividuals(CreateNextGeneration());
+            if (randomMode)
+            {
+                individuals = StringsToIndividuals(RandomizeNextGeneration());
+            }
+            else
+            {
+                individuals = StringsToIndividuals(CreateNextGeneration());
+            }
+
             ResetVariables();
 
             PlayerReady = false;
             readyManager.NewWave();
             return;
-
-            Spawn(GenerationSize);
         }
 
 
@@ -260,6 +308,19 @@ public class GenerationManager : MonoBehaviour
         return newGeneration;
     }
 
+    List<string> RandomizeGeneration()
+    {
+        List<string> newGeneration = new List<string>();
+        for (int i = 0; i < GenerationSize; i++)
+        {
+            string newIndividual = RandomizeIndividual();
+            newGeneration.Add(newIndividual.ToString());
+        }
+
+        GenFilesManager.SaveGeneration(newGeneration);
+        return newGeneration;
+    }
+
     string RandomizeIndividual()
     {
         StringBuilder newIndividual = new StringBuilder();
@@ -339,11 +400,13 @@ public class GenerationManager : MonoBehaviour
 
             StringBuilder newChildA = new StringBuilder();
             StringBuilder newChildB = new StringBuilder();
-            int crossoverPoint = rand.Next(1, attributes);
 
+            // Uniform crossover
+            int crossoverPoint = rand.Next(1, attributes);
             for (int indexParentTrait = 0; indexParentTrait < attributes; indexParentTrait++)
             {
-                if (indexParentTrait < crossoverPoint)
+                int coinFlip = rand.Next(0, 2);
+                if (coinFlip == 0)
                 {
                     newChildA.Append(newAttributes[indexParentA][indexParentTrait]);
                     newChildB.Append(newAttributes[indexParentB][indexParentTrait]);
@@ -354,6 +417,22 @@ public class GenerationManager : MonoBehaviour
                     newChildB.Append(newAttributes[indexParentA][indexParentTrait]);
                 }
             }
+
+            // Single point crossover
+            //int crossoverPoint = rand.Next(1, attributes);
+            //for (int indexParentTrait = 0; indexParentTrait < attributes; indexParentTrait++)
+            //{
+            //    if (indexParentTrait < crossoverPoint)
+            //    {
+            //        newChildA.Append(newAttributes[indexParentA][indexParentTrait]);
+            //        newChildB.Append(newAttributes[indexParentB][indexParentTrait]);
+            //    }
+            //    else
+            //    {
+            //        newChildA.Append(newAttributes[indexParentB][indexParentTrait]);
+            //        newChildB.Append(newAttributes[indexParentA][indexParentTrait]);
+            //    }
+            //}
 
             ConsiderMutation(newChildA);
             ConsiderMutation(newChildB);
@@ -427,5 +506,29 @@ public class GenerationManager : MonoBehaviour
             /*Logging*/
             GenLogManager.LogMutatatedIndividual(child.ToString(), afterMutation: true);
         }
+    }
+
+    List<string> RandomizeNextGeneration()
+    {
+        /*Logging details about last generation's individuals*/
+        GenLogManager.SaveLog(LogType.Individual);
+
+        List<Individual> sortedList = individuals.OrderByDescending(i => i.FitnessScore).ToList();
+        /*Logging*/
+        GenLogManager.LogAfterSort(sortedList);
+        GenLogManager.LogForGraphing(sortedList);
+        GenLogManager.SaveLog(LogType.ForGraphing);
+
+        List<string> newGeneration = RandomizeGeneration();
+
+        /*Logging*/
+        GenLogManager.LogNewGeneration(newGeneration);
+        /*Logging*/
+        GenLogManager.SaveLog(LogType.Progress);
+
+        individuals.Clear();
+        CurrentGeneration++;
+
+        return newGeneration;
     }
 }

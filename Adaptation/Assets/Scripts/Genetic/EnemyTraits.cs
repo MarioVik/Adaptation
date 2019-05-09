@@ -37,13 +37,13 @@ public class EnemyTraits : MonoBehaviour
         switch (attrChar)
         {
             case 'h':
-                GetComponent<EnemyHealth>().IncreaseHealth(10);
+                GetComponent<EnemyHealth>().IncreaseHealth();
                 break;
             case 'd':
                 if (Melee)
-                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackDamage(5);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackDamage();
                 if (Ranged)
-                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackDamage(5);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackDamage();
                 break;
             case 's':
                 if (Melee)
@@ -51,12 +51,6 @@ public class EnemyTraits : MonoBehaviour
                 if (Ranged)
                     GetComponentInChildren<RangedAttackFeature>().IncreaseAttackSpeed(0.1f);
                 break;
-            //case 'o':
-            //    if (melee)
-            //        GetComponentInChildren<EnemyMeleeAttacking>().IncreaseAttackRate(0.1f);
-            //    if (ranged)
-            //        GetComponentInChildren<EnemyRangedAttacking>().IncreaseAttackRate(0.1f);
-            //break;
             case 'r':
                 if (Melee)
                 {

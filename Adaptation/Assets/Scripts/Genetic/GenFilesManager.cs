@@ -41,6 +41,14 @@ static public class GenFilesManager
         return playerTraits;
     }
 
+    static public string LoadTutorial(int tutorial)
+    {
+        StreamReader reader = new StreamReader(DirectoryPath + "Tutorial" + tutorial + ".txt");
+        string playerTraits = reader.ReadLine();
+        reader.Close();
+        return playerTraits;
+    }
+
     static public List<Individual> LoadGeneration()
     {
         StreamReader reader = new StreamReader(GenerationFilepath);

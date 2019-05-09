@@ -13,8 +13,8 @@ public class EnemyHealth : MonoBehaviour
 
     TargetingHandler targeting;
 
-    public int startingHealth = 80;
-    public int currentHealth;
+    public float startingHealth = 100;
+    public float currentHealth;
     public float sinkSpeed = 2.5f;
     public AudioClip deathClip;
 
@@ -31,10 +31,11 @@ public class EnemyHealth : MonoBehaviour
     float uiOffset = 0.05f/*-1.6f*/;
     float uiScale = 0.005f;
 
-    public void IncreaseHealth(int increase)
+    public void IncreaseHealth()
     {
-        startingHealth += increase;
+        startingHealth += (startingHealth * 0.1f);
         currentHealth = startingHealth;
+
         healthSlider.maxValue = currentHealth;
         healthSlider.value = currentHealth;
     }
@@ -91,7 +92,7 @@ public class EnemyHealth : MonoBehaviour
         healthSlider.transform.position += dirToCamera * 4;
     }
 
-    public void TakeDamage(int amount, Vector3 hitPoint)
+    public void TakeDamage(float amount, Vector3 hitPoint)
     {
         if (IsDead)
             return;

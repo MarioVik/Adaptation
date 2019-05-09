@@ -22,7 +22,8 @@ public class MeleeAttackFeature : MonoBehaviour
 
     Collider weaponcollider;
 
-    int damage = 60;
+    float baseDamage = 65;
+    float damage;
     float speed, baseSpeed;
     bool combo;
 
@@ -33,7 +34,7 @@ public class MeleeAttackFeature : MonoBehaviour
     float animationTimer = 0;
     Animator anim;
 
-    public void IncreaseAttackDamage(int increase) => damage += increase;
+    public void IncreaseAttackDamage() => damage += (baseDamage * 0.125f);
 
     public void IncreaseAttackSpeed(float increase) => speed += increase;
 
@@ -103,6 +104,8 @@ public class MeleeAttackFeature : MonoBehaviour
 
     private void Awake()
     {
+        damage = baseDamage;
+
         weaponAudio = GetComponent<AudioSource>();
 
         weaponcollider = GetComponent<CapsuleCollider>();
@@ -213,7 +216,7 @@ public class MeleeAttackFeature : MonoBehaviour
                 return;
 
             enemyHealth.TakeDamage(damage, hitPoint);
-            Debug.Log("Enemy hit");
+            //Debug.Log("Enemy hit");
         }
     }
 
