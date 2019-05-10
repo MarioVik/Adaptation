@@ -16,6 +16,8 @@ public class PlayerTraits : MonoBehaviour
 
     public bool Ranged { get; private set; }
     public bool Melee { get; private set; }
+    public bool Block { get; private set; }
+    public bool Dash { get; private set; }
 
     void Start()
     {
@@ -90,9 +92,20 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 'B':
                 blockObject.SetActive(true);
+
+                if (!Ranged)
+                {
+                    rangedObject.SetActive(true);
+                    rangedObject.GetComponent<RangedAttackFeature>().OnlyForBlock = true;
+                    rangedObject.GetComponent<MeshRenderer>().enabled = false;
+                }
+
+                Block = true;
+
                 break;
             case 'D':
                 GetComponent<DashingFeature>().enabled = true;
+                Dash = true;
                 break;
             default:
                 throw new System.Exception("Player has unrecognized feature");

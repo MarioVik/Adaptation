@@ -6851,6 +6851,7 @@ MonoBehaviour:
   characterTransform: {fileID: 4412919469045156}
   sliderPreafab: {fileID: 8674604864378442237, guid: d202a6bae7be530418c3be59f3a725c7,
     type: 3}
+  rangedAttacking: {fileID: 8998885933963737106}
 --- !u!1 &5453425561702790075
 GameObject:
   m_ObjectHideFlags: 0

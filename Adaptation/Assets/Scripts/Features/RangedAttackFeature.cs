@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RangedAttackFeature : MonoBehaviour
 {
+    public bool OnlyForBlock { get; set; }
+
     public bool Attacking { get; private set; }
 
     public bool IsPlayer { get { return isPlayer; } }
@@ -109,7 +111,7 @@ public class RangedAttackFeature : MonoBehaviour
         }
     }
 
-    private void Shoot()
+    public void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab);
         projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, Range, damage);

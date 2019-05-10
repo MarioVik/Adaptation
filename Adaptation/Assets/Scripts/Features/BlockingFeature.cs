@@ -26,6 +26,9 @@ public class BlockingFeature : MonoBehaviour
     float activeTimer = 0;
     float activeDuration = 5f;
 
+    [SerializeField]
+    RangedAttackFeature rangedAttacking;
+
     public void Activate()
     {
         coolDownTimer = 0;
@@ -47,6 +50,11 @@ public class BlockingFeature : MonoBehaviour
         cooldownSlider.maxValue = coolDown;
         cooldownSlider.value = coolDown;
         //Debug.Log("Block Stopped");
+    }
+
+    public void Reflect(/*Vector3 incomingDirection*/)
+    {
+        rangedAttacking.Shoot();
     }
 
     private void Start()

@@ -888,6 +888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 051418cff7695ef4399464dfc89578a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorial: 0
   meleeObject: {fileID: 4933245001564209812}
   rangedObject: {fileID: 4523233905093845874}
   blockObject: {fileID: 5340979041483773908}
@@ -906,6 +907,7 @@ MonoBehaviour:
   healthSlider: {fileID: 0}
   damageImage: {fileID: 0}
   deathClip: {fileID: 8300000, guid: d36a393bca4582043982db9089e1694f, type: 3}
+  hurtClip: {fileID: 0}
   flashSpeed: 5
   flashColour: {r: 1, g: 0, b: 0, a: 0.15686275}
   playerBlocking: {fileID: 9203182338668119507}
@@ -7378,6 +7380,7 @@ MonoBehaviour:
   characterTransform: {fileID: 4412919469045156}
   sliderPreafab: {fileID: 8674604864378442237, guid: d202a6bae7be530418c3be59f3a725c7,
     type: 3}
+  rangedAttacking: {fileID: 4490881236577021202}
 --- !u!1 &5453425561702790075
 GameObject:
   m_ObjectHideFlags: 0
@@ -11599,7 +11602,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2966847198795004848, guid: 4947b503cb72bb145b62689e78b84301,
+    - target: {fileID: 8070987585793539296, guid: 4947b503cb72bb145b62689e78b84301,
         type: 3}
       propertyPath: IsPlayer
       value: 1
@@ -11609,7 +11612,7 @@ PrefabInstance:
       propertyPath: IsPlayer
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8070987585793539296, guid: 4947b503cb72bb145b62689e78b84301,
+    - target: {fileID: 2966847198795004848, guid: 4947b503cb72bb145b62689e78b84301,
         type: 3}
       propertyPath: IsPlayer
       value: 1

@@ -29,10 +29,11 @@ public class MeleeAttackFeature : MonoBehaviour
 
     AudioSource weaponAudio;
 
+    Animator anim;
     float animationDuration;
     AnimationClip normalClip, comboClip;
     float animationTimer = 0;
-    Animator anim;
+
 
     public void IncreaseAttackDamage() => damage += (baseDamage * 0.125f);
 
@@ -192,7 +193,10 @@ public class MeleeAttackFeature : MonoBehaviour
                 if (playerDashing != null && playerDashing.isActiveAndEnabled && playerDashing.Dashing)
                     return;
                 if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+                {
+                    anim.SetTrigger("recoil");
                     return;
+                }
 
                 outerHit = true;
             }

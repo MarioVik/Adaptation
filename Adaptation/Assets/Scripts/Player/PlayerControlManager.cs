@@ -29,6 +29,8 @@ public class PlayerControlManager : MonoBehaviour
     float moveSpeed = 9f;  //speed of running
     float rotateSpeed = 35f;   //speed of character's turning around    
 
+    PlayerTraits traits;
+
     [Header("FeatureBehaviours")]
     [SerializeField]
     MeleeAttackFeature meleeAttacking;
@@ -79,13 +81,20 @@ public class PlayerControlManager : MonoBehaviour
         SetupAnimator();
         rigid = GetComponent<Rigidbody>();
 
-        hasMelee = meleeAttacking.gameObject.activeSelf;
-        hasRanged = rangedAttacking.gameObject.activeSelf;
-        targeting = GetComponent<TargetingHandler>();
+        traits = GetComponentInChildren<PlayerTraits>();
 
-        hasBlock = blocking.gameObject.activeSelf;
-        dashing = GetComponentInChildren<DashingFeature>();
-        hasDash = dashing.isActiveAndEnabled;
+        hasMelee = traits.Melee;
+        hasRanged = traits.Ranged;
+
+        hasBlock = traits.Block;
+        if (hasBlock)
+            blockAudio = GetComponent<AudioSource>();
+
+        hasDash = traits.Dash;
+        if (hasDash)
+            dashing = GetComponentInChildren<DashingFeature>();
+
+        targeting = GetComponent<TargetingHandler>();
 
         blockAudio = GetComponent<AudioSource>();
 
@@ -159,7 +168,7 @@ public class PlayerControlManager : MonoBehaviour
         //This is for limiting values from 0 to 1.
         float m;
 
-        if (dashing.Dashing)
+        if (hasDash && dashing.Dashing)
         {
             horizontalInput = dashHorizontal;
             verticalInput = dashVertical;
@@ -258,7 +267,7 @@ public class PlayerControlManager : MonoBehaviour
 
         float pDelta = d;
 
-        if (canMove || dashing.Dashing)
+        if (canMove || (hasDash && dashing.Dashing))
         {
             rigid.velocity = moveDirection;  //This controls the character movement.                  
         }

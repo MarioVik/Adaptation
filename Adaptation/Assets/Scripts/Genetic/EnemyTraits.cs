@@ -85,6 +85,14 @@ public class EnemyTraits : MonoBehaviour
                 break;
             case 'B':
                 blockObject.SetActive(true);
+
+                if (!Ranged)
+                {
+                    rangedObject.SetActive(true);
+                    rangedObject.GetComponent<RangedAttackFeature>().OnlyForBlock = true;
+                    rangedObject.GetComponent<MeshRenderer>().enabled = false;
+                }
+
                 Block = true;
                 break;
             case 'D':

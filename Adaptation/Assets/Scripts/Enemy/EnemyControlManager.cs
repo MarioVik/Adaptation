@@ -33,6 +33,9 @@ public class EnemyControlManager : MonoBehaviour
     float moveSpeed = 9f;  //speed of running
     float rotateSpeed = 60f;   //speed of character's turning around    
 
+
+    EnemyTraits traits;
+
     [Header("FeatureBehaviours")]
     [SerializeField]
     MeleeAttackFeature meleeAttacking;
@@ -82,14 +85,18 @@ public class EnemyControlManager : MonoBehaviour
         SetupAnimator();
         rigid = GetComponent<Rigidbody>();
 
-        hasMelee = meleeAttacking.gameObject.activeSelf;
-        hasRanged = rangedAttacking.gameObject.activeSelf;
+        traits = GetComponentInChildren<EnemyTraits>();
 
-        hasBlock = blocking.gameObject.activeSelf;
-        dashing = GetComponentInChildren<DashingFeature>();
-        hasDash = dashing.isActiveAndEnabled;
+        hasMelee = traits.Melee;
+        hasRanged = traits.Ranged;
 
-        blockAudio = GetComponent<AudioSource>();
+        hasBlock = traits.Block;
+        if (hasBlock)
+            blockAudio = GetComponent<AudioSource>();
+
+        hasDash = traits.Dash;
+        if (hasDash)
+            dashing = GetComponentInChildren<DashingFeature>();
 
         health = GetComponentInChildren<EnemyHealth>();
     }
@@ -150,16 +157,17 @@ public class EnemyControlManager : MonoBehaviour
         //This is for limiting values from 0 to 1.
         float m;
 
-        if (!dashing.Dashing)
-        {
-            m = Mathf.Abs(HorizontalInput) + Mathf.Abs(VerticalInput);
-            moveDirection = verticalMovement + horizontalMovement;
-        }
-        else
+        if (hasDash && dashing.Dashing)
         {
             m = Mathf.Abs(DashDirection.z) + Mathf.Abs(DashDirection.x);
             moveDirection = DashDirection;
         }
+        else
+        {
+            m = Mathf.Abs(HorizontalInput) + Mathf.Abs(VerticalInput);
+            moveDirection = verticalMovement + horizontalMovement;
+        }
+
         moveAmount = Mathf.Clamp01(m);
 
         //multiplying target speed and move amount.
@@ -247,7 +255,7 @@ public class EnemyControlManager : MonoBehaviour
 
         float pDelta = d;
 
-        if (dashing.Dashing)
+        if (hasDash && dashing.Dashing)
         {
             rigid.velocity = moveDirection;  //This controls the character movement.                  
         }

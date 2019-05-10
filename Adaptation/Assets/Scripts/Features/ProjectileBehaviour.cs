@@ -118,7 +118,10 @@ public class ProjectileBehaviour : MonoBehaviour
 
                 BlockingFeature enemyBlocking = collision.collider.GetComponentInChildren<BlockingFeature>();
                 if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
+                {
+                    enemyBlocking.Reflect();
                     return;
+                }
 
                 enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
 
@@ -140,16 +143,22 @@ public class ProjectileBehaviour : MonoBehaviour
             }
             else if (collision.collider.tag == "Player" && !playerHealth.IsDead)
             {
-                Explode(collision);
-
                 if (playerDashing != null && playerDashing.isActiveAndEnabled && playerDashing.Dashing)
+                {
+                    Sizzle();
                     return;
+                }
 
                 playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
 
                 if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+                {
+                    Sizzle();
+                    playerBlocking.Reflect();
                     return;
+                }
 
+                Explode(collision);
                 playerHealth.TakeDamage(damage);
                 user.GetComponentInParent<FitnessTracker>().DamagedPlayer(damage);
                 inflictedDamage = true;
