@@ -42,12 +42,12 @@ public class GenerationManager : MonoBehaviour
 
     System.Random rand = new System.Random();
     char[] possibleAttributes = new char[] { 'h', 'd', 's', 'r', 'm' };
-    char[] possibleAttackFeatures = new char[] { 'M', 'R' };
-    char[] possbleUtilityFeatures = new char[] { 'B', 'D' };
+    char[] possibleOffensiveFeatures = new char[] { 'M', 'R' };
+    char[] possbleDefensiveFeatures = new char[] { 'B', 'D' };
 
     char RandomAttribute { get { return possibleAttributes[rand.Next(0, possibleAttributes.Length)]; } }
-    char RandomAttackFeature { get { return possibleAttackFeatures[rand.Next(0, possibleAttackFeatures.Length)]; } }
-    char RandomUtilityFeature { get { return possbleUtilityFeatures[rand.Next(0, possbleUtilityFeatures.Length)]; } }
+    char RandomOffensiveFeature { get { return possibleOffensiveFeatures[rand.Next(0, possibleOffensiveFeatures.Length)]; } }
+    char RandomDefensiveFeature { get { return possbleDefensiveFeatures[rand.Next(0, possbleDefensiveFeatures.Length)]; } }
 
     int mutationChance = 8;
 
@@ -348,8 +348,8 @@ public class GenerationManager : MonoBehaviour
     {
         StringBuilder newFeatures = new StringBuilder();
 
-        newFeatures.Append(RandomAttackFeature);
-        newFeatures.Append(RandomUtilityFeature);
+        newFeatures.Append(RandomOffensiveFeature);
+        newFeatures.Append(RandomDefensiveFeature);
 
         return newFeatures.ToString();
     }

@@ -21,6 +21,9 @@ public class PlayerTraits : MonoBehaviour
 
     void Start()
     {
+        if (!Debug.isDebugBuild)
+            Cursor.visible = false;
+
         string[] traits;
 
         if (tutorial > 0)

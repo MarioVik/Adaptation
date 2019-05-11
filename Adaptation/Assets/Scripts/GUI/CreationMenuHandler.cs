@@ -9,23 +9,18 @@ public class CreationMenuHandler : MonoBehaviour
 {
     [SerializeField]
     Text[] attributeTexts;
-    [SerializeField]
-    Text[] featureTexts;
-    [SerializeField]
-    Text[] featureButtonTexts;
+
+    [SerializeField] Toggle rangedToggle;
+    [SerializeField] Toggle meleeToggle;
+    [SerializeField] Toggle dashToggle;
+    [SerializeField] Toggle blockToggle;
 
     [SerializeField]
     Button completeButton;
 
-    [SerializeField]
-    int totalAttributes;
-    [SerializeField]
-    int totalFeatures;
+    int totalAttributes = 12;
 
-    int attributes, features;
-
-    int health, attackDamage, attackSpeed, attackRange, movementSpeed;
-    bool melee, ranged, block, dash;
+    int attributes, health, attackDamage, attackSpeed, attackRange, movementSpeed;
 
     private void Start()
     {
@@ -59,17 +54,17 @@ public class CreationMenuHandler : MonoBehaviour
 
         playertraits.Append('|');
 
-        if (melee)
-            playertraits.Append('M');
-
-        if (ranged)
+        if (rangedToggle.isOn)
             playertraits.Append('R');
 
-        if (block)
-            playertraits.Append('B');
+        if (meleeToggle.isOn)
+            playertraits.Append('M');
 
-        if (dash)
+        if (dashToggle.isOn)
             playertraits.Append('D');
+
+        if (blockToggle.isOn)
+            playertraits.Append('B');
 
         return playertraits.ToString();
     }
@@ -83,19 +78,9 @@ public class CreationMenuHandler : MonoBehaviour
         attributeTexts[4].text = "Movement Speed: " + movementSpeed;
         attributeTexts[5].text = "Atrribute Points Left: " + (totalAttributes - attributes);
 
-        featureTexts[0].text = "Melee Attack: " + melee;
-        featureTexts[1].text = "Ranged Attack: " + ranged;
-        featureTexts[2].text = "Block: " + block;
-        featureTexts[3].text = "Dash: " + dash;
-        featureTexts[4].text = "Feature Points Left: " + (totalFeatures - features);
-
-        featureButtonTexts[0].text = melee ? "x" : "o";
-        featureButtonTexts[1].text = ranged ? "x" : "o";
-        featureButtonTexts[2].text = block ? "x" : "o";
-        featureButtonTexts[3].text = dash ? "x" : "o";
-
         if (totalAttributes - attributes == 0
-            && totalFeatures - features == 0)
+            && (rangedToggle.isOn || meleeToggle.isOn)
+            && (dashToggle.isOn || blockToggle.isOn))
         {
             completeButton.interactable = true;
         }
@@ -205,62 +190,38 @@ public class CreationMenuHandler : MonoBehaviour
         UpdateGUI();
     }
 
-    public void ToggleMelee()
+    public void ToggleRanged(bool active)
     {
-        if (features < totalFeatures && !melee)
+        if (active && meleeToggle.isOn)
         {
-            features++;
-            melee = true;
-        }
-        else if (melee)
-        {
-            features--;
-            melee = false;
+            meleeToggle.isOn = false;
         }
         UpdateGUI();
     }
 
-    public void ToggleRanged()
+    public void ToggleMelee(bool active)
     {
-        if (features < totalFeatures && !ranged)
+        if (active && rangedToggle.isOn)
         {
-            features++;
-            ranged = true;
-        }
-        else if (ranged)
-        {
-            features--;
-            ranged = false;
+            rangedToggle.isOn = false;
         }
         UpdateGUI();
     }
 
-    public void ToggleBlock()
+    public void ToggleDash(bool active)
     {
-        if (features < totalFeatures && !block)
+        if (active && blockToggle.isOn)
         {
-            features++;
-            block = true;
-        }
-        else if (block)
-        {
-            features--;
-            block = false;
+            blockToggle.isOn = false;
         }
         UpdateGUI();
     }
 
-    public void ToggleDash()
+    public void ToggleBlock(bool active)
     {
-        if (features < totalFeatures && !dash)
+        if (active && dashToggle.isOn)
         {
-            features++;
-            dash = true;
-        }
-        else if (dash)
-        {
-            features--;
-            dash = false;
+            dashToggle.isOn = false;
         }
         UpdateGUI();
     }
