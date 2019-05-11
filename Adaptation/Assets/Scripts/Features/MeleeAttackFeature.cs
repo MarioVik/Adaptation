@@ -226,6 +226,7 @@ public class MeleeAttackFeature : MonoBehaviour
                 return;
             }
 
+            enemyHealth.GetComponentInParent<EnemyControlManager>().KnockBack(enemyHealth.transform.position - transform.position);
             enemyHealth.TakeDamage(damage, hitPoint);
             //Debug.Log("Enemy hit");
         }
@@ -249,6 +250,7 @@ public class MeleeAttackFeature : MonoBehaviour
                 return;
             }
 
+            playerHealth.GetComponentInParent<PlayerControlManager>().KnockBack(playerHealth.transform.position - transform.position);
             playerHealth.TakeDamage(damage);
             GetComponentInParent<FitnessTracker>().DamagedPlayer(damage);
             inflictedDamage = true;

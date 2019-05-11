@@ -56,6 +56,11 @@ public class PlayerControlManager : MonoBehaviour
 
     AudioSource blockAudio;
 
+    readonly float knockBackDistance = 1f;
+    readonly float knockBackSpeed = 10f;
+    Vector3 posBeforeKnock, knockDirection;
+    bool beingKnocked;
+
     public void IncreaseMovementSpeed(float increase) => moveSpeed += increase;
 
     public void GetHit()
@@ -74,6 +79,13 @@ public class PlayerControlManager : MonoBehaviour
         //        blockAudio.Play();
 
         anim.SetTrigger("hit");
+    }
+
+    public void KnockBack(Vector3 direction)
+    {
+        beingKnocked = true;
+        posBeforeKnock = transform.position;
+        knockDirection = direction.normalized;
     }
 
     void Start() // Initiallizing camera, animator, rigidboy
@@ -135,7 +147,6 @@ public class PlayerControlManager : MonoBehaviour
         if (health.IsDead)
             return;
 
-
         GetInput();     //getting control input from keyboard or joypad
         UpdateStates();   //Updating anything related to character's actions.         
     }
@@ -152,6 +163,11 @@ public class PlayerControlManager : MonoBehaviour
     void UpdateStates() //updates character's various actions.
     {
         canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".
+        
+
+        if (Vector3.Distance(posBeforeKnock, transform.position) >= knockBackDistance)
+            beingKnocked = false;
+
 
         UpdateAttack();
 
@@ -167,16 +183,14 @@ public class PlayerControlManager : MonoBehaviour
         if (hasDash)
             UpdateDash(ref targetSpeed);
 
-        //This is for limiting values from 0 to 1.
-        float m;
-
         if (hasDash && dashing.Dashing)
         {
             horizontalInput = dashHorizontal;
             verticalInput = dashVertical;
         }
 
-        m = Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput);
+        //This is for limiting values from 0 to 1.
+        float m = Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput);
 
         moveAmount = Mathf.Clamp01(m);
 
@@ -269,7 +283,11 @@ public class PlayerControlManager : MonoBehaviour
 
         float pDelta = d;
 
-        if (canMove || (hasDash && dashing.Dashing))
+        if (beingKnocked)
+        {
+            rigid.velocity = knockDirection * knockBackSpeed;
+        }
+        else if (canMove || (hasDash && dashing.Dashing))
         {
             rigid.velocity = moveDirection;  //This controls the character movement.                  
         }

@@ -60,6 +60,11 @@ public class EnemyControlManager : MonoBehaviour
 
     AudioSource blockAudio;
 
+    readonly float knockBackDistance = 1f;
+    readonly float knockBackSpeed = 10f;
+    Vector3 posBeforeKnock, knockDirection;
+    bool beingKnocked;
+
     public void IncreaseMovementSpeed(float increase) => moveSpeed += increase;
 
     public void GetHit()
@@ -78,6 +83,13 @@ public class EnemyControlManager : MonoBehaviour
         //        blockAudio.Play();
 
         anim.SetTrigger("hit");
+    }
+
+    public void KnockBack(Vector3 direction)
+    {
+        beingKnocked = true;
+        posBeforeKnock = transform.position;
+        knockDirection = direction.normalized;
     }
 
     void Start() // Initiallizing camera, animator, rigidboy
@@ -135,7 +147,6 @@ public class EnemyControlManager : MonoBehaviour
             return;
 
         UpdateStates();   //Updating anything related to character's actions.         
-
     }
 
     void UpdateStates() //updates character's various actions.
@@ -143,6 +154,9 @@ public class EnemyControlManager : MonoBehaviour
         canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".
 
         UpdateAttack();
+
+        if (Vector3.Distance(posBeforeKnock, transform.position) >= knockBackDistance)
+            beingKnocked = false;
 
         float targetSpeed = moveSpeed;  //set run speed as target speed.
 
@@ -257,7 +271,11 @@ public class EnemyControlManager : MonoBehaviour
 
         float pDelta = d;
 
-        if (hasDash && dashing.Dashing)
+        if (beingKnocked)
+        {
+            rigid.velocity = knockDirection * knockBackSpeed;
+        }
+        else if (hasDash && dashing.Dashing)
         {
             rigid.velocity = moveDirection;  //This controls the character movement.                  
         }
