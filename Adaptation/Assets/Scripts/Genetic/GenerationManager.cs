@@ -19,7 +19,7 @@ public class GenerationManager : MonoBehaviour
     static public bool PlayerReady { get; set; } = true;
 
     public GameObject enemyPrefab;
-    PlayerHealth playerHealth;
+    static PlayerHealth playerHealth;
     PlayerReadyManager readyManager;
 
     [SerializeField]
@@ -32,22 +32,23 @@ public class GenerationManager : MonoBehaviour
     public static int DeadIndividuals { get; private set; }
     public static int CurrentGeneration { get; private set; }
     public static int TotalGenerations { get; } = 10;
-    public static int GenerationSize { get; } = 9;
-    public static int ConcurrentIndividuals { get; } = 3;
+    public static int GenerationSize { get; } = 9; // (GenerationSize - 1) must be dividable by permutations.Length. Aside for the one random individual, the first generation has an equal amount of every permutation.
+    public static int ConcurrentIndividuals { get; } = 1;
 
-    static float spawnFrequency = 8f;
+    static readonly float spawnFrequency = 8f;
     static float spawnTimer = 0;
 
-    readonly int attributes = 12;
+    public static int Attributes { get; } = 12;
 
     System.Random rand = new System.Random();
-    char[] possibleAttributes = new char[] { 'h', 'd', 's', 'r', 'm' };
-    char[] possibleOffensiveFeatures = new char[] { 'M', 'R' };
-    char[] possbleDefensiveFeatures = new char[] { 'B', 'D' };
+    char[] attributes = new char[] { 'h', 'd', 's', 'r', 'm' };
+    char[] offensiveFeatures = new char[] { 'M', 'R' };
+    char[] defensiveFeatures = new char[] { 'B', 'D' };
+    string[] featurePermutations = { /*"MB", "MD", */"RB", "RD" };
 
-    char RandomAttribute { get { return possibleAttributes[rand.Next(0, possibleAttributes.Length)]; } }
-    char RandomOffensiveFeature { get { return possibleOffensiveFeatures[rand.Next(0, possibleOffensiveFeatures.Length)]; } }
-    char RandomDefensiveFeature { get { return possbleDefensiveFeatures[rand.Next(0, possbleDefensiveFeatures.Length)]; } }
+    char RandomAttribute { get { return attributes[rand.Next(0, attributes.Length)]; } }
+    char RandomOffensiveFeature { get { return offensiveFeatures[rand.Next(0, offensiveFeatures.Length)]; } }
+    char RandomDefensiveFeature { get { return defensiveFeatures[rand.Next(0, defensiveFeatures.Length)]; } }
 
     int mutationChance = 8;
 
@@ -96,7 +97,7 @@ public class GenerationManager : MonoBehaviour
         GenLogManager.Initialize();
     }
 
-    void ResetWave()
+    static public void ResetWave()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("EnemyController");
         foreach (GameObject enemy in enemies)
@@ -221,7 +222,7 @@ public class GenerationManager : MonoBehaviour
         return individualList;
     }
 
-    void ResetVariables()
+    static void ResetVariables()
     {
         InstantiatedIndividuals = 0;
         DeadIndividuals = 0;
@@ -276,15 +277,17 @@ public class GenerationManager : MonoBehaviour
 
     List<string> CreateFirstGeneration()
     {
-        string[] permutations = { "MB", "MD", "RB", "RD" };
-
         List<string> features = new List<string>();
-        for (int i = 0; i < (GenerationSize - 1) / permutations.Length; i++)
+        for (int i = 0; i < (GenerationSize - 1) / featurePermutations.Length; i++)
         {
-            features.Add(permutations[0]);
-            features.Add(permutations[1]);
-            features.Add(permutations[2]);
-            features.Add(permutations[3]);
+            foreach (string permutation in featurePermutations)
+            {
+                features.Add(permutation);
+            }
+            //features.Add(permutations[0]);
+            //features.Add(permutations[1]);
+            //features.Add(permutations[2]);
+            //features.Add(permutations[3]);
         }
 
         List<string> newGeneration = new List<string>();
@@ -336,7 +339,7 @@ public class GenerationManager : MonoBehaviour
     {
         StringBuilder newAttributes = new StringBuilder();
 
-        for (int j = 0; j < attributes; j++)
+        for (int j = 0; j < Attributes; j++)
         {
             newAttributes.Append(RandomAttribute);
         }
@@ -402,8 +405,8 @@ public class GenerationManager : MonoBehaviour
             StringBuilder newChildB = new StringBuilder();
 
             // Uniform crossover
-            int crossoverPoint = rand.Next(1, attributes);
-            for (int indexParentTrait = 0; indexParentTrait < attributes; indexParentTrait++)
+            int crossoverPoint = rand.Next(1, Attributes);
+            for (int indexParentTrait = 0; indexParentTrait < Attributes; indexParentTrait++)
             {
                 int coinFlip = rand.Next(0, 2);
                 if (coinFlip == 0)
@@ -441,7 +444,7 @@ public class GenerationManager : MonoBehaviour
             newChildB.Append('|');
 
             // Copy over the parent's features  to whichever child inherited the bigger part of the parent's genotype
-            if (crossoverPoint > attributes / 2)
+            if (crossoverPoint > Attributes / 2)
             {
                 newChildA.Append(newFeatures[indexParentA]);
                 newChildB.Append(newFeatures[indexParentB]);

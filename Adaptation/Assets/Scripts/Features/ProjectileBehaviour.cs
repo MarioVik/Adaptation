@@ -32,7 +32,7 @@ public class ProjectileBehaviour : MonoBehaviour
     DashingFeature playerDashing;
     BlockingFeature playerBlocking;
 
-    public void Initialize(RangedAttackFeature user, float speed, float range, float damage)
+    public void Initialize(RangedAttackFeature user, float speed, float range, float damage, Vector3 direction = new Vector3())
     {
         this.user = user;
         this.speed = speed;
@@ -40,7 +40,13 @@ public class ProjectileBehaviour : MonoBehaviour
         this.damage = damage;
 
         Vector3 originPosition = user.ShootOrigin.position;
-        Quaternion originRotation = user.ShootOrigin.rotation;
+        Quaternion originRotation;
+
+        if (direction == new Vector3())
+            originRotation = user.ShootOrigin.rotation;
+        else
+            originRotation = Quaternion.Euler(direction.x, 0, direction.z);
+
         InitializeEffect(originPosition, originRotation);
 
         if (!user.IsPlayer)
@@ -78,8 +84,6 @@ public class ProjectileBehaviour : MonoBehaviour
 
         if (Vector3.Distance(startPos, transform.position) >= range)
         {
-            if (ByPlayer)
-                outerBehaviour.Clear();
             Sizzle();
         }
     }
@@ -88,8 +92,6 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         if (collision.collider.tag == "Environment")
         {
-            if (ByPlayer)
-                outerBehaviour.Clear();
             Sizzle();
             return;
         }
@@ -119,7 +121,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 BlockingFeature enemyBlocking = collision.collider.GetComponentInChildren<BlockingFeature>();
                 if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
                 {
-                    enemyBlocking.Reflect();
+                    enemyBlocking.Reflect(transform.forward);
                     return;
                 }
 
@@ -154,7 +156,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
                 {
                     Sizzle();
-                    playerBlocking.Reflect();
+                    playerBlocking.Reflect(transform.forward);
                     return;
                 }
 
@@ -172,14 +174,17 @@ public class ProjectileBehaviour : MonoBehaviour
         }
     }
 
-    private void Sizzle()
+    public void Sizzle()
     {
-        if (!ByPlayer)
+        if (ByPlayer)
+        {
+            outerBehaviour.Clear();
+        }
+        else
         {
             if (!inflictedDamage && outerHit)
             {
                 // If the player is not blocking AND not dashing, register the "almost" damage
-
                 if (playerDashing != null && playerDashing.isActiveAndEnabled && playerDashing.Dashing)
                 { }
                 else if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)

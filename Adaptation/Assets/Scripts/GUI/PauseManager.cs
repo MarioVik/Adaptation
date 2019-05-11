@@ -31,6 +31,19 @@ public class PauseManager : MonoBehaviour
                 Time.timeScale = 1;
             }
         }
+
+        if (active)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                GenerationManager.ResetWave();
+
+                active = false;
+                Toggle();
+
+                Time.timeScale = 1;
+            }
+        }
     }
 
     void Toggle()

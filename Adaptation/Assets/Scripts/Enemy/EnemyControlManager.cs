@@ -71,9 +71,9 @@ public class EnemyControlManager : MonoBehaviour
             rangedAttacking.Disable();
         }
 
-        if (hasBlock)
-            if (blocking.Blocking)
-                blockAudio.Play();
+        //if (hasBlock)
+        //    if (blocking.Blocking)
+        //        blockAudio.Play();
 
         anim.SetTrigger("hit");
     }

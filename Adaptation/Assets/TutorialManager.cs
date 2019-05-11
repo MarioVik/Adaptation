@@ -88,6 +88,11 @@ public class TutorialManager : MonoBehaviour
                         SceneManager.LoadScene(1);
                     }
                 }
+
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    SceneManager.LoadScene(5);
+                }
                 break;
         }
     }
@@ -285,7 +290,6 @@ public class TutorialManager : MonoBehaviour
 
                     if (Input.GetButtonDown("Confirm"))
                     {
-                        GenerationManager.Tutorial = false;
                         SceneManager.LoadScene(5);
                     }
                 }

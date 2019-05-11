@@ -52,9 +52,9 @@ public class BlockingFeature : MonoBehaviour
         //Debug.Log("Block Stopped");
     }
 
-    public void Reflect(/*Vector3 incomingDirection*/)
+    public void Reflect(Vector3 incomingDirection)
     {
-        rangedAttacking.Shoot();
+        rangedAttacking.Shoot(-incomingDirection);
     }
 
     private void Start()

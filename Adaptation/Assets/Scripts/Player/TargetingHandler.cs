@@ -99,7 +99,9 @@ public class TargetingHandler : MonoBehaviour
     private void Untarget()
     {
         targetIndex = -1;
-        targetPointer.SetActive(false);
+
+        if (targetPointer != null)
+            targetPointer.SetActive(false);
     }
 
     private void TargetClosest()

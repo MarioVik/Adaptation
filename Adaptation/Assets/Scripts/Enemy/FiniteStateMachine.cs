@@ -16,10 +16,15 @@ public class FiniteStateMachine : MonoBehaviour
     [SerializeField]
     BlockingFeature blocking;
 
-    DashingFeature dashing;
     EnemyControlManager controlManager;
     EnemyHealth health;
     EnemyTraits traits;
+    DashingFeature dashing;
+
+    bool hasMelee;
+    bool hasRanged;
+    bool hasBlock;
+    bool hasDash;
 
     Transform player;
     PlayerHealth playerHealth;
@@ -29,11 +34,6 @@ public class FiniteStateMachine : MonoBehaviour
 
     NavMeshAgent navAgent;
     MeleeRangeTracker meleeRangeTracker;
-
-    bool hasMelee;
-    bool hasRanged;
-    bool hasBlock;
-    bool hasDash;
 
     Vector3 DirectionToPlayer { get { return (player.position - transform.position).normalized; } }
     Vector3 DirectionFromPlayer { get { return (transform.position - player.position).normalized; } }
@@ -65,10 +65,17 @@ public class FiniteStateMachine : MonoBehaviour
 
     void Start()
     {
-        dashing = GetComponentInChildren<DashingFeature>();
-        controlManager = GetComponent<EnemyControlManager>();
         health = GetComponentInChildren<EnemyHealth>();
         traits = GetComponentInChildren<EnemyTraits>();
+
+        hasMelee = traits.Melee;
+        hasRanged = traits.Ranged;
+        hasBlock = traits.Block;
+        hasDash = traits.Dash;
+
+        if (hasDash)
+            dashing = GetComponentInChildren<DashingFeature>();
+        controlManager = GetComponent<EnemyControlManager>();
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerHealth = player.GetComponent<PlayerHealth>();
@@ -81,11 +88,6 @@ public class FiniteStateMachine : MonoBehaviour
 
         navAgent = GetComponent<NavMeshAgent>();
         meleeRangeTracker = GetComponentInChildren<MeleeRangeTracker>();
-
-        hasMelee = traits.Melee;
-        hasRanged = traits.Ranged;
-        hasBlock = traits.Block;
-        hasDash = traits.Dash;
 
         currentState = EnemyState.Approach;
     }
@@ -281,10 +283,10 @@ public class FiniteStateMachine : MonoBehaviour
 
     void UpdateMeleeAttack()
     {
+        UpdateInput();
+
         if (!controlManager.canMove)
             return;
-
-        UpdateInput();
 
         if (AvoidableAttackIncoming())
         {
@@ -309,10 +311,10 @@ public class FiniteStateMachine : MonoBehaviour
 
     void UpdateRangedAttack()
     {
+        UpdateInput();
+
         if (!controlManager.canMove)
             return;
-
-        UpdateInput();
 
         if (AvoidableAttackIncoming())
         {

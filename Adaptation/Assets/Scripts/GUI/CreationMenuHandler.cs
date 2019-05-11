@@ -18,7 +18,7 @@ public class CreationMenuHandler : MonoBehaviour
     [SerializeField]
     Button completeButton;
 
-    int totalAttributes = 12;
+    int totalAttributes = GenerationManager.Attributes;
 
     int attributes, health, attackDamage, attackSpeed, attackRange, movementSpeed;
 
@@ -29,6 +29,7 @@ public class CreationMenuHandler : MonoBehaviour
 
     public void CompletePlayer()
     {
+        GenerationManager.Tutorial = false;
         GenFilesManager.SavePlayer(GetPlayerTraits());
         SceneManager.LoadScene(6);
     }

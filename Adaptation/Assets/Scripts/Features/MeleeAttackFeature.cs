@@ -174,6 +174,11 @@ public class MeleeAttackFeature : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "Projectile")
+        {
+            other.GetComponent<ProjectileBehaviour>().Sizzle();
+        }
+
         if (isPlayer)
         {
             EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
@@ -193,10 +198,7 @@ public class MeleeAttackFeature : MonoBehaviour
                 if (playerDashing != null && playerDashing.isActiveAndEnabled && playerDashing.Dashing)
                     return;
                 if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
-                {
-                    anim.SetTrigger("recoil");
                     return;
-                }
 
                 outerHit = true;
             }
@@ -217,7 +219,11 @@ public class MeleeAttackFeature : MonoBehaviour
 
             BlockingFeature enemyBlocking = enemyHealth.GetComponentInChildren<BlockingFeature>();
             if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
+            {
+                Disable();
+                anim.SetTrigger("recoil");
                 return;
+            }
 
             enemyHealth.TakeDamage(damage, hitPoint);
             //Debug.Log("Enemy hit");
@@ -235,7 +241,11 @@ public class MeleeAttackFeature : MonoBehaviour
             playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
 
             if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
+            {
+                Disable();
+                anim.SetTrigger("recoil");
                 return;
+            }
 
             playerHealth.TakeDamage(damage);
             GetComponentInParent<FitnessTracker>().DamagedPlayer(damage);

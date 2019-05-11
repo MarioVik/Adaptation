@@ -111,10 +111,17 @@ public class RangedAttackFeature : MonoBehaviour
         }
     }
 
-    public void Shoot()
+    private void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab);
         projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, Range, damage);
+        weaponAudio.Play();
+    }
+
+    public void Shoot(Vector3 direction)
+    {
+        GameObject projectile = Instantiate(projectilePrefab);
+        projectile.GetComponent<ProjectileBehaviour>().Initialize(this, projectileSpeed, Range, damage, direction.normalized);
         weaponAudio.Play();
     }
 }
