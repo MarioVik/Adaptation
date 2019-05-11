@@ -16,6 +16,8 @@ public class EnemyControlManager : MonoBehaviour
 
     public bool MovementInput { get { return VerticalInput != 0 || HorizontalInput != 0; } }
 
+    public Vector3 TargetDir { get; set; } // This is public so that the BlockingFeature can set the target of rotation when reflecting an attack 
+
     Transform playerTransform;
 
     [Header("Initialize")]
@@ -265,20 +267,25 @@ public class EnemyControlManager : MonoBehaviour
         //}
 
         //This can control character's rotation.
-        if (canMove)
+        //if (canMove)
+        //{
+        //Vector3 targetDir = moveDir;
+
+        if (!(hasBlock && blocking.Blocking))
         {
-            //Vector3 targetDir = moveDir;
-
-            Vector3 targetDir = DirectionToPlayer;
-
-            targetDir.y = 0;
-            if (targetDir == Vector3.zero)
-                targetDir = transform.forward;
-
-            Quaternion tr = Quaternion.LookRotation(targetDir);
-            Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta * /*moveAmount **/ rotateSpeed);
-            transform.rotation = targetRotation;
+            TargetDir = DirectionToPlayer;
         }
+
+        TargetDir = new Vector3(TargetDir.x, 0, TargetDir.z);
+
+
+        if (TargetDir == Vector3.zero)
+            TargetDir = transform.forward;
+
+        Quaternion tr = Quaternion.LookRotation(TargetDir);
+        Quaternion targetRotation = Quaternion.Slerp(transform.rotation, tr, pDelta * rotateSpeed);
+        transform.rotation = targetRotation;
+        //}
 
         HandleMovementAnimations(); //update character's animations.
     }

@@ -77,10 +77,10 @@ static public class GenLogManager
         progressLog.AppendLine("Individual " + (afterMutation ? "after" : "before") + " mutation: " + child);
     }
 
-    static public void LogNewGeneration(List<string> newGeneration)
+    static public void LogNewGeneration(List<string> newGeneration, bool randomized = false)
     {
         progressLog.AppendLine("");
-        progressLog.AppendLine("New generation: ");
+        progressLog.AppendLine("New generation " + (randomized ? "SHUFFLED: " : ":"));
         foreach (string tempStr in newGeneration)
         {
             progressLog.AppendLine("\tTraits: " + tempStr);

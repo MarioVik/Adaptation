@@ -8,6 +8,7 @@ public class BlockingFeature : MonoBehaviour
 {
     [SerializeField]
     Transform characterTransform;
+    public Transform CharacterTransform { get { return characterTransform; } }
 
     [SerializeField]
     Slider sliderPreafab;
@@ -20,7 +21,7 @@ public class BlockingFeature : MonoBehaviour
     public bool BlockStop { get; private set; }
     public bool Blocking { get; private set; }
 
-    float coolDown = 1.5f;
+    float coolDown = 3f;
     float coolDownTimer;
 
     float activeTimer = 0;
@@ -52,7 +53,18 @@ public class BlockingFeature : MonoBehaviour
         //Debug.Log("Block Stopped");
     }
 
-    public void Reflect(Vector3 incomingDirection)
+    public void BlockHit(bool attackedByPlayer, Vector3 incomingDirection, bool reflect = false)
+    {
+        if (!attackedByPlayer)
+            GetComponentInParent<PlayerControlManager>().TargetDir = (-incomingDirection).normalized;
+        else
+            GetComponentInParent<EnemyControlManager>().TargetDir = (-incomingDirection).normalized;
+
+        if (reflect)
+            Reflect(incomingDirection);
+    }
+
+    private void Reflect(Vector3 incomingDirection)
     {
         rangedAttacking.Shoot(-incomingDirection);
     }

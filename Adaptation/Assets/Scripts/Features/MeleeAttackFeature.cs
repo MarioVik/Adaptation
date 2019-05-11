@@ -181,9 +181,9 @@ public class MeleeAttackFeature : MonoBehaviour
 
         if (isPlayer)
         {
-            EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
-            if (enemyHealth != null)
+            if (other.tag == "Enemy")
             {
+                EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
                 HitEnemy(enemyHealth, enemyHealth.transform.position);
             }
         }
@@ -221,6 +221,7 @@ public class MeleeAttackFeature : MonoBehaviour
             if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
             {
                 Disable();
+                enemyBlocking.BlockHit(isPlayer, enemyBlocking.CharacterTransform.position - transform.position);
                 anim.SetTrigger("recoil");
                 return;
             }
@@ -244,6 +245,7 @@ public class MeleeAttackFeature : MonoBehaviour
             {
                 Disable();
                 anim.SetTrigger("recoil");
+                playerBlocking.BlockHit(isPlayer, playerBlocking.CharacterTransform.position - transform.position);
                 return;
             }
 

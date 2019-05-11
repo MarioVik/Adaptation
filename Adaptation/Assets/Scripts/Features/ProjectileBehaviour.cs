@@ -45,7 +45,7 @@ public class ProjectileBehaviour : MonoBehaviour
         if (direction == new Vector3())
             originRotation = user.ShootOrigin.rotation;
         else
-            originRotation = Quaternion.Euler(direction.x, 0, direction.z);
+            originRotation = Quaternion.LookRotation(direction);
 
         InitializeEffect(originPosition, originRotation);
 
@@ -121,7 +121,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 BlockingFeature enemyBlocking = collision.collider.GetComponentInChildren<BlockingFeature>();
                 if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
                 {
-                    enemyBlocking.Reflect(transform.forward);
+                    enemyBlocking.BlockHit(ByPlayer, transform.forward, reflect: true);
                     return;
                 }
 
@@ -156,7 +156,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
                 {
                     Sizzle();
-                    playerBlocking.Reflect(transform.forward);
+                    playerBlocking.BlockHit(ByPlayer, transform.forward, reflect: true);
                     return;
                 }
 
