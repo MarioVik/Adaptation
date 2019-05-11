@@ -60,7 +60,9 @@ public class EnemyControlManager : MonoBehaviour
 
     AudioSource blockAudio;
 
-    readonly float knockBackDistance = 1f;
+    float knockBackDistance;
+    readonly float shortKnockBack = 0.5f;
+    readonly float longKnockBack = 1.0f;
     readonly float knockBackSpeed = 10f;
     Vector3 posBeforeKnock, knockDirection;
     bool beingKnocked;
@@ -85,11 +87,16 @@ public class EnemyControlManager : MonoBehaviour
         anim.SetTrigger("hit");
     }
 
-    public void KnockBack(Vector3 direction)
+    public void KnockBack(Vector3 direction, bool isShort)
     {
         beingKnocked = true;
         posBeforeKnock = transform.position;
         knockDirection = direction.normalized;
+
+        if (isShort)
+            knockBackDistance = shortKnockBack;
+        else
+            knockBackDistance = longKnockBack;
     }
 
     void Start() // Initiallizing camera, animator, rigidboy

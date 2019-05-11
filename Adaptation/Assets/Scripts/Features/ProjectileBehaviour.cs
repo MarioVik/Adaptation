@@ -125,7 +125,7 @@ public class ProjectileBehaviour : MonoBehaviour
                     return;
                 }
 
-                enemyHealth.GetComponentInParent<EnemyControlManager>().KnockBack(enemyHealth.transform.position - transform.position);
+                enemyHealth.GetComponentInParent<EnemyControlManager>().KnockBack(enemyHealth.transform.position - transform.position, isShort: false);
                 enemyHealth.TakeDamage(damage, enemyHealth.transform.position);
 
                 //Debug.Log("Enemy hit");
@@ -162,7 +162,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 }
 
                 Explode(collision);
-                playerHealth.GetComponentInParent<PlayerControlManager>().KnockBack(playerHealth.transform.position - transform.position);
+                playerHealth.GetComponentInParent<PlayerControlManager>().KnockBack(playerHealth.transform.position - transform.position, isShort: false);
                 playerHealth.TakeDamage(damage);
                 user.GetComponentInParent<FitnessTracker>().DamagedPlayer(damage);
                 inflictedDamage = true;

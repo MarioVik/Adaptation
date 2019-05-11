@@ -44,7 +44,7 @@ public class GenerationManager : MonoBehaviour
     char[] attributes = new char[] { 'h', 'd', 's', 'r', 'm' };
     char[] offensiveFeatures = new char[] { 'M', 'R' };
     char[] defensiveFeatures = new char[] { 'B', 'D' };
-    string[] featurePermutations = { /*"MB", "MD",*/ "RB", "RD" };
+    string[] featurePermutations = { "MB", "MD", /*"RB", "RD" */};
 
     char RandomAttribute { get { return attributes[rand.Next(0, attributes.Length)]; } }
     char RandomOffensiveFeature { get { return offensiveFeatures[rand.Next(0, offensiveFeatures.Length)]; } }

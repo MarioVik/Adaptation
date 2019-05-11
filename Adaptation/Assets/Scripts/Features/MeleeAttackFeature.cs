@@ -215,18 +215,21 @@ public class MeleeAttackFeature : MonoBehaviour
 
             enemyHealth.AlreadyHit = true;
             hitEnemies.Add(enemyHealth);
-            enemyHealth.GetComponentInParent<EnemyControlManager>().GetHit();
+
+            EnemyControlManager enemyControl = enemyHealth.GetComponentInParent<EnemyControlManager>();
+            enemyControl.GetHit();
 
             BlockingFeature enemyBlocking = enemyHealth.GetComponentInChildren<BlockingFeature>();
             if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
             {
                 Disable();
                 enemyBlocking.BlockHit(isPlayer, enemyBlocking.CharacterTransform.position - transform.position);
+                GetComponentInParent<PlayerControlManager>().KnockBack(transform.position - enemyHealth.transform.position, isShort: true);
                 anim.SetTrigger("recoil");
                 return;
             }
 
-            enemyHealth.GetComponentInParent<EnemyControlManager>().KnockBack(enemyHealth.transform.position - transform.position);
+            enemyControl.KnockBack(enemyHealth.transform.position - transform.position, isShort: false);
             enemyHealth.TakeDamage(damage, hitPoint);
             //Debug.Log("Enemy hit");
         }
@@ -240,17 +243,19 @@ public class MeleeAttackFeature : MonoBehaviour
                 return;
 
             playerHealth.AlreadyHit = true;
-            playerHealth.GetComponentInParent<PlayerControlManager>().GetHit();
+            PlayerControlManager playerControl = playerHealth.GetComponentInParent<PlayerControlManager>();
+            playerControl.GetHit();
 
             if (playerBlocking != null && playerBlocking.isActiveAndEnabled && playerBlocking.Blocking)
             {
                 Disable();
                 anim.SetTrigger("recoil");
+                GetComponentInParent<EnemyControlManager>().KnockBack(transform.position - playerHealth.transform.position, isShort: true);
                 playerBlocking.BlockHit(isPlayer, playerBlocking.CharacterTransform.position - transform.position);
                 return;
             }
 
-            playerHealth.GetComponentInParent<PlayerControlManager>().KnockBack(playerHealth.transform.position - transform.position);
+            playerControl.KnockBack(playerHealth.transform.position - transform.position, isShort: false);
             playerHealth.TakeDamage(damage);
             GetComponentInParent<FitnessTracker>().DamagedPlayer(damage);
             inflictedDamage = true;
