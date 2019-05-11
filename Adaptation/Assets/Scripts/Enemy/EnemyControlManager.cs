@@ -58,8 +58,6 @@ public class EnemyControlManager : MonoBehaviour
     [HideInInspector]
     public Rigidbody rigid;     //for caching Rigidbody component
 
-    AudioSource blockAudio;
-
     float knockBackDistance;
     readonly float shortKnockBack = 0.5f;
     readonly float longKnockBack = 1.0f;
@@ -112,8 +110,6 @@ public class EnemyControlManager : MonoBehaviour
         hasRanged = traits.Ranged;
 
         hasBlock = traits.Block;
-        if (hasBlock)
-            blockAudio = GetComponent<AudioSource>();
 
         hasDash = traits.Dash;
         if (hasDash)

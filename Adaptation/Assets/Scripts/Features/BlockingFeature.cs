@@ -28,7 +28,11 @@ public class BlockingFeature : MonoBehaviour
     float activeDuration = 5f;
 
     [SerializeField]
-    RangedAttackFeature rangedAttacking;
+    RangedAttackFeature rangedReflecting;
+
+    [SerializeField]
+    AudioSource hitAudio;
+
 
     public void Activate()
     {
@@ -55,6 +59,8 @@ public class BlockingFeature : MonoBehaviour
 
     public void BlockHit(bool attackedByPlayer, Vector3 incomingDirection, bool reflect = false)
     {
+        hitAudio.Play();
+
         if (!attackedByPlayer)
             GetComponentInParent<PlayerControlManager>().TargetDir = (-incomingDirection).normalized;
         else
@@ -66,7 +72,7 @@ public class BlockingFeature : MonoBehaviour
 
     private void Reflect(Vector3 incomingDirection)
     {
-        rangedAttacking.Shoot(-incomingDirection);
+        rangedReflecting.Shoot(-incomingDirection);
     }
 
     private void Start()
@@ -79,6 +85,8 @@ public class BlockingFeature : MonoBehaviour
         cooldownSlider.value = coolDown;
         fillArea = cooldownSlider.GetComponentsInChildren<Image>()[1];
         cooldownSlider.transform.localScale *= uiScale;
+
+        hitAudio = GetComponent<AudioSource>();
     }
 
     void Update()

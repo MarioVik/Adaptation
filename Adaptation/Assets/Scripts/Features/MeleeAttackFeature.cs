@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public class MeleeAttackFeature : MonoBehaviour
 {
@@ -27,7 +29,10 @@ public class MeleeAttackFeature : MonoBehaviour
     float speed, baseSpeed;
     bool combo;
 
+    [SerializeField]
+    AudioClip[] audioClips;
     AudioSource weaponAudio;
+    Random rand;
 
     Animator anim;
     float animationDuration;
@@ -54,6 +59,7 @@ public class MeleeAttackFeature : MonoBehaviour
 
         weaponcollider.enabled = true;
 
+        weaponAudio.clip = audioClips[rand.Next(0, audioClips.Length)];
         weaponAudio.Play();
 
         anim.speed = speed;
@@ -115,6 +121,8 @@ public class MeleeAttackFeature : MonoBehaviour
         anim = GetComponentInParent<Animator>();
         baseSpeed = anim.speed;
         speed = baseSpeed;
+
+        rand = new Random();
 
         normalClip = GetAnimationTime("NormalAttack01_SwordShield");
         comboClip = GetAnimationTime("NormalAttack02_SwordShield");

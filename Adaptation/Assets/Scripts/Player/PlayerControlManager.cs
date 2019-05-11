@@ -54,8 +54,6 @@ public class PlayerControlManager : MonoBehaviour
     public Rigidbody rigid;     //for caching Rigidbody component
     CameraManager camManager;   //for caching CameraManager script
 
-    AudioSource blockAudio;
-
     float knockBackDistance;
     readonly float shortKnockBack = 0.2f;
     readonly float longKnockBack = 1.0f;
@@ -75,10 +73,6 @@ public class PlayerControlManager : MonoBehaviour
         {
             rangedAttacking.Disable();
         }
-
-        //if (hasBlock)
-        //    if (blocking.Blocking)
-        //        blockAudio.Play();
 
         anim.SetTrigger("hit");
     }
@@ -108,16 +102,12 @@ public class PlayerControlManager : MonoBehaviour
         hasRanged = traits.Ranged;
 
         hasBlock = traits.Block;
-        if (hasBlock)
-            blockAudio = GetComponent<AudioSource>();
 
         hasDash = traits.Dash;
         if (hasDash)
             dashing = GetComponentInChildren<DashingFeature>();
 
         targeting = GetComponent<TargetingHandler>();
-
-        blockAudio = GetComponent<AudioSource>();
 
         health = GetComponentInChildren<PlayerHealth>();
     }
