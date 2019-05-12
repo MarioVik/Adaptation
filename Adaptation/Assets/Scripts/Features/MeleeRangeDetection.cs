@@ -29,6 +29,19 @@ public class MeleeRangeDetection : MonoBehaviour
                 trackerInParent.IncrementCombo();
             else
                 trackerInParent.IncrementNormal(); ;
+
+            if (IsPlayer)
+            {
+                other.GetComponentInParent<FiniteStateMachine>().InPlayerMeleeRange = true;
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (IsPlayer && other.tag == "Enemy")
+        {
+            other.GetComponentInParent<FiniteStateMachine>().InPlayerMeleeRange = true;
         }
     }
 
@@ -40,6 +53,11 @@ public class MeleeRangeDetection : MonoBehaviour
                 trackerInParent.DecrementCombo();
             else
                 trackerInParent.DecrementNormal();
+
+            if (IsPlayer)
+            {
+                other.GetComponentInParent<FiniteStateMachine>().InPlayerMeleeRange = false;
+            }
         }
     }
 }

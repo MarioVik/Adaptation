@@ -28,9 +28,9 @@ public class FiniteStateMachine : MonoBehaviour
 
     Transform player;
     PlayerHealth playerHealth;
-    bool playerHasMelee;
+    bool playerHasMelee, playerHasBlock;
     MeleeAttackFeature playerMeleeAttacking;
-    MeleeRangeTracker playerMeleeRangeTracker;
+    BlockingFeature playerBlocking;
 
     NavMeshAgent navAgent;
     MeleeRangeTracker meleeRangeTracker;
@@ -45,14 +45,16 @@ public class FiniteStateMachine : MonoBehaviour
     bool MidleRangeIncrement { get { return InRangedDistance && !FarRangeIncrement && DistanceToPlayer > (rangedAttacking.Range / 3) * 1.2f; } }
     bool CloseRangeIncrement { get { return InRangedDistance && !FarRangeIncrement && !MidleRangeIncrement; } }
 
-    int incomingCollisions = 0;
+    int incomingProjectiles;
+    public bool InPlayerMeleeRange { get; set; }
 
-    float blockTimer = 0;
-    float blockTimeMargin = 1.0f;
+    float blockTimer, blockTimeMargin;
+    float meleeMargin = 0.4f;
+    float rangedMargin = 1.0f;
 
-    public void IncrementColllisions() => incomingCollisions++;
+    public void IncrementColllisions() => incomingProjectiles++;
 
-    public void DecrementCollisions() => incomingCollisions--;
+    public void DecrementCollisions() => incomingProjectiles--;
 
     public void IncreaseMovementSpeed(float increase)
     {
@@ -79,35 +81,20 @@ public class FiniteStateMachine : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player").transform;
         playerHealth = player.GetComponent<PlayerHealth>();
+
         playerHasMelee = player.GetComponent<PlayerTraits>().Melee;
         if (playerHasMelee)
-        {
             playerMeleeAttacking = player.GetComponentInChildren<MeleeAttackFeature>();
-            playerMeleeRangeTracker = player.GetComponentInChildren<MeleeRangeTracker>();
-        }
+
+        playerHasBlock = player.GetComponent<PlayerTraits>().Block;
+        if (playerHasBlock)
+            playerBlocking = player.GetComponentInChildren<BlockingFeature>();
 
         navAgent = GetComponent<NavMeshAgent>();
         meleeRangeTracker = GetComponentInChildren<MeleeRangeTracker>();
 
         currentState = EnemyState.Approach;
     }
-
-    //Vector3 GetCurrentDirection()
-    //{
-    //    NavMeshHit hit;
-    //    navAgent.SamplePathPosition(0, 1, out hit);
-
-    //    Vector3 direction = hit.position - transform.position;
-
-    //    return direction.normalized;
-    //}
-
-    //void UpdateDirection()
-    //{
-    //    Vector3 direction = GetCurrentDirection();
-    //    controlManager.VerticalInput = direction.z;
-    //    controlManager.HorizontalInput = direction.x;
-    //}
 
     void UpdateInput()
     {
@@ -189,7 +176,9 @@ public class FiniteStateMachine : MonoBehaviour
 
     void UpdateIdle()
     {
-        navAgent.SetDestination(transform.position);
+        if (!navAgent.isStopped)
+            navAgent.velocity = Vector3.zero;
+        navAgent.isStopped = true;
 
         if (Input.GetKeyDown(KeyCode.O))
             currentState = EnemyState.Approach;
@@ -326,12 +315,12 @@ public class FiniteStateMachine : MonoBehaviour
         {
             currentState = EnemyState.Approach;
         }
-        else if (FarRangeIncrement)
+        else if (FarRangeIncrement/* && !(playerHasBlock && playerBlocking.Blocking)*/)
         {
             controlManager.NormalAttackInput = false;
             controlManager.ComboAttackInput = true;
         }
-        else if (MidleRangeIncrement)
+        else if (MidleRangeIncrement/* && !(playerHasBlock && playerBlocking.Blocking)*/)
         {
             controlManager.NormalAttackInput = true;
             controlManager.ComboAttackInput = false;
@@ -350,7 +339,7 @@ public class FiniteStateMachine : MonoBehaviour
         }
         else
         {
-            throw new System.Exception("Error: Unknown distance to player");
+            currentState = EnemyState.Withdraw;
         }
     }
 
@@ -358,7 +347,7 @@ public class FiniteStateMachine : MonoBehaviour
     {
         if (playerMeleeAttacking.Attacking)
         {
-            if (playerMeleeRangeTracker.NormalRange || playerMeleeRangeTracker.ComboRange)
+            if (InPlayerMeleeRange)
             {
                 return true;
             }
@@ -374,15 +363,15 @@ public class FiniteStateMachine : MonoBehaviour
             {
                 if (MeleeAttackIncoming())
                 {
+                    blockTimeMargin = meleeMargin;
                     return true;
                 }
             }
-            else
+
+            if (incomingProjectiles > 0)
             {
-                if (incomingCollisions > 0)
-                {
-                    return true;
-                }
+                blockTimeMargin = rangedMargin;
+                return true;
             }
         }
         return false;
@@ -408,7 +397,7 @@ public class FiniteStateMachine : MonoBehaviour
             }
             else
             {
-                if (incomingCollisions <= 0)
+                if (incomingProjectiles <= 0)
                     blockTimer += Time.deltaTime;
                 else
                     blockTimer = 0;

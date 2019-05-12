@@ -144,6 +144,7 @@ public class PlayerControlManager : MonoBehaviour
         if (health.IsDead)
             return;
 
+
         GetInput();     //getting control input from keyboard or joypad
         UpdateStates();   //Updating anything related to character's actions.         
     }
@@ -154,13 +155,14 @@ public class PlayerControlManager : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");    //for getting horizontal input.
         normalAttackInput = Input.GetButton("NormalAttack"); //for getting normal attack input.
         comboAttackInput = Input.GetButton("ComboAttack");    //for getting combo attack input.
-        featureInput = Input.GetButton("Feature");
+        if (canMove || (hasBlock && blocking.Blocking))
+            featureInput = Input.GetButton("Feature");
     }
 
     void UpdateStates() //updates character's various actions.
     {
         canMove = anim.GetBool("canMove");   //getting bool value from Animator's parameter named "canMove".
-        
+
 
         if (Vector3.Distance(posBeforeKnock, transform.position) >= knockBackDistance)
             beingKnocked = false;

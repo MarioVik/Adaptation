@@ -6758,8 +6758,7 @@ MonoBehaviour:
   characterTransform: {fileID: 4412919469045156}
   sliderPreafab: {fileID: 8674604864378442237, guid: d202a6bae7be530418c3be59f3a725c7,
     type: 3}
-  rangedReflecting: {fileID: 0}
-  hitAudio: {fileID: 0}
+  rangedReflecting: {fileID: 8998885933963737106}
 --- !u!82 &4291646992303430753
 AudioSource:
   m_ObjectHideFlags: 0

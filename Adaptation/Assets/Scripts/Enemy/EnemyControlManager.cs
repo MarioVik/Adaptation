@@ -59,7 +59,7 @@ public class EnemyControlManager : MonoBehaviour
     public Rigidbody rigid;     //for caching Rigidbody component
 
     float knockBackDistance;
-    readonly float shortKnockBack = 0.5f;
+    readonly float shortKnockBack = 0.2f;
     readonly float longKnockBack = 1.0f;
     readonly float knockBackSpeed = 10f;
     Vector3 posBeforeKnock, knockDirection;

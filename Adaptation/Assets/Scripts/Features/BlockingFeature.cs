@@ -25,12 +25,11 @@ public class BlockingFeature : MonoBehaviour
     float coolDownTimer;
 
     float activeTimer = 0;
-    float activeDuration = 5f;
+    float activeDuration = 2f;
 
     [SerializeField]
     RangedAttackFeature rangedReflecting;
 
-    [SerializeField]
     AudioSource hitAudio;
 
 

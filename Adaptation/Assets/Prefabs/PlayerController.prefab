@@ -7287,8 +7287,7 @@ MonoBehaviour:
   characterTransform: {fileID: 4412919469045156}
   sliderPreafab: {fileID: 8674604864378442237, guid: d202a6bae7be530418c3be59f3a725c7,
     type: 3}
-  rangedReflecting: {fileID: 0}
-  hitAudio: {fileID: 0}
+  rangedReflecting: {fileID: 4490881236577021202}
 --- !u!82 &345473150106553586
 AudioSource:
   m_ObjectHideFlags: 0
@@ -11606,7 +11605,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8070987585793539296, guid: 4947b503cb72bb145b62689e78b84301,
+    - target: {fileID: 2966847198795004848, guid: 4947b503cb72bb145b62689e78b84301,
         type: 3}
       propertyPath: IsPlayer
       value: 1
@@ -11616,7 +11615,7 @@ PrefabInstance:
       propertyPath: IsPlayer
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2966847198795004848, guid: 4947b503cb72bb145b62689e78b84301,
+    - target: {fileID: 8070987585793539296, guid: 4947b503cb72bb145b62689e78b84301,
         type: 3}
       propertyPath: IsPlayer
       value: 1
