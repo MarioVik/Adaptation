@@ -21,7 +21,7 @@ public class RangedAttackFeature : MonoBehaviour
     public Transform ShootOrigin { get { return shootOrigin; } }
 
     public float Range { get; private set; } = 8f;
-    float baseDamage = 40;
+    float baseDamage = 35;
     float damage;
     float projectileSpeed = 10f;
     float attackSpeed, baseAttackSpeed = 1.0f;

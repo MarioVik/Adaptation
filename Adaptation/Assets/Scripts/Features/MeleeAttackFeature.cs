@@ -22,9 +22,9 @@ public class MeleeAttackFeature : MonoBehaviour
     BlockingFeature playerBlocking;
     //
 
-    Collider weaponcollider;
+    Collider weaponcollider, outerCollider;
 
-    float baseDamage = 65;
+    float baseDamage = 70;
     float damage;
     float speed, baseSpeed;
     bool combo;
@@ -39,7 +39,6 @@ public class MeleeAttackFeature : MonoBehaviour
     AnimationClip normalClip, comboClip;
     float animationTimer = 0;
 
-
     public void IncreaseAttackDamage() => damage += (baseDamage * 0.125f);
 
     public void IncreaseAttackSpeed(float increase) => speed += increase;
@@ -50,6 +49,11 @@ public class MeleeAttackFeature : MonoBehaviour
             weaponcollider.transform.localScale.x,
             weaponcollider.transform.localScale.y + increase,
             weaponcollider.transform.localScale.z);
+
+        outerCollider.transform.localScale = new Vector3(
+                    outerCollider.transform.localScale.x,
+                    outerCollider.transform.localScale.y + increase,
+                    outerCollider.transform.localScale.z);
     }
 
     public void Activate(bool combo = false)
@@ -58,6 +62,7 @@ public class MeleeAttackFeature : MonoBehaviour
         Attacking = true;
 
         weaponcollider.enabled = true;
+        outerCollider.enabled = true;
 
         weaponAudio.clip = audioClips[rand.Next(0, audioClips.Length)];
         weaponAudio.Play();
@@ -86,6 +91,7 @@ public class MeleeAttackFeature : MonoBehaviour
         Attacking = false;
         combo = false;
         weaponcollider.enabled = false;
+        outerCollider.enabled = false;
 
         if (isPlayer)
         {
@@ -118,6 +124,9 @@ public class MeleeAttackFeature : MonoBehaviour
         weaponcollider = GetComponent<CapsuleCollider>();
         weaponcollider.enabled = false;
 
+        outerCollider = GetComponentInChildren<Collider>();
+        outerCollider.enabled = false;
+
         anim = GetComponentInParent<Animator>();
         baseSpeed = anim.speed;
         speed = baseSpeed;
@@ -146,7 +155,7 @@ public class MeleeAttackFeature : MonoBehaviour
         foreach (AnimationClip clip in clips)
             if (clip.name == name)
                 return clip;
-        throw new System.ArgumentNullException("No matching animation clip found for attack");
+        throw new ArgumentNullException("No matching animation clip found for attack");
     }
 
     void Update()
@@ -182,11 +191,6 @@ public class MeleeAttackFeature : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Projectile")
-        {
-            other.GetComponent<ProjectileBehaviour>().Sizzle();
-        }
-
         if (isPlayer)
         {
             if (other.tag == "Enemy")
