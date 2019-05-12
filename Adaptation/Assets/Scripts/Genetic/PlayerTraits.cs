@@ -95,16 +95,13 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 'B':
                 blockObject.SetActive(true);
-
                 if (!Ranged)
                 {
                     rangedObject.SetActive(true);
                     rangedObject.GetComponent<RangedAttackFeature>().OnlyForBlock = true;
                     rangedObject.GetComponent<MeshRenderer>().enabled = false;
                 }
-
                 Block = true;
-
                 break;
             case 'D':
                 GetComponent<DashingFeature>().enabled = true;

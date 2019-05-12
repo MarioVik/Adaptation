@@ -6730,6 +6730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayer: 1
+  outerCollider: {fileID: 1140167428}
   audioClips:
   - {fileID: 8300000, guid: 64e8c275e75280a45904f0cfacfd61e7, type: 3}
   - {fileID: 8300000, guid: 749b22f625a17e945844288974f384f6, type: 3}

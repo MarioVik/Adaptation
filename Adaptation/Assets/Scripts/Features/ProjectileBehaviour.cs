@@ -121,6 +121,7 @@ public class ProjectileBehaviour : MonoBehaviour
                 BlockingFeature enemyBlocking = collision.collider.GetComponentInChildren<BlockingFeature>();
                 if (enemyBlocking != null && enemyBlocking.isActiveAndEnabled && enemyBlocking.Blocking)
                 {
+                    Sizzle();
                     enemyBlocking.BlockHit(ByPlayer, transform.forward, reflect: true);
                     return;
                 }

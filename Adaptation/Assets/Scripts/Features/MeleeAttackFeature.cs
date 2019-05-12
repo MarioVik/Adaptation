@@ -22,7 +22,8 @@ public class MeleeAttackFeature : MonoBehaviour
     BlockingFeature playerBlocking;
     //
 
-    Collider weaponcollider, outerCollider;
+    Collider weaponcollider;
+    [SerializeField] Collider outerCollider;
 
     float baseDamage = 70;
     float damage;
@@ -124,7 +125,6 @@ public class MeleeAttackFeature : MonoBehaviour
         weaponcollider = GetComponent<CapsuleCollider>();
         weaponcollider.enabled = false;
 
-        outerCollider = GetComponentInChildren<Collider>();
         outerCollider.enabled = false;
 
         anim = GetComponentInParent<Animator>();

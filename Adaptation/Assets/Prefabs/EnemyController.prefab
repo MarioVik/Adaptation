@@ -3714,7 +3714,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 2070901277846709638}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.19950806
   m_Height: 1.6643761
   m_Direction: 1
@@ -6087,7 +6087,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 4933245001564209812}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.19950806
   m_Height: 1.6643761
   m_Direction: 1
@@ -6201,6 +6201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayer: 0
+  outerCollider: {fileID: 687990454033390394}
   audioClips:
   - {fileID: 8300000, guid: 64e8c275e75280a45904f0cfacfd61e7, type: 3}
   - {fileID: 8300000, guid: 749b22f625a17e945844288974f384f6, type: 3}

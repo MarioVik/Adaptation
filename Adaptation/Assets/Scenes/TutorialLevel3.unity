@@ -450,8 +450,10 @@ MonoBehaviour:
   m_Text: 'NOTE: You don''t take any damage while dashing OR while blocking
 
 
-    Blocking will last longer and has shorter cooldown but makes you a static target.
-    Dashing will make you a more agile target.'
+    Dashing will keep you moving and make you an agile target.
+
+    Blocking will reflect incoming projectiles and recoil attempted attacks but will
+    root you in place making you a static target.'
 --- !u!222 &80150096
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -539,16 +541,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.8
       objectReference: {fileID: 0}
-    - target: {fileID: 1862499946274658056, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1862499946274658056, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: m_Height
-      value: 2.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6041806528922612925, guid: 6ccf4ddb3be542344b6f5ac473782628,
         type: 3}
       propertyPath: m_Enabled
@@ -563,6 +555,16 @@ PrefabInstance:
         type: 3}
       propertyPath: tutorial
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862499946274658056, guid: 6ccf4ddb3be542344b6f5ac473782628,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862499946274658056, guid: 6ccf4ddb3be542344b6f5ac473782628,
+        type: 3}
+      propertyPath: m_Height
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}

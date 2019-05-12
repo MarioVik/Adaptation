@@ -35,7 +35,7 @@ public class GenerationManager : MonoBehaviour
     public static int GenerationSize { get; } = 9; // (GenerationSize - 1) must be dividable by permutations.Length. Aside for the one random individual, the first generation has an equal amount of every permutation.
     public static int ConcurrentIndividuals { get; } = 1;
 
-    static readonly float spawnFrequency = 8f;
+    static readonly float spawnFrequency = 0f;
     static float spawnTimer = 0;
 
     public static int Attributes { get; } = 12;
@@ -44,7 +44,7 @@ public class GenerationManager : MonoBehaviour
     char[] attributes = new char[] { 'h', 'd', 's', 'r', 'm' };
     char[] offensiveFeatures = new char[] { 'M', 'R' };
     char[] defensiveFeatures = new char[] { 'B', 'D' };
-    string[] featurePermutations = { /*"MB", "MD", */"RB", "RD" };
+    string[] featurePermutations = { "MB"/*, "MD", "RB", "RD" */};
 
     char RandomAttribute { get { return attributes[rand.Next(0, attributes.Length)]; } }
     char RandomOffensiveFeature { get { return offensiveFeatures[rand.Next(0, offensiveFeatures.Length)]; } }
@@ -405,7 +405,6 @@ public class GenerationManager : MonoBehaviour
             StringBuilder newChildB = new StringBuilder();
 
             // Uniform crossover
-            int crossoverPoint = rand.Next(1, Attributes);
             for (int indexParentTrait = 0; indexParentTrait < Attributes; indexParentTrait++)
             {
                 int coinFlip = rand.Next(0, 2);
@@ -437,14 +436,27 @@ public class GenerationManager : MonoBehaviour
             //    }
             //}
 
+            // Copy over the parent's features  to whichever child inherited the bigger part of the parent's genotype
+            //if (crossoverPoint > Attributes / 2)
+            //{
+            //    newChildA.Append(newFeatures[indexParentA]);
+            //    newChildB.Append(newFeatures[indexParentB]);
+            //}
+            //else
+            //{
+            //    newChildA.Append(newFeatures[indexParentB]);
+            //    newChildB.Append(newFeatures[indexParentA]);
+            //}
+
             ConsiderMutation(newChildA);
             ConsiderMutation(newChildB);
 
             newChildA.Append('|');
             newChildB.Append('|');
 
-            // Copy over the parent's features  to whichever child inherited the bigger part of the parent's genotype
-            if (crossoverPoint > Attributes / 2)
+            int fifyfifty = rand.Next(0, 2);
+            // Copy over the parent's features to a random child
+            if (fifyfifty > 0)
             {
                 newChildA.Append(newFeatures[indexParentA]);
                 newChildB.Append(newFeatures[indexParentB]);
@@ -458,7 +470,6 @@ public class GenerationManager : MonoBehaviour
             // If any of the children are identical to any of the parents; redo the crossover
             if (newChildA.ToString() == newGeneration[indexParentA] ||
                 newChildA.ToString() == newGeneration[indexParentB])
-
             {
                 GenLogManager.LogReBreed(newChildA.ToString());
                 indexParentA -= 2;
