@@ -24,6 +24,9 @@ public class CreationMenuHandler : MonoBehaviour
 
     private void Start()
     {
+        if (!Debug.isDebugBuild)
+            Cursor.visible = true;
+
         UpdateGUI();
     }
 

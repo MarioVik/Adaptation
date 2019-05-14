@@ -66,7 +66,7 @@ public class BlockingFeature : MonoBehaviour
             GetComponentInParent<EnemyControlManager>().TargetDir = (-incomingDirection).normalized;
 
         if (reflect)
-            Reflect(incomingDirection);
+            Reflect(new Vector3(incomingDirection.x, 0, incomingDirection.z));
     }
 
     private void Reflect(Vector3 incomingDirection)
