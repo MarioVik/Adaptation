@@ -14,6 +14,6 @@ public class IndividualsTextManager : MonoBehaviour
     void Update()
     {
         text.text = "Enemies killed: " + GenerationManager.DeadIndividuals + "/" + GenerationManager.GenerationSize
-            + "\nCurrently spawned: " + (GenerationManager.InstantiatedIndividuals - GenerationManager.DeadIndividuals) + "/" + GenerationManager.ConcurrentIndividuals;
+            /*+ "\nCurrently spawned: " + (GenerationManager.InstantiatedIndividuals - GenerationManager.DeadIndividuals) + "/" + GenerationManager.ConcurrentIndividuals*/;
     }
 }

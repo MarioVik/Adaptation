@@ -456,16 +456,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.8
       objectReference: {fileID: 0}
-    - target: {fileID: 1862499946274658056, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1862499946274658056, guid: 6ccf4ddb3be542344b6f5ac473782628,
-        type: 3}
-      propertyPath: m_Height
-      value: 2.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6041806528922612925, guid: 6ccf4ddb3be542344b6f5ac473782628,
         type: 3}
       propertyPath: m_Enabled
@@ -480,6 +470,16 @@ PrefabInstance:
         type: 3}
       propertyPath: tutorial
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862499946274658056, guid: 6ccf4ddb3be542344b6f5ac473782628,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1862499946274658056, guid: 6ccf4ddb3be542344b6f5ac473782628,
+        type: 3}
+      propertyPath: m_Height
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ccf4ddb3be542344b6f5ac473782628, type: 3}
@@ -8857,7 +8857,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -30, y: -10}
-  m_SizeDelta: {x: 700, y: 200}
+  m_SizeDelta: {x: 700, y: 100}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1178844038
 MonoBehaviour:
@@ -8919,9 +8919,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Enemies killed: 10/10
-
-    Currently spawned: 0/3'
+  m_Text: 'Enemies killed: 10/10'
 --- !u!222 &1178844041
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12333,7 +12331,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorial: 1
-  randomMode: 0
   enemyPrefab: {fileID: 0}
   spawnPoints: []
   endText: {fileID: 0}

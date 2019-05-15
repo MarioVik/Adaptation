@@ -36,6 +36,14 @@ public class PlayerReadyManager : MonoBehaviour
         }
     }
 
+    public void End()
+    {
+        foreach (Text uiElement in infoUI)
+        {
+            uiElement.enabled = false;
+        }
+    }
+
     void Start()
     {
         renderer = GetComponent<MeshRenderer>();

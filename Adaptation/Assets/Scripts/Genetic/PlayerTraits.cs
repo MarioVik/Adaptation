@@ -58,19 +58,19 @@ public class PlayerTraits : MonoBehaviour
                 break;
             case 's':
                 if (Melee)
-                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackSpeed(0.1f);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackSpeed(0.15f);
                 if (Ranged || Block)
-                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackSpeed(0.1f);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackSpeed(0.15f);
                 break;
             case 'r':
                 if (Melee)
                 {
-                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackRange(0.1f);
-                    GetComponentInChildren<MeleeRangeTracker>().IncreaseRange(0.1f);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackRange(0.15f);
+                    GetComponentInChildren<MeleeRangeTracker>().IncreaseRange(0.15f);
                 }
                 if (Ranged || Block)
                 {
-                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackRange(1f);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackRange(1.5f);
                 }
                 break;
             case 'm':

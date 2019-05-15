@@ -54,17 +54,17 @@ public class EnemyTraits : MonoBehaviour
             case 'r':
                 if (Melee)
                 {
-                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackRange(0.1f);
-                    GetComponentInChildren<MeleeRangeTracker>().IncreaseRange(0.1f);
+                    GetComponentInChildren<MeleeAttackFeature>().IncreaseAttackRange(0.15f);
+                    GetComponentInChildren<MeleeRangeTracker>().IncreaseRange(0.15f);
                 }
                 if (Ranged || Block)
                 {
-                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackRange(1f);
+                    GetComponentInChildren<RangedAttackFeature>().IncreaseAttackRange(1.5f);
                 }
                 break;
             case 'm':
-                GetComponentInParent<EnemyControlManager>().IncreaseMovementSpeed(1.5f);
-                GetComponentInParent<FiniteStateMachine>().IncreaseMovementSpeed(1.5f);
+                GetComponentInParent<EnemyControlManager>().IncreaseMovementSpeed(2.5f);
+                GetComponentInParent<FiniteStateMachine>().IncreaseMovementSpeed(2.5f);
                 break;
             default:
                 throw new System.Exception("Enemy has unrecognized attribute");

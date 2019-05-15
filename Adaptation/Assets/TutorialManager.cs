@@ -43,11 +43,6 @@ public class TutorialManager : MonoBehaviour
 
         playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHealth>();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            GenerationManager.Tutorial = false;
-            SceneManager.LoadScene(5);
-        }
     }
 
     void Update()
@@ -62,6 +57,12 @@ public class TutorialManager : MonoBehaviour
         UpdateTutorial3();
         UpdateTutorial4();
         UpdateTutorial5();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GenerationManager.Tutorial = false;
+            SceneManager.LoadScene(5);
+        }
     }
 
     void UpdateTutorial1()
@@ -89,10 +90,6 @@ public class TutorialManager : MonoBehaviour
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    SceneManager.LoadScene(5);
-                }
                 break;
         }
     }
@@ -287,11 +284,12 @@ public class TutorialManager : MonoBehaviour
                 if (enemyHealth != null && enemyHealth.IsDead)
                 {
                     lastInstructions.SetActive(true);
+                }
 
-                    if (Input.GetButtonDown("Confirm"))
-                    {
-                        SceneManager.LoadScene(5);
-                    }
+                if (Input.GetButtonDown("Confirm"))
+                {
+                    GenerationManager.Tutorial = false;
+                    SceneManager.LoadScene(5);
                 }
 
                 break;

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GenerationManager : MonoBehaviour
 {
@@ -13,12 +14,12 @@ public class GenerationManager : MonoBehaviour
     bool tutorial;
     public static bool Tutorial;
 
-    [SerializeField]
-    bool randomMode;
+    public static bool RandomMode = false;
 
-    static public bool PlayerReady { get; set; } = true;
+    static public bool PlayerReady { get; set; }
 
     public GameObject enemyPrefab;
+
     static PlayerHealth playerHealth;
     PlayerReadyManager readyManager;
 
@@ -50,7 +51,7 @@ public class GenerationManager : MonoBehaviour
     char RandomOffensiveFeature { get { return offensiveFeatures[rand.Next(0, offensiveFeatures.Length)]; } }
     char RandomDefensiveFeature { get { return defensiveFeatures[rand.Next(0, defensiveFeatures.Length)]; } }
 
-    int mutationChance = 8;
+    int mutationChance = 5;
 
     bool gameStarted = false;
     bool gameEnd = false;
@@ -80,6 +81,8 @@ public class GenerationManager : MonoBehaviour
 
     void Start()
     {
+        PlayerReady = true;
+
         if (tutorial)
         {
             Tutorial = tutorial;
@@ -110,12 +113,7 @@ public class GenerationManager : MonoBehaviour
             ind.FitnessScore = 0;
         }
 
-        //PlayerReady = false;
-        //readyManager.NewWave();
-
         ResetVariables();
-
-        //GameObject.FindGameObjectWithTag("PlayerController").transform.SetPositionAndRotation(readyManager.transform.position, readyManager.transform.rotation);
     }
 
     void Update()
@@ -128,14 +126,23 @@ public class GenerationManager : MonoBehaviour
             GenLogManager.LogForGraphing(individuals);
             GenLogManager.SaveLog(LogType.Individual);
             endText.SetActive(true);
+            readyManager.End();
             gameEnd = true;
         }
 
         if (gameEnd)
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("Confirm"))
             {
-                Application.Quit();
+                if (RandomMode)
+                {
+                    Application.Quit();
+                }
+                else
+                {
+                    RandomMode = true;
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
             }
             return;
         }
@@ -156,7 +163,7 @@ public class GenerationManager : MonoBehaviour
 
         if (!gameStarted)
         {
-            if (randomMode)
+            if (RandomMode)
             {
                 individuals = StringsToIndividuals(RandomizeGeneration());
             }
@@ -176,7 +183,7 @@ public class GenerationManager : MonoBehaviour
             && DeadIndividuals >= GenerationSize
             && CurrentGeneration <= TotalGenerations)
         {
-            if (randomMode)
+            if (RandomMode)
             {
                 individuals = StringsToIndividuals(RandomizeNextGeneration());
             }
@@ -420,52 +427,27 @@ public class GenerationManager : MonoBehaviour
                 }
             }
 
-            // Single point crossover
-            //int crossoverPoint = rand.Next(1, attributes);
-            //for (int indexParentTrait = 0; indexParentTrait < attributes; indexParentTrait++)
-            //{
-            //    if (indexParentTrait < crossoverPoint)
-            //    {
-            //        newChildA.Append(newAttributes[indexParentA][indexParentTrait]);
-            //        newChildB.Append(newAttributes[indexParentB][indexParentTrait]);
-            //    }
-            //    else
-            //    {
-            //        newChildA.Append(newAttributes[indexParentB][indexParentTrait]);
-            //        newChildB.Append(newAttributes[indexParentA][indexParentTrait]);
-            //    }
-            //}
-
-            // Copy over the parent's features  to whichever child inherited the bigger part of the parent's genotype
-            //if (crossoverPoint > Attributes / 2)
-            //{
-            //    newChildA.Append(newFeatures[indexParentA]);
-            //    newChildB.Append(newFeatures[indexParentB]);
-            //}
-            //else
-            //{
-            //    newChildA.Append(newFeatures[indexParentB]);
-            //    newChildB.Append(newFeatures[indexParentA]);
-            //}
-
-            ConsiderMutation(newChildA);
-            ConsiderMutation(newChildB);
-
             newChildA.Append('|');
             newChildB.Append('|');
 
-            int fifyfifty = rand.Next(0, 2);
-            // Copy over the parent's features to a random child
-            if (fifyfifty > 0)
+            // Uniform crossover
+            for (int i = 0; i < 2; i++)
             {
-                newChildA.Append(newFeatures[indexParentA]);
-                newChildB.Append(newFeatures[indexParentB]);
+                int coinToss = rand.Next(0, 2);
+                if (coinToss == 0)
+                {
+                    newChildA.Append(newFeatures[indexParentA][i]);
+                    newChildB.Append(newFeatures[indexParentB][i]);
+                }
+                else
+                {
+                    newChildA.Append(newFeatures[indexParentB][i]);
+                    newChildB.Append(newFeatures[indexParentA][i]);
+                }
             }
-            else
-            {
-                newChildA.Append(newFeatures[indexParentB]);
-                newChildB.Append(newFeatures[indexParentA]);
-            }
+
+            ConsiderMutation(newChildA);
+            ConsiderMutation(newChildB);
 
             // If any of the children are identical to any of the parents; redo the crossover
             if (newChildA.ToString() == newGeneration[indexParentA] ||
@@ -517,10 +499,53 @@ public class GenerationManager : MonoBehaviour
             /*Logging*/
             GenLogManager.LogMutatatedIndividual(child.ToString(), afterMutation: false);
 
-            int placeToChange = rand.Next(0, child.Length);
+            int placeToChange;
+            do
+            {
+                placeToChange = rand.Next(0, child.Length);
+            }
+            while (child[placeToChange] == '|');
+
             char newTrait;
-            do { newTrait = RandomAttribute; } while (newTrait == child[placeToChange]);
-            child[placeToChange] = newTrait;
+            switch (child[placeToChange])
+            {
+                case 'h':
+                case 'd':
+                case 's':
+                case 'r':
+                case 'm':
+                    do
+                    {
+                        newTrait = RandomAttribute;
+                    }
+                    while (newTrait == child[placeToChange]);
+
+                    child[placeToChange] = newTrait;
+                    break;
+
+                case 'M':
+                case 'R':
+                    do
+                    {
+                        newTrait = RandomOffensiveFeature;
+                    }
+                    while (newTrait == child[placeToChange]);
+
+                    child[placeToChange] = newTrait;
+                    break;
+                case 'B':
+                case 'D':
+                    do
+                    {
+                        newTrait = RandomDefensiveFeature;
+                    }
+                    while (newTrait == child[placeToChange]);
+
+                    child[placeToChange] = newTrait;
+                    break;
+                default:
+                    throw new Exception("Tried to mutate unrecognized trait");
+            }
 
             /*Logging*/
             GenLogManager.LogMutatatedIndividual(child.ToString(), afterMutation: true);
@@ -551,3 +576,31 @@ public class GenerationManager : MonoBehaviour
         return newGeneration;
     }
 }
+
+// Single point crossover
+//int crossoverPoint = rand.Next(1, attributes);
+//for (int indexParentTrait = 0; indexParentTrait < attributes; indexParentTrait++)
+//{
+//    if (indexParentTrait < crossoverPoint)
+//    {
+//        newChildA.Append(newAttributes[indexParentA][indexParentTrait]);
+//        newChildB.Append(newAttributes[indexParentB][indexParentTrait]);
+//    }
+//    else
+//    {
+//        newChildA.Append(newAttributes[indexParentB][indexParentTrait]);
+//        newChildB.Append(newAttributes[indexParentA][indexParentTrait]);
+//    }
+//}
+
+// Copy over the parent's features  to whichever child inherited the bigger part of the parent's genotype
+//if (crossoverPoint > Attributes / 2)
+//{
+//    newChildA.Append(newFeatures[indexParentA]);
+//    newChildB.Append(newFeatures[indexParentB]);
+//}
+//else
+//{
+//    newChildA.Append(newFeatures[indexParentB]);
+//    newChildB.Append(newFeatures[indexParentA]);
+//}

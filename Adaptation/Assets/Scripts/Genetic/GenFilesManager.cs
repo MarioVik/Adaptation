@@ -7,9 +7,10 @@ using UnityEngine;
 static public class GenFilesManager
 {
     //static public string DirectoryPath { get { return @"C:\Users\vikto\OneDrive\År3\Examensarbete\Adaptation\Adaptation\Assets\Generations\"; } }
-    static public string DirectoryPath { get { return @"GeneticData\"; } }
+    static public string DirectoryPath { get { return GenerationManager.RandomMode ? @"TestDataB\" : @"TestDataA\"; } }
+    static public string PlayerDirectory { get { return @"PlayerData\"; } }
     static public string PlayerFilename { get { return "PlayerTraits.txt"; } }
-    static public string PlayerFilepath { get { return DirectoryPath + PlayerFilename; } }
+    static public string PlayerFilepath { get { return PlayerDirectory + PlayerFilename; } }
     static public string GenerationFilename { get { return "Generation_" + GenerationManager.CurrentGeneration + ".txt"; } }
     static public string GenerationFilepath { get { return DirectoryPath + GenerationFilename; } }
 
@@ -43,7 +44,7 @@ static public class GenFilesManager
 
     static public string LoadTutorial(int tutorial)
     {
-        StreamReader reader = new StreamReader(DirectoryPath + "Tutorial" + tutorial + ".txt");
+        StreamReader reader = new StreamReader(PlayerDirectory + "Tutorial" + tutorial + ".txt");
         string playerTraits = reader.ReadLine();
         reader.Close();
         return playerTraits;

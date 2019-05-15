@@ -2668,7 +2668,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -30, y: -10}
-  m_SizeDelta: {x: 700, y: 200}
+  m_SizeDelta: {x: 700, y: 100}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1178844038
 MonoBehaviour:
@@ -2730,9 +2730,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Enemies killed: 10/10
-
-    Currently spawned: 0/3'
+  m_Text: 'Enemies killed: 10/10'
 --- !u!222 &1178844041
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3859,7 +3857,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tutorial: 0
-  randomMode: 0
   enemyPrefab: {fileID: 1467028744492758, guid: 47612b60f1059614b84f788049eac29a,
     type: 3}
   spawnPoints:
@@ -3868,7 +3865,7 @@ MonoBehaviour:
   - {fileID: 86064874}
   - {fileID: 86064873}
   - {fileID: 86064872}
-  endText: {fileID: 0}
+  endText: {fileID: 1579985887}
 --- !u!4 &1470502429
 Transform:
   m_ObjectHideFlags: 0
@@ -4467,10 +4464,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'This game session is completed, thanks for playing!
+  m_Text: 'This game session is completed!
 
 
-    Press ESCAPE to exit the game'
+    Press ESCAPE'
 --- !u!222 &1579985890
 CanvasRenderer:
   m_ObjectHideFlags: 0
